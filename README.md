@@ -15,3 +15,4 @@ Tek dosya, sunucu gerekmez. `index.html` dosyasını tarayıcıda açman yeterli
 ## Sözlük kaynakları
 - [mertemin/turkish-word-list](https://github.com/mertemin/turkish-word-list)
 - [CanNuhlar/Turkce-Kelime-Listesi](https://github.com/CanNuhlar/Turkce-Kelime-Listesi)
+- Kelime sıklıkları (Gündelik satırı): [hermitdave/FrequencyWords](https://github.com/hermitdave/FrequencyWords) (MIT), OpenSubtitles 2018 verisinden
