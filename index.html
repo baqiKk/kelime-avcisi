@@ -227,12 +227,12 @@ textarea{min-height:92px;resize:vertical}
     </div>
   </section>
 
-  <a class="win sim a-sim" href="https://baqikk.github.io/orbital-simulator/kabin.html" target="_blank" rel="noopener">
+  <a class="win sim a-sim" href="https://baqikk.github.io/orbital-simulator/kabin.html" target="_blank" rel="noopener" title="Yörünge Transfer Simülatörü'nü aç">
     <canvas id="orbit" width="128" height="128" aria-hidden="true"></canvas>
     <div class="sim-t">
-      <span class="lbl">Aynı geliştiriciden <em>Ücretsiz</em></span>
-      <strong>Yörünge Transfer Simülatörü</strong>
-      <span class="d">Dünya'dan Mars'a hangi gün kalkmalı? Gerçek gezegen konumlarıyla hesapla, uçuşu izle.</span>
+      <span class="lbl">Yörünge Simülatörü <em>Ücretsiz</em></span>
+      <strong id="simTitle">Mars'a yolculuk</strong>
+      <span class="d" id="simText">En verimli transfer penceresi yaklaşık 26 ayda bir açılır; yolculuk ~8,5 ay sürer.</span>
     </div>
     <span class="sim-go">Dene →</span>
   </a>
@@ -511,29 +511,80 @@ function applyMode(m){document.documentElement.dataset.mode=m; const l=m==="ligh
   applyMode(m)})();
 modeBtn.onclick=()=>{const m=document.documentElement.dataset.mode==="light"?"dark":"light"; applyMode(m); S.set("ka_mode",m)};
 
-// tanıtım kartındaki küçük Hohmann transferi animasyonu
+// tanıtım kartı: her yüklemede rastgele bir gök cismi animasyonu ve kısa bilgi
 (function(){
   const cv=document.getElementById("orbit"); if(!cv||!cv.getContext)return; const x=cv.getContext("2d");
-  const W=128,C=64,r1=24,r2=46,a=(r1+r2)/2,b=Math.sqrt(r1*r2),ex=C+(r1-r2)/2;
+  const W=128,C=64,TAU=Math.PI*2;
   const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
   const reduce=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
-  let vis=true,t0=performance.now();
-  function frame(now){
-    const cyc=5200, p=Math.min(1,((now-t0)%cyc)/(cyc*0.82)), q=reduce?0.62:p;
-    const cy=css("--cyan"),ac=css("--accent"),fa=css("--faint"),ink=css("--ink");
-    x.clearRect(0,0,W,W); x.lineWidth=1.4;
-    x.strokeStyle=fa; x.globalAlpha=.7; [r1,r2].forEach(r=>{x.beginPath();x.arc(C,C,r,0,7);x.stroke()}); x.globalAlpha=1;
-    x.setLineDash([3,4]); x.strokeStyle=ac; x.beginPath(); x.ellipse(ex,C,a,b,0,Math.PI,2*Math.PI,true); x.stroke(); x.setLineDash([]);
-    x.fillStyle=ac; x.beginPath(); x.arc(C,C,5,0,7); x.fill();
-    const ea=-q*Math.PI*1.75, ma=-(Math.PI-(1-q)*0.95);
-    x.fillStyle=cy; x.beginPath(); x.arc(C+r1*Math.cos(ea),C+r1*Math.sin(ea),4,0,7); x.fill();
-    x.fillStyle=css("--bad"); x.beginPath(); x.arc(C+r2*Math.cos(ma),C+r2*Math.sin(ma),3.5,0,7); x.fill();
-    const th=q*Math.PI, sx=ex+a*Math.cos(th), sy=C-b*Math.sin(th);
-    x.fillStyle=ink; x.beginPath(); x.arc(sx,sy,2.6,0,7); x.fill();
-    if(!reduce&&vis) requestAnimationFrame(frame);
-  }
-  if("IntersectionObserver" in window){new IntersectionObserver(es=>{const v=es[0].isIntersecting; if(v&&!vis){vis=true;requestAnimationFrame(frame)} vis=v}).observe(cv)}
-  modeBtn.addEventListener("click",()=>{if(reduce)requestAnimationFrame(frame)});
+  const dot=(px,py,r,fill)=>{x.fillStyle=fill;x.beginPath();x.arc(px,py,r,0,TAU);x.fill()};
+  const ring=(px,py,r,stroke,a=1,dash)=>{x.save();x.globalAlpha=a;x.strokeStyle=stroke;if(dash)x.setLineDash(dash);x.beginPath();x.arc(px,py,r,0,TAU);x.stroke();x.restore()};
+  const banded=(px,py,r,base,band,n,shift)=>{x.save();x.beginPath();x.arc(px,py,r,0,TAU);x.clip();x.fillStyle=base;x.fillRect(px-r,py-r,2*r,2*r);
+    x.fillStyle=band;for(let i=0;i<n;i++){const yy=py-r+(i+.5)*(2*r/n);x.globalAlpha=.55;x.fillRect(px-r,yy-r/(n*2.4),2*r,r/(n*1.2))}
+    x.globalAlpha=1;x.restore();x.save();x.globalAlpha=.25;x.strokeStyle=css("--ink");x.lineWidth=1;x.beginPath();x.arc(px,py,r,0,TAU);x.stroke();x.restore()};
+  const P={
+    mars:{title:"Mars'a yolculuk",text:"En verimli transfer penceresi yaklaşık 26 ayda bir açılır; yolculuk ~8,5 ay sürer.",
+      draw(t,c){const r1=24,r2=46,a=(r1+r2)/2,b=Math.sqrt(r1*r2),ex=C+(r1-r2)/2,cyc=5.2,q=reduce?.62:Math.min(1,(t%cyc)/(cyc*.82));
+        ring(C,C,r1,c.fa,.7);ring(C,C,r2,c.fa,.7);
+        // transfer yarım elipsi: günberi sağda (Dünya yörüngesi), günöte solda (Mars yörüngesi), üst yarı
+        x.save();x.setLineDash([3,4]);x.strokeStyle=c.ac;x.beginPath();x.ellipse(ex,C,a,b,0,0,Math.PI,true);x.stroke();x.restore();
+        dot(C,C,5,c.ac);
+        const ea=-q*Math.PI*1.75, ma=-(Math.PI-(1-q)*.95);
+        dot(C+r1*Math.cos(ea),C+r1*Math.sin(ea),4,c.cy); dot(C+r2*Math.cos(ma),C+r2*Math.sin(ma),3.5,c.bad);
+        const th=q*Math.PI; dot(ex+a*Math.cos(th),C-b*Math.sin(th),2.6,c.ink)}},
+    saturn:{title:"Satürn suda yüzerdi",text:"Ortalama yoğunluğu sudan düşük. Halkaları ~280 bin km çapında ama çoğu yerde yalnızca ~10 m kalınlığında.",
+      draw(t,c){const rx=50,ry=13,tilt=-.32,tt=reduce?1.2:t;
+        const rings=(back)=>{x.save();x.translate(C,C);x.rotate(tilt);
+          [[50,.35],[46,.55],[42,.7],[36,.5],[32,.35]].forEach(([r,a],i)=>{x.globalAlpha=a;x.strokeStyle=i===2?c.ink:c.tan;x.lineWidth=i===3?1:2.2;
+            if(i===1){x.setLineDash([6,3]);x.lineDashOffset=-tt*14}else x.setLineDash([]);
+            x.beginPath();x.ellipse(0,0,r,r*ry/rx,0,back?Math.PI:0,back?TAU:Math.PI);x.stroke()});x.restore()};
+        const ma=tt*.7, mx=C+58*Math.cos(ma)*Math.cos(tilt)-15*Math.sin(ma)*Math.sin(tilt), my=C+58*Math.cos(ma)*Math.sin(tilt)+15*Math.sin(ma)*Math.cos(tilt), behind=Math.sin(ma)<0;
+        if(behind)dot(mx,my,2.6,c.cy);
+        rings(true); x.save();x.translate(C,C);x.rotate(tilt);x.translate(-C,-C);banded(C,C,19,c.tan,c.tan2,5);x.restore(); rings(false);
+        if(!behind)dot(mx,my,2.6,c.cy)}},
+    jupiter:{title:"Üç ay, tek ritim",text:"Io, Europa ve Ganymede 1:2:4 rezonansında: Io 4 tur atarken Europa 2, Ganymede 1 tur atar.",
+      draw(t,c){const tt=reduce?2:t,w=1.5;[26,38,52].forEach(r=>ring(C,C,r,c.fa,.55));
+        x.save();x.beginPath();x.arc(C,C,15,0,TAU);x.clip();banded(C,C,15,c.tan,c.tan2,6);
+        const sx=C-22+((tt*6)%44);x.fillStyle=c.bad;x.globalAlpha=.85;x.beginPath();x.ellipse(sx,C+4,3.6,2.2,0,0,TAU);x.fill();x.restore();
+        [[26,w,c.ac,2.6],[38,w/2,c.ink,2.4],[52,w/4,c.cy,3]].forEach(([r,om,col,s])=>{const a=-tt*om;dot(C+r*Math.cos(a),C+r*Math.sin(a),s,col)})}},
+    moon:{title:"Ay hep aynı yüzünü gösterir",text:"Kendi ekseni etrafında dönüşü yörüngesiyle eş zamanlı. Üstelik Dünya'dan her yıl ~3,8 cm uzaklaşıyor.",
+      draw(t,c){const tt=reduce?1:t,a=-tt*.8,R=44,mx=C+R*Math.cos(a),my=C+R*Math.sin(a);
+        ring(C,C,R,c.fa,.6,[2,4]); dot(C,C,14,c.cy); x.save();x.globalAlpha=.35;dot(C-4,C-3,5,c.good);dot(C+5,C+4,3.5,c.good);x.restore();
+        dot(mx,my,7,c.moon); const fx=mx-(mx-C)/R*3.6, fy=my-(my-C)/R*3.6; x.save();x.globalAlpha=.55;dot(fx,fy,2.4,c.fa);dot(fx+1.8,fy-1.6,1.2,c.fa);x.restore()}},
+    iss:{title:"Günde 16 gün doğumu",text:"Uluslararası Uzay İstasyonu Dünya'nın çevresini yaklaşık 92 dakikada bir, saatte ~28.000 km hızla dolaşır.",
+      draw(t,c){const tt=reduce?.8:t,a=tt*2.1,rx=48,ry=15,inc=-.45;
+        const px=C+rx*Math.cos(a)*Math.cos(inc)-ry*Math.sin(a)*Math.sin(inc), py=C+rx*Math.cos(a)*Math.sin(inc)+ry*Math.sin(a)*Math.cos(inc), behind=Math.sin(a)<0;
+        x.save();x.translate(C,C);x.rotate(inc);x.globalAlpha=.5;x.strokeStyle=c.fa;x.setLineDash([2,3]);x.beginPath();x.ellipse(0,0,rx,ry,0,0,TAU);x.stroke();x.restore();
+        if(behind)dot(px,py,2.4,c.ac);
+        x.save();x.beginPath();x.arc(C,C,28,0,TAU);x.clip();x.fillStyle=c.cy;x.fillRect(C-28,C-28,56,56);
+        x.strokeStyle=c.well;x.globalAlpha=.35;x.lineWidth=1;for(let k=0;k<4;k++){const ph=((tt*.25+k/4)%1)*Math.PI;x.beginPath();x.ellipse(C,C,Math.abs(28*Math.cos(ph)),28,0,0,TAU);x.stroke()}
+        x.globalAlpha=.38;x.fillStyle="#000";x.fillRect(C-28,C-28,24,56);x.restore();
+        if(!behind){dot(px,py,2.4,c.ac);x.save();x.strokeStyle=c.ac;x.globalAlpha=.6;x.beginPath();x.moveTo(px-4,py);x.lineTo(px+4,py);x.stroke();x.restore()}}},
+    halley:{title:"Güneş'e yaklaşan hızlanır",text:"Kepler'in 2. yasası: Halley Kuyruklu Yıldızı Güneş'in yakınından çok hızlı geçer. Bir sonraki ziyareti 2061'de.",
+      draw(t,c){const e=.82,a=50,b=a*Math.sqrt(1-e*e),cx=56,sx=cx+a*e,tt=reduce?3:t;
+        x.save();x.globalAlpha=.55;x.strokeStyle=c.fa;x.setLineDash([2,4]);x.beginPath();x.ellipse(cx,C,a,b,0,0,TAU);x.stroke();x.restore();
+        dot(sx,C,6,c.ac);x.save();x.globalAlpha=.2;dot(sx,C,10,c.ac);x.restore();
+        const M=((tt*.9)%TAU);let E=M;for(let i=0;i<8;i++)E-= (E-e*Math.sin(E)-M)/(1-e*Math.cos(E));
+        const px=cx+a*Math.cos(E),py=C-b*Math.sin(E),dx=px-sx,dy=py-C,r=Math.hypot(dx,dy),L=4+20*(1-r/(a*(1+e)));
+        const g=x.createLinearGradient(px,py,px+dx/r*L,py+dy/r*L);g.addColorStop(0,c.cy);g.addColorStop(1,"transparent");
+        x.save();x.strokeStyle=g;x.lineWidth=3;x.lineCap="round";x.beginPath();x.moveTo(px,py);x.lineTo(px+dx/r*L,py+dy/r*L);x.stroke();x.restore();
+        dot(px,py,2.6,c.ink)}}
+  };
+  const keys=Object.keys(P);
+  let last=S.get("ka_promo",null), pick=keys[Math.floor(Math.random()*keys.length)];
+  if(pick===last&&keys.length>1) pick=keys[(keys.indexOf(pick)+1+Math.floor(Math.random()*(keys.length-1)))%keys.length];
+  S.set("ka_promo",pick);
+  const v=P[pick];
+  document.getElementById("simTitle").textContent=v.title;
+  document.getElementById("simText").textContent=v.text;
+  let pal=null; const readPal=()=>{const dark=document.documentElement.dataset.mode!=="light";
+    pal={cy:css("--cyan"),ac:css("--accent"),fa:css("--faint"),ink:css("--ink"),bad:css("--bad"),good:css("--good"),well:css("--well"),void:css("--void"),
+      tan:dark?"#d9b273":"#c99a4e",tan2:dark?"#a77d43":"#9c7034",moon:dark?"#c9d2d4":"#9aa09c"}};
+  readPal();
+  let vis=true; const t0=performance.now();
+  function frame(now){x.clearRect(0,0,W,W);x.lineWidth=1.4;v.draw((now-t0)/1000,pal);if(!reduce&&vis)requestAnimationFrame(frame)}
+  if("IntersectionObserver" in window){new IntersectionObserver(es=>{const s=es[0].isIntersecting; if(s&&!vis){vis=true;requestAnimationFrame(frame)} vis=s}).observe(cv)}
+  modeBtn.addEventListener("click",()=>{readPal(); if(reduce)requestAnimationFrame(frame)});
   requestAnimationFrame(frame);
 })();
 
