@@ -23,6 +23,7 @@
   --t-grey:#26333a; --t-orange:#e8a23f; --t-green:#3fae7a; --t-dark:#0a1014;
   --t-grey-ink:#d9e7eb;
   --pg1:#5ee7b0; --pg2:#43c6e8; --pg3:#6f8bff;
+  --sb-thumb:rgba(140,196,212,.32); --sb-track:rgba(3,5,7,.5);
   --cell:rgba(3,5,7,.6); --chip:rgba(3,5,7,.5); --well:rgba(3,5,7,.35); --field:rgba(3,5,7,.7);
   --glow1:rgba(159,214,228,.07); --glow2:rgba(255,181,71,.04);
   --shadow:0 12px 32px rgba(0,0,0,.5);
@@ -42,12 +43,18 @@
   --good:#2f8656; --warn:#9a6d0a; --bad:#bb3f33;
   --t-grey:#8d877b; --t-orange:#df9a36; --t-green:#3f9a68; --t-dark:#1d1a14; --t-grey-ink:#fffaf0;
   --pg1:#1f9e72; --pg2:#1d8fb3; --pg3:#3f5fd6;
+  --sb-thumb:rgba(90,78,58,.38); --sb-track:#f3ecdf;
   --cell:#fbf8f1; --chip:#f8f3e8; --well:#f3ecdf; --field:#fbf8f1;
   --glow1:rgba(45,107,120,.06); --glow2:rgba(180,111,12,.07);
   --shadow:0 8px 22px rgba(90,70,40,.12);
   color-scheme:light;
 }
 *{box-sizing:border-box}
+/* kaydırma çubukları temayla birlikte değişsin (tarayıcının kendi rengi tema geçişinde takılı kalabiliyor) */
+html,textarea,select,.list{scrollbar-color:var(--sb-thumb) var(--sb-track)}
+textarea::-webkit-scrollbar,html::-webkit-scrollbar{width:12px;height:12px}
+textarea::-webkit-scrollbar-track,html::-webkit-scrollbar-track{background:var(--sb-track)}
+textarea::-webkit-scrollbar-thumb,html::-webkit-scrollbar-thumb{background:var(--sb-thumb);border:3px solid var(--sb-track)}
 button,input,select,textarea{font:inherit;color:inherit}
 body{background:var(--bg);color:var(--ink);font:13.5px/1.45 var(--f-body);-webkit-font-smoothing:antialiased;
   background-image:radial-gradient(ellipse at 20% -10%,var(--glow1),transparent 55%),radial-gradient(ellipse at 110% 110%,var(--glow2),transparent 50%);
@@ -247,7 +254,7 @@ textarea{min-height:92px;resize:vertical}
   <div class="brand">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="3"/><path d="M12 1.5v4M12 18.5v4M1.5 12h4M18.5 12h4"/></svg>
     <h1>Kelime Avcısı</h1>
-    <span class="ver" title="Son güncelleme: 7 Kasım 2026 16:44">v1.28</span>
+    <span class="ver" title="Son güncelleme: 7 Kasım 2026 16:55">v1.29</span>
   </div>
   <div class="today">
     <div><span class="lbl">Tarih</span><span class="val date" id="dDate">—</span></div>
@@ -323,7 +330,7 @@ textarea{min-height:92px;resize:vertical}
   </section>
 </div>
 <footer class="foot">
-  <span>Kelime Avcısı <b>v1.28</b></span><span class="dotsep">·</span><span>Son güncelleme 7 Kasım 2026 16:44</span><span class="dotsep">·</span><a href="https://github.com/baqiKk/kelime-avcisi" target="_blank" rel="noopener">Kaynak kod</a>
+  <span>Kelime Avcısı <b>v1.29</b></span><span class="dotsep">·</span><span>Son güncelleme 7 Kasım 2026 16:55</span><span class="dotsep">·</span><a href="https://github.com/baqiKk/kelime-avcisi" target="_blank" rel="noopener">Kaynak kod</a>
 </footer>
 
 <script>
