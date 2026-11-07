@@ -24,6 +24,7 @@
   --t-grey-ink:#d9e7eb;
   --pg1:#5ee7b0; --pg2:#43c6e8; --pg3:#6f8bff;
   --sb-thumb:rgba(140,196,212,.32); --sb-track:rgba(3,5,7,.5);
+  --env-back:#0f2029; --env-front:#163543; --env-flap:#1c4252; --env-flapo:#122c38; --env-line:rgba(159,214,228,.75); --env-paper:#e4eef0; --env-pline:#9db4ba;
   --cell:rgba(3,5,7,.6); --chip:rgba(3,5,7,.5); --well:rgba(3,5,7,.35); --field:rgba(3,5,7,.7);
   --glow1:rgba(159,214,228,.07); --glow2:rgba(255,181,71,.04);
   --shadow:0 12px 32px rgba(0,0,0,.5);
@@ -44,6 +45,7 @@
   --t-grey:#8d877b; --t-orange:#df9a36; --t-green:#3f9a68; --t-dark:#1d1a14; --t-grey-ink:#fffaf0;
   --pg1:#1f9e72; --pg2:#1d8fb3; --pg3:#3f5fd6;
   --sb-thumb:rgba(90,78,58,.38); --sb-track:#f3ecdf;
+  --env-back:#c3a576; --env-front:#dcc394; --env-flap:#cfb27f; --env-flapo:#b39463; --env-line:#8a6d3f; --env-paper:#fffaf0; --env-pline:#d8cbb0;
   --cell:#fbf8f1; --chip:#f8f3e8; --well:#f3ecdf; --field:#fbf8f1;
   --glow1:rgba(45,107,120,.06); --glow2:rgba(180,111,12,.07);
   --shadow:0 8px 22px rgba(90,70,40,.12);
@@ -228,38 +230,46 @@ button.pill{cursor:default;border-radius:0}
 .dotsep{color:var(--line3)}
 
 /* geri bildirim zarfı */
-.mail{position:fixed;right:max(18px,env(safe-area-inset-right,0px));bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:60}
-.env{position:relative;display:block;width:68px;height:46px;padding:0;border:0;background:none;cursor:pointer}
-.env>span{position:absolute;left:0;right:0}
-.env-back{inset:0;background:#c9ae7c;border-radius:3px}
-.env-flap{top:-20px;height:21px;background:#b39463;clip-path:polygon(0 100%,50% 0,100% 100%);transform-origin:bottom;transition:transform .3s}
-.env-paper{left:7px!important;right:7px!important;top:4px;height:38px;background:#fffaf0;border-radius:2px;box-shadow:0 1px 2px rgba(0,0,0,.2);transition:transform .35s cubic-bezier(.3,1.4,.5,1);padding:7px 7px 0;display:flex;flex-direction:column;gap:5px}
-.env-paper i{display:block;height:1.5px;background:#d8cbb0}
-.env-paper i:nth-child(3){width:60%}
-.env-front{inset:0;background:#dcc394;border-radius:3px;clip-path:polygon(0 18%,50% 62%,100% 18%,100% 100%,0 100%);box-shadow:inset 0 -1px 0 rgba(0,0,0,.08)}
-.env::after{content:"";position:absolute;inset:-4px -4px -4px -4px;border-radius:6px;box-shadow:0 8px 20px rgba(0,0,0,.28);z-index:-1;pointer-events:none}
-.env:hover .env-paper,.env:focus-visible .env-paper{transform:translateY(-14px)}
-.mail.open .env-paper{transform:translateY(-40px);opacity:0;transition:transform .35s ease-in,opacity .2s .25s}
-.mail.open .env-flap{transform:scaleY(.6)}
-.letter{position:absolute;right:0;bottom:62px;width:min(310px,calc(100vw - 36px));background:#fffaf0;color:#2b261d;padding:14px 16px 12px;border-radius:3px;
-  box-shadow:0 18px 40px rgba(0,0,0,.35);transform-origin:50% 100%}
-.letter::before{content:"";position:absolute;left:0;right:0;top:33.3%;border-top:1px dashed rgba(120,100,70,.18);pointer-events:none}
-.letter::after{content:"";position:absolute;left:0;right:0;top:66.6%;border-top:1px dashed rgba(120,100,70,.18);pointer-events:none}
+.mail{position:fixed;right:max(18px,env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:60}
+.env{position:relative;display:block;width:96px;height:88px;padding:0;border:0;background:none;cursor:pointer;filter:drop-shadow(0 8px 14px rgba(0,0,0,.32))}
+.env svg{width:100%;height:100%;overflow:visible}
+.env .e-back{fill:var(--env-back);stroke:var(--env-line);stroke-width:1.4}
+.env .e-front{fill:var(--env-front);stroke:var(--env-line);stroke-width:1.4;stroke-linejoin:round}
+.env .e-fold{fill:none;stroke:var(--env-line);stroke-width:1;opacity:.45}
+.env .e-flapc{fill:var(--env-flap);stroke:var(--env-line);stroke-width:1.4;stroke-linejoin:round;transform-box:view-box;transform-origin:50px 33px;transition:transform .18s ease-in}
+.env .e-flapo{fill:var(--env-flapo);stroke:var(--env-line);stroke-width:1.4;stroke-linejoin:round;transform-box:view-box;transform-origin:50px 33px;transform:scaleY(0);transition:transform .18s ease-out}
+.env .e-paper rect{fill:var(--env-paper);stroke:var(--env-line);stroke-width:1}
+.env .e-paper path{stroke:var(--env-pline);stroke-width:2;stroke-linecap:round}
+.env .e-paper{transition:transform .35s cubic-bezier(.3,1.4,.5,1),opacity .2s}
+.env .e-seal{fill:var(--accent);stroke:var(--env-line);stroke-width:1;transform-box:fill-box;transform-origin:center;transition:transform .2s,opacity .15s}
+.env:hover .e-flapc,.env:focus-visible .e-flapc{transform:scaleY(.82)}
+.env:hover .e-seal{transform:scale(1.15)}
+.mail.open .e-flapc{transform:scaleY(0)}
+.mail.open .e-seal{opacity:0;transform:scale(.4)}
+.mail.open .e-flapo{transform:scaleY(1);transition-delay:.18s}
+.mail.open .e-paper{transform:translateY(-34px);opacity:0;transition:transform .4s .32s ease-in,opacity .2s .58s}
+.env-tip{position:absolute;right:104px;bottom:30px;white-space:nowrap;background:var(--solid);color:var(--ink);border:1px solid var(--line2);padding:6px 9px;font:600 10.5px/1 var(--f-disp);letter-spacing:.12em;text-transform:uppercase;opacity:0;transform:translateX(6px);transition:opacity .2s,transform .2s;pointer-events:none}
+.mail:not(.open) .env:hover ~ .env-tip,.mail:not(.open):hover .env-tip{opacity:1;transform:none}
+@media (prefers-reduced-motion:no-preference){.mail:not(.open) .env{animation:envNudge 9s ease-in-out 4s infinite}}
+@keyframes envNudge{0%,90%,100%{transform:none}92%{transform:rotate(-6deg)}94%{transform:rotate(5deg)}96%{transform:rotate(-3deg)}98%{transform:rotate(1deg)}}
+.letter{position:absolute;right:0;bottom:92px;width:min(320px,calc(100vw - 36px));background:#fffaf0;color:#2b261d;padding:14px 16px 12px;border-radius:3px;box-shadow:0 18px 40px rgba(0,0,0,.35);transform-origin:50% 100%}
+.letter::before,.letter::after{content:"";position:absolute;left:0;right:0;border-top:1px dashed rgba(120,100,70,.18);pointer-events:none}
+.letter::before{top:33.3%}.letter::after{top:66.6%}
 .lt-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
 .lt-to{font:600 15px/1.2 var(--f-disp);letter-spacing:.02em;color:#5a4528}
 .lt-x{border:0;background:none;color:#8a7650;font-size:22px;line-height:1;cursor:pointer;padding:0 2px}
-.letter textarea{width:100%;min-height:150px;resize:vertical;border:0;outline:0;background:transparent;color:#2b261d;padding:2px 0;font:15px/26px var(--f-body);
-  background-image:repeating-linear-gradient(transparent 0 25px,#e5d9c0 25px 26px);scrollbar-color:#cdbb95 transparent}
+.letter textarea{width:100%;min-height:150px;resize:vertical;border:0;outline:0;background:transparent;color:#2b261d;padding:2px 0;font:15px/26px var(--f-body);background-image:repeating-linear-gradient(transparent 0 25px,#e5d9c0 25px 26px);scrollbar-color:#cdbb95 transparent}
 .letter textarea::placeholder{color:#a8977a}
 .lt-f{display:flex;align-items:center;gap:10px;margin-top:8px}
 .lt-n{flex:1;font-size:11.5px;color:#8a7650;line-height:1.35}
+.lt-n.err{color:#b23b2e}
 .lt-send{border:1px solid #8a5a1a;background:#b46f0c;color:#fff8ec;padding:8px 14px;font:600 11px/1 var(--f-disp);letter-spacing:.12em;text-transform:uppercase;cursor:pointer;border-radius:2px}
 .lt-send:disabled{opacity:.55;cursor:default}
-.lt-n.err{color:#b23b2e}
-.mail-toast{position:absolute;right:0;bottom:60px;white-space:nowrap;background:var(--solid);color:var(--good);border:1px solid var(--good);padding:7px 10px;font:600 11px/1 var(--f-disp);letter-spacing:.1em;text-transform:uppercase;opacity:0;pointer-events:none;transition:opacity .3s}
+.mail-toast{position:absolute;right:0;bottom:96px;white-space:nowrap;background:var(--solid);color:var(--good);border:1px solid var(--good);padding:7px 10px;font:600 11px/1 var(--f-disp);letter-spacing:.1em;text-transform:uppercase;opacity:0;pointer-events:none;transition:opacity .3s}
 .mail-toast.on{opacity:1}
+.rk-cv{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:9998}
 .sr{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-@media (max-width:520px){.env{transform:scale(.85);transform-origin:100% 100%}}
+@media (max-width:520px){.env{width:76px;height:70px}.letter{bottom:76px}.mail-toast{bottom:78px}.env-tip{display:none}}
 
 /* forms */
 label{display:block;margin-bottom:6px;font:500 10px/1.15 var(--f-disp);letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
@@ -288,7 +298,7 @@ textarea{min-height:92px;resize:vertical}
   <div class="brand">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="3"/><path d="M12 1.5v4M12 18.5v4M1.5 12h4M18.5 12h4"/></svg>
     <h1>Kelime Avcısı</h1>
-    <span class="ver" title="Son güncelleme: 7 Kasım 2026 17:00">v1.30</span>
+    <span class="ver" title="Son güncelleme: 7 Kasım 2026 18:56">v1.31</span>
   </div>
   <div class="today">
     <div><span class="lbl">Tarih</span><span class="val date" id="dDate">—</span></div>
@@ -364,14 +374,21 @@ textarea{min-height:92px;resize:vertical}
   </section>
 </div>
 <footer class="foot">
-  <span>Kelime Avcısı <b>v1.30</b></span><span class="dotsep">·</span><span>Son güncelleme 7 Kasım 2026 17:00</span><span class="dotsep">·</span><a href="https://github.com/baqiKk/kelime-avcisi" target="_blank" rel="noopener">Kaynak kod</a>
+  <span>Kelime Avcısı <b>v1.31</b></span><span class="dotsep">·</span><span>Son güncelleme 7 Kasım 2026 18:56</span><span class="dotsep">·</span><a href="https://github.com/baqiKk/kelime-avcisi" target="_blank" rel="noopener">Kaynak kod</a>
 </footer>
 
 <div class="mail" id="mail">
+  <span class="env-tip" aria-hidden="true">Bize yaz</span>
   <button class="env" id="envBtn" type="button" aria-label="Geri bildirim gönder" title="Geri bildirim gönder">
-    <span class="env-back"></span><span class="env-flap"></span>
-    <span class="env-paper"><i></i><i></i><i></i></span>
-    <span class="env-front"></span>
+    <svg viewBox="0 0 100 92" aria-hidden="true">
+      <rect class="e-back" x="4" y="32" width="92" height="56" rx="3"/>
+      <path class="e-flapo" d="M4 33 L50 4 L96 33 Z"/>
+      <g class="e-paper"><rect x="13" y="36" width="74" height="48" rx="2"/><path d="M21 46h58M21 54h58M21 62h40"/></g>
+      <path class="e-front" d="M4 33 L50 64 L96 33 V85 a3 3 0 0 1 -3 3 H7 a3 3 0 0 1 -3 -3 Z"/>
+      <path class="e-fold" d="M5 86 L40 56 M95 86 L60 56"/>
+      <path class="e-flapc" d="M4 33 L50 66 L96 33 Z"/>
+      <circle class="e-seal" cx="50" cy="62" r="6.5"/>
+    </svg>
   </button>
   <form class="letter" id="letter" hidden novalidate>
     <div class="lt-h"><span class="lt-to">Sevgili Kelime Avcısı,</span><button class="lt-x" id="ltClose" type="button" aria-label="Kapat">×</button></div>
@@ -767,13 +784,16 @@ modeBtn.onclick=()=>{
         ring(C,C,R,c.fa,.6,[2,4]); dot(C,C,14,c.cy); x.save();x.globalAlpha=.35;dot(C-4,C-3,5,c.good);dot(C+5,C+4,3.5,c.good);x.restore();
         dot(mx,my,7,c.moon); const fx=mx-(mx-C)/R*3.6, fy=my-(my-C)/R*3.6; x.save();x.globalAlpha=.55;dot(fx,fy,2.4,c.fa);dot(fx+1.8,fy-1.6,1.2,c.fa);x.restore()}},
     iss:{title:"Günde 16 gün doğumu",text:"Uluslararası Uzay İstasyonu Dünya'nın çevresini yaklaşık 92 dakikada bir, saatte ~28.000 km hızla dolaşır.",
-      draw(t,c){const tt=reduce?.8:t,a=tt*2.1,rx=48,ry=15,inc=-.45;
+      draw(t,c){const tt=reduce?.8:t,a=tt*2.1,rx=48,ry=15,inc=-.45,R=28;
         const px=C+rx*Math.cos(a)*Math.cos(inc)-ry*Math.sin(a)*Math.sin(inc), py=C+rx*Math.cos(a)*Math.sin(inc)+ry*Math.sin(a)*Math.cos(inc), behind=Math.sin(a)<0;
         x.save();x.translate(C,C);x.rotate(inc);x.globalAlpha=.5;x.strokeStyle=c.fa;x.setLineDash([2,3]);x.beginPath();x.ellipse(0,0,rx,ry,0,0,TAU);x.stroke();x.restore();
         if(behind)dot(px,py,2.4,c.ac);
-        x.save();x.beginPath();x.arc(C,C,28,0,TAU);x.clip();x.fillStyle=c.cy;x.fillRect(C-28,C-28,56,56);
-        x.strokeStyle=c.well;x.globalAlpha=.35;x.lineWidth=1;for(let k=0;k<4;k++){const ph=((tt*.25+k/4)%1)*Math.PI;x.beginPath();x.ellipse(C,C,Math.abs(28*Math.cos(ph)),28,0,0,TAU);x.stroke()}
-        x.globalAlpha=.38;x.fillStyle="#000";x.fillRect(C-28,C-28,24,56);x.restore();
+        x.save();x.beginPath();x.arc(C,C,R,0,TAU);x.clip();x.fillStyle=c.cy;x.fillRect(C-R,C-R,2*R,2*R);
+        x.strokeStyle=c.well;x.globalAlpha=.45;x.lineWidth=1;
+        // enlem çizgileri sabit, boylam çizgileri tek yönde (batıdan doğuya) akar; yalnızca öndeki yarı çizilir
+        [-.55,0,.55].forEach(l=>{const yy=C+R*l,hw=R*Math.sqrt(1-l*l);x.beginPath();x.ellipse(C,yy,hw,hw*.14,0,0,Math.PI);x.stroke()});
+        for(let k=0;k<6;k++){const lam=(((tt*.6+k*Math.PI/3)%TAU)+TAU)%TAU-Math.PI;if(Math.cos(lam)<=0)continue;const s=Math.sin(lam);x.beginPath();x.ellipse(C,C,Math.abs(R*s)+.01,R,0,-Math.PI/2,Math.PI/2,s<0);x.stroke()}
+        const sh=x.createLinearGradient(C-R,0,C+R*.2,0);sh.addColorStop(0,"rgba(0,0,0,.5)");sh.addColorStop(1,"rgba(0,0,0,0)");x.globalAlpha=1;x.fillStyle=sh;x.fillRect(C-R,C-R,2*R,2*R);x.restore();
         if(!behind){dot(px,py,2.4,c.ac);x.save();x.strokeStyle=c.ac;x.globalAlpha=.6;x.beginPath();x.moveTo(px-4,py);x.lineTo(px+4,py);x.stroke();x.restore()}}},
     halley:{title:"Güneş'e yaklaşan hızlanır",text:"Kepler'in 2. yasası: Halley Kuyruklu Yıldızı Güneş'in yakınından çok hızlı geçer. Bir sonraki ziyareti 2061'de.",
       draw(t,c){const e=.82,a=50,b=a*Math.sqrt(1-e*e),cx=56,sx=cx+a*e,tt=reduce?3:t;
@@ -832,7 +852,66 @@ modeBtn.onclick=()=>{
         const pt=f=>{const r=p/(1+e*Math.cos(f));const xx=r*Math.cos(f),yy=r*Math.sin(f);return [C+xx*Math.cos(rot)-yy*Math.sin(rot),C+12+yy*Math.cos(rot)+xx*Math.sin(rot)]};
         x.save();x.strokeStyle=c.ac;x.globalAlpha=.6;x.setLineDash([3,4]);x.beginPath();for(let f=-lim;f<=lim;f+=.02){const [a,b]=pt(f);f===-lim?x.moveTo(a,b):x.lineTo(a,b)}x.stroke();x.restore();
         banded(C,C+12,12,c.tan,c.tan2,5);
-        const [vx,vy]=pt(phi);dot(vx,vy,2.6,c.ink)}}
+        const [vx,vy]=pt(phi);dot(vx,vy,2.6,c.ink)}},
+    plutodwarf:{title:"Plüton neden gezegen değil?",text:"2006'da gezegen için 3 şart kondu: Güneş'in etrafında dönmek, küre olmak ve yörüngesini temizlemek. Plüton, Kuiper Kuşağı'nı paylaştığı için üçüncüsünü karşılamıyor.",
+      draw(t,c){const tt=reduce?2:t,w=.5;dot(C,C,5,c.ac);ring(C,C,34,c.fa,.55,[2,4]);
+        if(!this.kb){this.kb=Array.from({length:70},()=>[Math.random()*TAU,40+Math.random()*20,.6+Math.random()*.9])}
+        x.save();x.fillStyle=c.fa;this.kb.forEach(([a0,r,s])=>{const a=a0-tt*w*.45;x.globalAlpha=.55;x.fillRect(C+r*Math.cos(a)-s/2,C+r*Math.sin(a)*.92-s/2,s,s)});x.restore();
+        const na=-tt*w;dot(C+34*Math.cos(na),C+34*Math.sin(na),3.6,c.nep);
+        const e=.25,a=44,b=a*Math.sqrt(1-e*e),rot=.5,M=(-tt*w/1.5)%TAU;let E=M;for(let i=0;i<6;i++)E-=(E-e*Math.sin(E)-M)/(1-e*Math.cos(E));
+        x.save();x.translate(C,C);x.rotate(rot);x.globalAlpha=.6;x.strokeStyle=c.ac;x.setLineDash([2,3]);x.beginPath();x.ellipse(-a*e,0,a,b,0,0,TAU);x.stroke();x.restore();
+        const ex=-a*e+a*Math.cos(E),ey=b*Math.sin(E);dot(C+ex*Math.cos(rot)-ey*Math.sin(rot),C+ex*Math.sin(rot)+ey*Math.cos(rot),3,c.pluto)}},
+    blackhole:{title:"Işığın bile kaçamadığı yer",text:"Kara deliğin olay ufkundan ışık bile kaçamaz. M87*'nin ilk fotoğrafı 2019'da çekildi; kütlesi Güneş'in ~6,5 milyar katı.",
+      draw(t,c){const tt=reduce?1:t,tilt=-.18;
+        const disk=(back)=>{x.save();x.translate(C,C);x.rotate(tilt);[[46,"#ffcf7a",.35],[40,"#ffb547",.6],[33,"#ff8a3a",.8],[26,"#ffe1a8",.9]].forEach(([r,col,al],i)=>{
+          x.strokeStyle=col;x.globalAlpha=al;x.lineWidth=i==3?2:3;x.setLineDash([10+i*3,5]);x.lineDashOffset=-tt*(30+i*14);x.beginPath();x.ellipse(0,0,r,r*.24,0,back?Math.PI:0,back?TAU:Math.PI);x.stroke()});x.restore()};
+        disk(true);
+        x.save();x.globalAlpha=.75;x.strokeStyle="#ffcf7a";x.lineWidth=2.2;x.beginPath();x.ellipse(C,C-2,22,19,0,Math.PI*1.08,Math.PI*1.92);x.stroke();x.restore();
+        const g=x.createRadialGradient(C,C,10,C,C,20);g.addColorStop(0,"rgba(255,200,120,.0)");g.addColorStop(.6,"rgba(255,190,110,.55)");g.addColorStop(1,"rgba(255,190,110,0)");x.fillStyle=g;x.beginPath();x.arc(C,C,20,0,TAU);x.fill();
+        dot(C,C,12.5,"#000");disk(false)}},
+    pulsar:{title:"Kozmik deniz feneri",text:"Pulsarlar ışın saçarak dönen nötron yıldızlarıdır. Bilinen en hızlısı PSR J1748−2446ad saniyede 716 tur atar.",
+      draw(t,c){const tt=reduce?.3:t,ph=tt*2.6,ax=.45;
+        const beam=(dir)=>{const L=70,wd=.16,a=ph+dir*Math.PI,ca=Math.cos(a),sa=Math.sin(a);
+          // ışın eksen etrafında döner; görünür izdüşüm
+          const bx=Math.sin(ax)*ca, by=-Math.cos(ax)*(dir?-1:1), bz=Math.sin(ax)*sa, len=L*Math.hypot(bx,by);
+          const ang=Math.atan2(by,bx);const g=x.createLinearGradient(C,C,C+Math.cos(ang)*len,C+Math.sin(ang)*len);g.addColorStop(0,c.cy);g.addColorStop(1,"rgba(159,214,228,0)");
+          x.save();x.globalAlpha=.55+.35*Math.max(0,bz);x.fillStyle=g;x.beginPath();x.moveTo(C,C);x.arc(C,C,len,ang-wd,ang+wd);x.closePath();x.fill();x.restore()};
+        beam(0);beam(1);
+        x.save();x.globalAlpha=.4;x.strokeStyle=c.fa;x.beginPath();x.ellipse(C,C,16,7,0,0,TAU);x.stroke();x.beginPath();x.ellipse(C,C,24,11,0,0,TAU);x.stroke();x.restore();
+        const g2=x.createRadialGradient(C,C,0,C,C,12);g2.addColorStop(0,"#fff");g2.addColorStop(.35,c.cy);g2.addColorStop(1,"rgba(159,214,228,0)");x.fillStyle=g2;x.beginPath();x.arc(C,C,12,0,TAU);x.fill()}},
+    neutron:{title:"Bir çay kaşığı, bir milyar ton",text:"Dev bir yıldız çökünce şehir büyüklüğünde bir nötron yıldızı kalır. Bir çay kaşığı maddesi yaklaşık 1 milyar ton gelir.",
+      draw(t,c){const cyc=4.2,u=reduce?.9:((t%cyc)/cyc);
+        if(u<.45){const k=u/.45,r=40-36*k*k;const g=x.createRadialGradient(C,C,0,C,C,r);g.addColorStop(0,"#ffd9a0");g.addColorStop(1,"#d9573b");x.fillStyle=g;x.beginPath();x.arc(C,C,r,0,TAU);x.fill()}
+        else{const k=(u-.45)/.55;if(k<.6){x.save();x.globalAlpha=(1-k/.6)*.8;x.strokeStyle="#ffcf7a";x.lineWidth=3;x.beginPath();x.arc(C,C,6+k*95,0,TAU);x.stroke();x.restore()}
+          const g=x.createRadialGradient(C,C,0,C,C,12);g.addColorStop(0,"#fff");g.addColorStop(.3,c.cy);g.addColorStop(1,"rgba(159,214,228,0)");x.fillStyle=g;x.beginPath();x.arc(C,C,12,0,TAU);x.fill();dot(C,C,3.2,"#fff")}}},
+    sunmass:{title:"Güneş her şeyi taşıyor",text:"Güneş Sistemi'ndeki tüm kütlenin ~%99,86'sı Güneş'te. Gezegenlerin hepsi kalan %0,14'ü paylaşıyor.",
+      draw(t,c){const tt=reduce?1:t;const g=x.createRadialGradient(C,C,8,C,C,34);g.addColorStop(0,c.ac);g.addColorStop(.75,c.ac);g.addColorStop(1,"rgba(255,181,71,0)");x.fillStyle=g;x.beginPath();x.arc(C,C,34,0,TAU);x.fill();
+        [[38,1.6,1.2],[44,1.1,1.6],[50,.8,1.8],[57,.5,1.4]].forEach(([r,w,s],i)=>{ring(C,C,r,c.fa,.35,[1,4]);const a=-tt*w+i;dot(C+r*Math.cos(a),C+r*Math.sin(a),s,i==2?c.cy:c.ink)})}},
+    hexagon:{title:"Satürn'ün altıgen fırtınası",text:"Satürn'ün kuzey kutbunda her kenarı Dünya'nın çapından uzun, altıgen biçimli dev bir fırtına dönüyor.",
+      draw(t,c){const tt=reduce?1:t;[54,48].forEach((r,i)=>ring(C,C,r,c.tan,.45-i*.1));
+        x.save();x.beginPath();x.arc(C,C,36,0,TAU);x.clip();x.fillStyle=c.tan;x.fillRect(C-36,C-36,72,72);
+        [30,24].forEach((r,i)=>{x.strokeStyle=c.tan2;x.globalAlpha=.6;x.lineWidth=3;x.beginPath();x.arc(C,C,r,0,TAU);x.stroke()});x.globalAlpha=1;
+        const ro=tt*.25;x.strokeStyle=c.nep2;x.lineWidth=2.4;x.fillStyle="rgba(63,108,198,.35)";x.beginPath();for(let i=0;i<6;i++){const a=ro+i*TAU/6;i?x.lineTo(C+17*Math.cos(a),C+17*Math.sin(a)):x.moveTo(C+17*Math.cos(a),C+17*Math.sin(a))}x.closePath();x.fill();x.stroke();
+        dot(C,C,3.5,c.nep2);x.restore();x.save();x.globalAlpha=.25;x.strokeStyle=c.ink;x.beginPath();x.arc(C,C,36,0,TAU);x.stroke();x.restore()}},
+    marssunset:{title:"Mars'ta gün batımı mavi",text:"Mars'taki ince toz, mavi ışığı Güneş'in çevresine saçar. Bu yüzden orada gün batımı mavi görünür.",
+      draw(t,c){const cyc=7,u=reduce?.55:((t%cyc)/cyc);const sky=x.createLinearGradient(0,0,0,128);sky.addColorStop(0,"#5a3324");sky.addColorStop(.7,"#b9774f");sky.addColorStop(1,"#d39a6e");x.fillStyle=sky;x.fillRect(0,0,128,128);
+        const sy=52+48*u,g=x.createRadialGradient(C,sy,2,C,sy,44);g.addColorStop(0,"rgba(220,240,255,.95)");g.addColorStop(.25,"rgba(120,170,230,.7)");g.addColorStop(1,"rgba(90,140,210,0)");x.fillStyle=g;x.fillRect(0,0,128,128);
+        dot(C,sy,5,"#eef6ff");x.fillStyle="#3a2018";x.beginPath();x.moveTo(0,100);x.quadraticCurveTo(30,90,56,98);x.quadraticCurveTo(84,106,128,94);x.lineTo(128,128);x.lineTo(0,128);x.closePath();x.fill()}},
+    europa:{title:"Buzun altında okyanus",text:"Jüpiter'in uydusu Europa'nın buz kabuğunun altında, Dünya'daki tüm okyanuslardan fazla su olduğu düşünülüyor.",
+      draw(t,c){const tt=reduce?1:t,R=36;dot(C,C,R,"#dfe7ea");
+        if(!this.cr){this.cr=Array.from({length:7},()=>[Math.random()*TAU,Math.random()*.8+.2,Math.random()*TAU])}
+        x.save();x.beginPath();x.arc(C,C,R,0,TAU);x.clip();x.strokeStyle="#a0714a";x.globalAlpha=.7;x.lineWidth=1.2;
+        this.cr.forEach(([a,r,p])=>{x.beginPath();for(let s=-1;s<=1.01;s+=.1){const px=C+Math.cos(a)*s*R+Math.sin(a)*R*r*.4*Math.sin(s*3+p),py=C+Math.sin(a)*s*R-Math.cos(a)*R*r*.4*Math.sin(s*3+p);s<-0.99?x.moveTo(px,py):x.lineTo(px,py)}x.stroke()});x.restore();
+        x.save();x.beginPath();x.moveTo(C,C);x.arc(C,C,R,-Math.PI/2,0);x.closePath();x.clip();
+        x.fillStyle="#f4f8fa";x.fillRect(C,C-R,R,R);dot(C,C,R-4,"#2f6fc4");
+        x.globalAlpha=.5;for(let k=0;k<3;k++){const rr=R-10-k*5;x.strokeStyle="#9cc6f2";x.lineWidth=1;x.setLineDash([3,4]);x.lineDashOffset=-tt*(8+k*4);x.beginPath();x.arc(C,C,rr,-Math.PI/2,0);x.stroke()}x.setLineDash([]);x.globalAlpha=1;
+        dot(C,C,R-18,"#8a6a4c");x.restore();x.save();x.globalAlpha=.3;x.strokeStyle=c.ink;x.beginPath();x.arc(C,C,R,0,TAU);x.stroke();x.restore()}},
+    olympus:{title:"Everest'in 2,5 katı",text:"Mars'taki Olympus Mons ~22 km yüksekliğiyle Güneş Sistemi'nin en büyük yanardağı; Everest ise ~8,8 km.",
+      draw(t,c){const u=reduce?1:Math.min(1,(t%7)/1.8),e=1-Math.pow(1-u,3),base=108;
+        x.save();x.strokeStyle=c.fa;x.globalAlpha=.6;x.beginPath();x.moveTo(6,base);x.lineTo(122,base);x.stroke();x.restore();
+        const oh=70*e;x.fillStyle=c.bad;x.globalAlpha=.85;x.beginPath();x.moveTo(36,base);x.bezierCurveTo(56,base-oh*.2,64,base-oh,82,base-oh);x.bezierCurveTo(100,base-oh,108,base-oh*.2,124,base);x.closePath();x.fill();x.globalAlpha=1;
+        const eh=28*e;x.fillStyle=c.cy;x.beginPath();x.moveTo(8,base);x.lineTo(19,base-eh);x.lineTo(30,base);x.closePath();x.fill();
+        x.save();x.fillStyle=c.dim;x.font="600 9px "+css("--f-mono");x.textAlign="center";x.globalAlpha=e;x.fillText("8,8",19,base-eh-4);x.fillText("21,9 km",82,base-oh-5);x.restore()}}
   };
   const keys=Object.keys(P);
   let last=S.get("ka_promo",null), pick=keys[Math.floor(Math.random()*keys.length)];
@@ -854,7 +933,7 @@ modeBtn.onclick=()=>{
 })();
 
 // geri bildirim zarfı: mesajlar Web3Forms üzerinden yalnızca geliştiricinin e-postasına gider
-const FEEDBACK_KEY="";
+const FEEDBACK_KEY="37da81da-05a0-4575-a3fe-f02b68cb08f6";
 (function(){
   const mail=document.getElementById("mail"),env=document.getElementById("envBtn"),form=document.getElementById("letter"),msg=document.getElementById("ltMsg"),
         send=document.getElementById("ltSend"),note=document.getElementById("ltNote"),toast=document.getElementById("mailToast");
@@ -865,17 +944,58 @@ const FEEDBACK_KEY="";
   msg.addEventListener("input",()=>{try{sessionStorage.setItem("ka_draft",msg.value)}catch(e){}});
   function open(){if(busy||!form.hidden)return;busy=true;mail.classList.add("open");
     setTimeout(()=>{form.hidden=false;note.textContent=NOTE;note.classList.remove("err");
-      const a=reduce?null:form.animate([{transform:"translateY(30px) scaleY(.34)",opacity:0},{transform:"translateY(10px) scaleY(.34)",opacity:1,offset:.25},{transform:"scaleY(.67)",offset:.6},{transform:"scaleY(1)"}],{duration:520,easing:"cubic-bezier(.3,.8,.4,1)"});
-      const fin=()=>{busy=false;msg.focus()}; a?a.onfinish=fin:fin()},reduce?0:300)}
-  function close(cb){if(form.hidden){cb&&cb();return}busy=true;
-    const a=reduce?null:form.animate([{transform:"scaleY(1)"},{transform:"scaleY(.67)",offset:.35},{transform:"translateY(10px) scaleY(.34)",opacity:1,offset:.7},{transform:"translateY(30px) scaleY(.34)",opacity:0}],{duration:420,easing:"ease-in"});
-    const fin=()=>{form.hidden=true;mail.classList.remove("open");busy=false;cb&&cb()}; a?a.onfinish=fin:fin()}
+      const a=reduce?null:form.animate([{transform:"translateY(40px) scaleY(.34)",opacity:0},{transform:"translateY(12px) scaleY(.34)",opacity:1,offset:.25},{transform:"scaleY(.67)",offset:.6},{transform:"scaleY(1)"}],{duration:520,easing:"cubic-bezier(.3,.8,.4,1)"});
+      const fin=()=>{busy=false;msg.focus()};a?a.onfinish=fin:fin()},reduce?0:640)}
+  function close(cb){if(form.hidden){mail.classList.remove("open");cb&&cb();return}busy=true;
+    const a=reduce?null:form.animate([{transform:"scaleY(1)"},{transform:"scaleY(.67)",offset:.35},{transform:"translateY(12px) scaleY(.34)",opacity:1,offset:.7},{transform:"translateY(40px) scaleY(.34)",opacity:0}],{duration:420,easing:"ease-in"});
+    const fin=()=>{form.hidden=true;mail.classList.remove("open");busy=false;setTimeout(()=>cb&&cb(),reduce?0:380)};a?a.onfinish=fin:fin()}
   env.onclick=()=>form.hidden?open():close();
   document.getElementById("ltClose").onclick=()=>close();
   document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!form.hidden)close()});
-  function showToast(t){toast.textContent=t;toast.classList.add("on");setTimeout(()=>toast.classList.remove("on"),2600)}
+  function showToast(t){toast.textContent=t;toast.classList.add("on");setTimeout(()=>toast.classList.remove("on"),2800)}
+
+  // mektup roketi: dikey kalkış, ardından SpaceX tarzı yerçekimi dönüşü; bulut, motor dumanı, uzakta parıltıyla kaybolma
+  function launch(done){
+    if(reduce){done();return}
+    const W=innerWidth,H=innerHeight,cv=document.createElement("canvas");cv.className="rk-cv";cv.width=W;cv.height=H;document.body.appendChild(cv);const g=cv.getContext("2d");
+    const dark=document.documentElement.dataset.mode!=="light",cs=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+    const br=env.getBoundingClientRect(),x0=br.left+br.width/2,y0=br.top+br.height*.35,xe=Math.max(60,W*.2),ye=Math.max(50,H*.12);
+    const P=[[x0,y0],[x0,y0-H*.5],[x0-(x0-xe)*.35,ye+H*.18],[xe,ye]];
+    const B=u=>{const v=1-u;return[0,1].map(i=>v*v*v*P[0][i]+3*v*v*u*P[1][i]+3*v*u*u*P[2][i]+u*u*u*P[3][i])};
+    const D=u=>{const v=1-u;return[0,1].map(i=>3*v*v*(P[1][i]-P[0][i])+6*v*u*(P[2][i]-P[1][i])+3*u*u*(P[3][i]-P[2][i]))};
+    const sprite=(rgb,a)=>{const s=document.createElement("canvas");s.width=s.height=96;const c=s.getContext("2d");
+      for(let j=0;j<7;j++){const ox=48+(Math.random()-.5)*34,oy=48+(Math.random()-.5)*34,r=18+Math.random()*20,gr=c.createRadialGradient(ox,oy,0,ox,oy,r);gr.addColorStop(0,`rgba(${rgb},${a})`);gr.addColorStop(1,`rgba(${rgb},0)`);c.fillStyle=gr;c.beginPath();c.arc(ox,oy,r,0,7);c.fill()}return s};
+    const smokeS=[sprite(dark?"205,214,218":"150,150,146",.5),sprite(dark?"180,190,196":"170,168,160",.5)], cloudS=[sprite("255,255,255",.75),sprite("242,246,250",.8),sprite("255,255,255",.7)],cloudShade=sprite(dark?"120,135,145":"150,140,120",.5);
+    const cu=.42,cp=B(cu),clouds=Array.from({length:7},(_,i)=>({x:cp[0]+(i-3)*46+(Math.random()-.5)*20,y:cp[1]+(Math.random()-.5)*26,r:46+Math.random()*30,s:cloudS[i%3],a:0}));
+    let smoke=[],t0=performance.now(),last=t0;const T=2300,SP=520;
+    const rocket=(px,py,ang,sc)=>{g.save();g.translate(px,py);g.rotate(ang);g.scale(sc,sc);
+      const fl=8+Math.random()*7,gr=g.createLinearGradient(0,22,0,22+fl+10);gr.addColorStop(0,"#fff6c8");gr.addColorStop(.4,"#ffb547");gr.addColorStop(1,"rgba(255,90,40,0)");
+      g.fillStyle=gr;g.beginPath();g.moveTo(-5,22);g.quadraticCurveTo(0,22+fl+12,5,22);g.closePath();g.fill();
+      g.lineWidth=1.3;g.strokeStyle="#23313a";g.fillStyle="#eef3f5";
+      g.beginPath();g.moveTo(-7,20);g.lineTo(-7,-12);g.quadraticCurveTo(0,-30,7,-12);g.lineTo(7,20);g.closePath();g.fill();g.stroke();
+      g.fillStyle=cs("--bad")||"#ff6f6f";g.beginPath();g.moveTo(-7,10);g.lineTo(-13,22);g.lineTo(-7,20);g.closePath();g.fill();g.stroke();g.beginPath();g.moveTo(7,10);g.lineTo(13,22);g.lineTo(7,20);g.closePath();g.fill();g.stroke();
+      g.fillStyle="#9fd6e4";g.beginPath();g.arc(0,-9,3.2,0,7);g.fill();g.stroke();
+      g.fillStyle="#fffaf0";g.fillRect(-5,1,10,7);g.strokeRect(-5,1,10,7);g.beginPath();g.moveTo(-5,1);g.lineTo(0,5);g.lineTo(5,1);g.stroke();
+      g.restore()};
+    const star=(px,py,k)=>{const r=4+26*Math.sin(Math.min(1,k)*Math.PI),rot=k*1.6;g.save();g.translate(px,py);g.rotate(rot);g.globalAlpha=1-Math.max(0,k-.6)/.4;
+      const gl=g.createRadialGradient(0,0,0,0,0,r*1.2);gl.addColorStop(0,"rgba(255,250,220,.9)");gl.addColorStop(1,"rgba(255,230,160,0)");g.fillStyle=gl;g.beginPath();g.arc(0,0,r*1.2,0,7);g.fill();
+      g.fillStyle="#fffbe6";g.beginPath();for(let i=0;i<8;i++){const a=i*Math.PI/4,rr=i%2?r*.22:r;g.lineTo(Math.cos(a)*rr,Math.sin(a)*rr)}g.closePath();g.fill();g.restore()};
+    const loop=now=>{const dt=Math.max(0,Math.min(.05,(now-last)/1000));last=now;const el=now-t0;g.clearRect(0,0,W,H);
+      const k=Math.min(1,el/T),u=Math.pow(k,1.65),p=B(u),d=D(Math.max(u,.001)),ang=Math.atan2(d[0],-d[1]),sc=1.45*(1-.72*Math.max(0,Math.min(1,(u-.55)/.45)));
+      if(el<T){for(let i=0;i<3;i++){const nx=p[0]-Math.sin(ang)*24*sc,ny=p[1]+Math.cos(ang)*24*sc;smoke.push({x:nx,y:ny,vx:(Math.random()-.5)*40-Math.sin(ang)*30,vy:(Math.random()-.5)*40+Math.cos(ang)*30,r:(5+Math.random()*5)*sc,gr:(22+Math.random()*20)*sc,life:0,ttl:.9+Math.random()*.6,s:smokeS[i%2],rot:Math.random()*6}) }}
+      for(const q of smoke){q.life+=dt;q.vx*=Math.exp(-1.8*dt);q.vy=q.vy*Math.exp(-1.8*dt)-8*dt;q.x+=q.vx*dt;q.y+=q.vy*dt;q.r+=q.gr*dt;const a=Math.max(0,1-q.life/q.ttl)*.75;if(a<.01)continue;g.save();g.globalAlpha=a;g.translate(q.x,q.y);g.rotate(q.rot);g.drawImage(q.s,-q.r,-q.r,2*q.r,2*q.r);g.restore()}
+      smoke=smoke.filter(q=>q.life<q.ttl);
+      if(el<T)rocket(p[0],p[1],ang,sc);
+      // bulut bandı: roketin önünde, geçerken araladığı bulutlar
+      const passK=(u-cu)/.12;clouds.forEach((c2,i)=>{const appear=Math.min(1,el/300),fade=el>T*.62?Math.max(0,1-(el-T*.62)/600):1;let push=0;if(passK>-1&&passK<3){const dx=c2.x-p[0];push=Math.sign(dx||1)*Math.max(0,40-Math.abs(dx))*.6*dt*10}c2.x+=push;
+        g.save();g.globalAlpha=(dark?.5:.55)*appear*fade;g.drawImage(cloudShade,c2.x-c2.r,c2.y-c2.r*.6+6,2*c2.r,1.2*c2.r);g.globalAlpha=(dark?.55:.95)*appear*fade;g.drawImage(c2.s,c2.x-c2.r,c2.y-c2.r*.6,2*c2.r,1.2*c2.r);g.restore()});
+      if(el>=T){star(P[3][0],P[3][1],(el-T)/SP)}
+      if(el<T+SP)requestAnimationFrame(loop);else{cv.remove();done()}};
+    requestAnimationFrame(loop);
+  }
+
   form.addEventListener("submit",async e=>{e.preventDefault();
-    const text=msg.value.trim(); if(text.length<3){note.textContent="Biraz daha yaz, en az birkaç kelime.";note.classList.add("err");return}
+    const text=msg.value.trim();if(text.length<3){note.textContent="Biraz daha yaz, en az birkaç kelime.";note.classList.add("err");return}
     if(!FEEDBACK_KEY){note.textContent="Geri bildirim kutusu henüz bağlanmadı, yakında açılacak.";note.classList.add("err");return}
     let lastSent=0;try{lastSent=+localStorage.getItem("ka_fb_last")||0}catch(_){}
     if(Date.now()-lastSent<30000){note.textContent="Az önce bir mektup gönderdin, biraz bekleyip tekrar dene.";note.classList.add("err");return}
@@ -886,9 +1006,10 @@ const FEEDBACK_KEY="";
       const j=await r.json().catch(()=>({}));
       if(!r.ok||j.success===false)throw new Error(j.message||r.status);
       try{localStorage.setItem("ka_fb_last",String(Date.now()));sessionStorage.removeItem("ka_draft")}catch(_){}
-      msg.value="";close(()=>showToast("Mektubun gönderildi, teşekkürler!"));
+      msg.value="";close(()=>launch(()=>showToast("Mektubun gönderildi, teşekkürler!")));
     }catch(err){note.textContent="Gönderilemedi. İnternet bağlantını kontrol edip tekrar dene.";note.classList.add("err")}
     finally{send.disabled=false;send.textContent="Gönder"}});
+  window.__kaLaunch=launch; // test için
 })();
 
 render();
