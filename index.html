@@ -247,7 +247,7 @@ textarea{min-height:92px;resize:vertical}
   <div class="brand">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="3"/><path d="M12 1.5v4M12 18.5v4M1.5 12h4M18.5 12h4"/></svg>
     <h1>Kelime Avcısı</h1>
-    <span class="ver" title="Son güncelleme: 7 Kasım 2026 16:41">v1.27</span>
+    <span class="ver" title="Son güncelleme: 7 Kasım 2026 16:44">v1.28</span>
   </div>
   <div class="today">
     <div><span class="lbl">Tarih</span><span class="val date" id="dDate">—</span></div>
@@ -323,7 +323,7 @@ textarea{min-height:92px;resize:vertical}
   </section>
 </div>
 <footer class="foot">
-  <span>Kelime Avcısı <b>v1.27</b></span><span class="dotsep">·</span><span>Son güncelleme 7 Kasım 2026 16:41</span><span class="dotsep">·</span><a href="https://github.com/baqiKk/kelime-avcisi" target="_blank" rel="noopener">Kaynak kod</a>
+  <span>Kelime Avcısı <b>v1.28</b></span><span class="dotsep">·</span><span>Son güncelleme 7 Kasım 2026 16:44</span><span class="dotsep">·</span><a href="https://github.com/baqiKk/kelime-avcisi" target="_blank" rel="noopener">Kaynak kod</a>
 </footer>
 
 <script>
@@ -618,6 +618,10 @@ modeBtn.onclick=()=>{
     const loop=now=>{const dt=Math.min(.05,(now-last)/1000);last=now;
       if(!smokeLanded){const b=g.getBoundingClientRect();emit(b.left+b.width/2,b.top+b.height*.25,2,false)}
       else if(now-smokeLanded<480){emit(tx+(Math.random()-.5)*30,ty+(Math.random()-.5)*30,3,true)}
+      // genişleyen sis cephesi: ekranın her yerine, köşeler dahil, bulut düşsün
+      if(smokeLanded&&now-smokeLanded<700){const u=(now-smokeLanded)/700,R=vmax*(.12+.85*u);
+        for(let i=0;i<3;i++){const a=Math.random()*6.283,d=R*(.75+Math.random()*.35),px=Math.max(-40,Math.min(W+40,tx+Math.cos(a)*d)),py=Math.max(-40,Math.min(H+40,ty+Math.sin(a)*d));
+          const n=parts.length;emit(px,py,1,true);const q=parts[n];q.vx*=.25;q.vy*=.25;q.r=vmax*.06;q.gr=vmax*(.16+Math.random()*.18)}}
       c2.clearRect(0,0,W,H);
       if(smokeLanded){const u=Math.min(1,(now-smokeLanded)/720);c2.fillStyle=`rgba(4,5,6,${.94*u*u*(3-2*u)})`;c2.fillRect(0,0,W,H)}
       for(const q of parts){q.life+=dt;const k=Math.exp(-2.6*dt);q.vx*=k;q.vy*=k;q.vy-=7*dt;q.vx+=Math.sin(q.seed+q.life*2.2)*14*dt;
@@ -641,9 +645,25 @@ modeBtn.onclick=()=>{
       setTimeout(()=>{
         const fl=document.createElement("div"); fl.className="fx-flash"; fl.style.setProperty("--x",tx+"px"); fl.style.setProperty("--y",ty+"px"); fx.appendChild(fl);
         const a=fl.animate([{opacity:0},{opacity:.93,offset:.08},{opacity:.93,offset:.3},{opacity:0}],{duration:1150,easing:"ease-out",fill:"forwards"});
+        // patlama: şok dalgası, kıvılcımlar, yatay parlama çizgisi ve flaş sonrası göz izi
+        const W=innerWidth,H=innerHeight,vmax=Math.max(W,H),cv=document.createElement("canvas");cv.className="fx-cv";cv.width=W;cv.height=H;fx.appendChild(cv);
+        const c3=cv.getContext("2d"),t1=performance.now();let lastF=t1,fr=0;
+        const sparks=Array.from({length:46},()=>{const an=Math.random()*6.283,sp=500+Math.random()*1100;return{x:tx,y:ty,vx:Math.cos(an)*sp,vy:Math.sin(an)*sp,life:0,ttl:.35+Math.random()*.55,w:1+Math.random()*1.6}});
+        const fl2=now=>{const dt=Math.max(0,Math.min(.05,(now-lastF)/1000));lastF=now;const el=Math.max(0,(now-t1)/1000);c3.clearRect(0,0,W,H);
+          // göz izi: parlamadan sonra ortada yavaşça sönen renkli leke
+          if(el>.3){const k=Math.max(0,1-(el-.3)/.85);const g2=c3.createRadialGradient(tx,ty,0,tx,ty,vmax*.22);g2.addColorStop(0,`rgba(150,110,200,${.28*k})`);g2.addColorStop(.5,`rgba(90,170,160,${.12*k})`);g2.addColorStop(1,"rgba(90,170,160,0)");c3.fillStyle=g2;c3.fillRect(0,0,W,H)}
+          c3.globalCompositeOperation="lighter";
+          if(el<.5){const u=el/.5,R=vmax*.9*(1-Math.pow(1-u,3));c3.strokeStyle=`rgba(255,248,225,${.9*(1-u)})`;c3.lineWidth=2+10*(1-u);c3.beginPath();c3.arc(tx,ty,R,0,7);c3.stroke()}
+          if(el<.65){const u=el/.65,hw=W*(.15+.85*Math.min(1,u*2.2)),hh=2+5*(1-u),g3=c3.createLinearGradient(tx-hw,0,tx+hw,0);
+            g3.addColorStop(0,"rgba(180,220,255,0)");g3.addColorStop(.5,`rgba(255,255,255,${.95*(1-u)})`);g3.addColorStop(1,"rgba(180,220,255,0)");c3.fillStyle=g3;c3.fillRect(tx-hw,ty-hh,2*hw,2*hh)}
+          for(const s of sparks){s.life+=dt;if(s.life>s.ttl)continue;const k=Math.exp(-3.2*dt);s.vx*=k;s.vy=s.vy*k+260*dt;const ox=s.x,oy=s.y;s.x+=s.vx*dt;s.y+=s.vy*dt;
+            const al=1-s.life/s.ttl;c3.strokeStyle=`rgba(255,${200+Math.round(55*al)},${120+Math.round(100*al)},${al})`;c3.lineWidth=s.w;c3.beginPath();c3.moveTo(ox-(s.x-ox)*1.5,oy-(s.y-oy)*1.5);c3.lineTo(s.x,s.y);c3.stroke()}
+          c3.globalCompositeOperation="source-over";
+          if(el<1.25)fr=requestAnimationFrame(fl2)};
+        fr=requestAnimationFrame(fl2);
         setTimeout(()=>{applyMode(to);done()},110);
         document.querySelectorAll(".bar,.wrap").forEach(el=>el.animate([{filter:"blur(2.5px) brightness(1.5)"},{filter:"none"}],{duration:900,delay:120,easing:"ease-out"}));
-        a.onfinish=()=>{fx.remove();clearTimeout(safety);release()};
+        a.onfinish=()=>{cancelAnimationFrame(fr);fx.remove();clearTimeout(safety);release()};
       },200);
     }
   };
