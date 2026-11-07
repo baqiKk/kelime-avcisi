@@ -82,20 +82,20 @@ button.pill{cursor:default;border-radius:0}
 /* grid */
 .wrap{max-width:1180px;margin:0 auto;display:grid;gap:14px;align-items:start;
   grid-template-columns:minmax(0,420px) minmax(0,1fr);grid-template-rows:auto auto auto 1fr;
-  grid-template-areas:"board list" "ad list" "topic list" "prompt list"}
-.a-board{grid-area:board}.a-list{grid-area:list}.a-topic{grid-area:topic}.a-prompt{grid-area:prompt}.a-ad{grid-area:ad}
-@media (max-width:860px){.wrap{grid-template-columns:minmax(0,1fr);grid-template-rows:auto;grid-template-areas:"board" "list" "ad" "topic" "prompt"}}
+  grid-template-areas:"board list" "sim list" "topic list" "prompt list"}
+.a-board{grid-area:board}.a-list{grid-area:list}.a-topic{grid-area:topic}.a-prompt{grid-area:prompt}.a-sim{grid-area:sim}
+@media (max-width:860px){.wrap{grid-template-columns:minmax(0,1fr);grid-template-rows:auto;grid-template-areas:"board" "list" "sim" "topic" "prompt"}}
 /* yörünge simülatörü tanıtımı */
-.ad{display:flex;align-items:center;gap:12px;padding:8px 12px 8px 8px;text-decoration:none;color:inherit;box-shadow:none}
-.ad:hover{border-color:var(--line3)}
-.ad:hover .ad-go{color:var(--accent)}
-.ad canvas{width:64px;height:64px;flex:none;border:1px solid var(--line);background:var(--well)}
-.ad-t{min-width:0;flex:1}
-.ad-t .lbl{display:flex;gap:8px;align-items:center}
-.ad-t .lbl em{font-style:normal;color:var(--faint);border:1px solid var(--line);padding:1px 4px;font-size:8.5px}
-.ad-t strong{display:block;font:600 13px/1.25 var(--f-disp);letter-spacing:.06em;text-transform:uppercase;color:var(--cyan);margin:4px 0 2px}
-.ad-t span.d{font-size:12.5px;color:var(--dim);line-height:1.4}
-.ad-go{flex:none;font:600 10.5px/1 var(--f-disp);letter-spacing:.14em;text-transform:uppercase;color:var(--dim);white-space:nowrap}
+.sim{display:flex;align-items:center;gap:12px;padding:8px 12px 8px 8px;text-decoration:none;color:inherit;box-shadow:none}
+.sim:hover{border-color:var(--line3)}
+.sim:hover .sim-go{color:var(--accent)}
+.sim canvas{width:64px;height:64px;flex:none;border:1px solid var(--line);background:var(--well)}
+.sim-t{min-width:0;flex:1}
+.sim-t .lbl{display:flex;gap:8px;align-items:center}
+.sim-t .lbl em{font-style:normal;color:var(--faint);border:1px solid var(--line);padding:1px 4px;font-size:8.5px}
+.sim-t strong{display:block;font:600 13px/1.25 var(--f-disp);letter-spacing:.06em;text-transform:uppercase;color:var(--cyan);margin:4px 0 2px}
+.sim-t span.d{font-size:12.5px;color:var(--dim);line-height:1.4}
+.sim-go{flex:none;font:600 10.5px/1 var(--f-disp);letter-spacing:.14em;text-transform:uppercase;color:var(--dim);white-space:nowrap}
 
 /* window panels */
 .win{position:relative;background:var(--panel);border:1px solid var(--line2);box-shadow:var(--shadow);min-width:0;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
@@ -227,14 +227,14 @@ textarea{min-height:92px;resize:vertical}
     </div>
   </section>
 
-  <a class="win ad a-ad" href="https://baqikk.github.io/orbital-simulator/kabin.html" target="_blank" rel="noopener">
+  <a class="win sim a-sim" href="https://baqikk.github.io/orbital-simulator/kabin.html" target="_blank" rel="noopener">
     <canvas id="orbit" width="128" height="128" aria-hidden="true"></canvas>
-    <div class="ad-t">
+    <div class="sim-t">
       <span class="lbl">Aynı geliştiriciden <em>Ücretsiz</em></span>
       <strong>Yörünge Transfer Simülatörü</strong>
       <span class="d">Dünya'dan Mars'a hangi gün kalkmalı? Gerçek gezegen konumlarıyla hesapla, uçuşu izle.</span>
     </div>
-    <span class="ad-go">Dene →</span>
+    <span class="sim-go">Dene →</span>
   </a>
 
   <section class="win a-list">
