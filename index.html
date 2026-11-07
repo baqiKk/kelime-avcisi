@@ -97,7 +97,7 @@ button.pill{cursor:default;border-radius:0}
 .a-board{grid-area:board}.a-list{grid-area:list}.a-topic{grid-area:topic}.a-prompt{grid-area:prompt}.a-sim{grid-area:sim}
 @media (max-width:860px){.wrap{grid-template-columns:minmax(0,1fr);grid-template-rows:auto;grid-template-areas:"board" "list" "sim" "topic" "prompt"}}
 /* yörünge simülatörü tanıtımı */
-.sim{display:flex;align-items:center;gap:12px;padding:8px 12px 8px 8px;text-decoration:none;color:inherit;box-shadow:none;background:color-mix(in srgb,var(--cyan) 7%,var(--panel));border-color:color-mix(in srgb,var(--cyan) 30%,var(--line2))}
+.win.sim{display:flex;align-items:center;gap:12px;padding:8px 12px 8px 8px;text-decoration:none;color:inherit;box-shadow:none;border:2px solid transparent;background:linear-gradient(color-mix(in srgb,var(--cyan) 6%,var(--solid)),color-mix(in srgb,var(--cyan) 6%,var(--solid))) padding-box,linear-gradient(120deg,var(--pg1),var(--pg2),var(--pg3)) border-box}
 .sim:hover{border-color:var(--line3)}
 .sim:hover .sim-go{color:var(--accent)}
 .sim canvas{width:64px;height:64px;flex:none;border:1px solid var(--line);background:var(--well)}
@@ -158,6 +158,15 @@ button.pill{cursor:default;border-radius:0}
 .best b{font:600 10.5px/1 var(--f-disp);letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-right:4px}
 .best .sub{flex-basis:100%;order:9;font-size:12px;color:var(--dim)}
 .best{row-gap:12px}
+.legend2{flex-basis:100%;order:10;display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;padding-top:8px;border-top:1px solid var(--line)}
+.legend2 i{font-style:normal;color:var(--faint)}
+.lg-t{font:600 10px/1 var(--f-disp);letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin-right:2px}
+.lg{display:inline-flex;align-items:center;gap:4px;padding:3px 7px;font:600 10.5px/1 var(--f-disp);letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--line);color:var(--ink);background:var(--chip)}
+.lg svg{width:12px;height:12px}
+.lg-p{border:1.5px solid transparent;color:var(--cyan);background:linear-gradient(var(--solid),var(--solid)) padding-box,linear-gradient(120deg,var(--pg1),var(--pg2),var(--pg3)) border-box}
+.lg-s{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
+.lg-g{border-color:var(--good)}
+.lg-x{flex-basis:100%;font-size:11.5px;color:var(--faint)}
 .brow{flex-basis:100%;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .brow b{min-width:118px}
 .best .w{position:relative}
@@ -493,7 +502,12 @@ function scheduleBest(cand,topic,pool){
     row("En çok daraltan",top);
     if(topicTop.length) row("Konudan en iyi",topicTop);
     if(daily.length) row("Gündelik",daily);
-    sub.textContent=`${basis}. Sayı: bu tahminden sonra ortalama kaç aday kalır. Yeşil: cevap olabilir.`+(topicTop.length?" ★ sarı: konudan en iyilerle ortak. Gezegen: gündelik kelimelerle ortak. İşaretliler ilk tercih.":"");
+    sub.textContent=`${basis}. ~sayı: bu tahminden sonra ortalama kaç aday kalır; küçük olan daha iyi.`;
+    const lg=document.createElement("div"); lg.className="legend2";
+    lg.innerHTML=(topicTop.length?'<span class="lg-t">Kabaca öncelik</span><span class="lg lg-p" title="Hem çok daraltır hem gündelik bir konu kelimesi">'+ICON_PLANET+'Gezegen</span><i>›</i><span class="lg lg-s" title="Hem çok daraltır hem konudan en iyilerden">★ Yıldız</span><i>›</i>':'<span class="lg-t">Kabaca öncelik</span>')
+      +'<span class="lg lg-g" title="Cevap olabilir">Yeşil</span><i>›</i><span class="lg lg-n" title="Cevap olmayabilir, sadece aday eler">Düz</span>'
+      +'<span class="lg-x">Gezegen ve yıldız hem eler hem cevap olabilir; yeşil cevap olabilir; düz sadece eler. Kesin kural değil, ~sayıya da bak.</span>';
+    box.appendChild(lg);
   },20);
 }
 function sec(el,t){const d=document.createElement("div"); d.className="sec"; d.textContent=t; el.appendChild(d)}
@@ -543,7 +557,7 @@ const ICON_FLASH='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" str
 const ICON_SMOKE='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"><rect x="6" y="10" width="9" height="11.5" rx="1"/><path d="M8 10V7.5h5V10"/><path d="M13 7.5l3.4 1.3v5.6"/><circle cx="6.6" cy="6" r="2"/><path d="M6 14h9M6 17.5h9"/><path d="M16.5 5.2c.9-1.3 2.4-1.3 3.2-.3M18 2.6c.7-.6 1.7-.5 2.3.2"/></svg>';
 const modeBtn=document.getElementById("modeBtn");
 function applyMode(m){document.documentElement.dataset.mode=m; const l=m==="light";
-  modeBtn.innerHTML=l?ICON_SMOKE:ICON_FLASH; const t=l?"Sis bombası: gece moduna geç":"Flaş bombası: gündüz moduna geç"; modeBtn.title=t; modeBtn.setAttribute("aria-label",t);
+  modeBtn.innerHTML=l?ICON_SMOKE:ICON_FLASH; const t=l?"Gece moduna geç":"Gündüz moduna geç"; modeBtn.title=t; modeBtn.setAttribute("aria-label",t);
   document.dispatchEvent(new Event("modechange"))}
 (function(){let m=S.get("ka_mode",null);
   if(!m){const h=document.documentElement.getAttribute("data-theme");
