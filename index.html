@@ -246,7 +246,7 @@ textarea{min-height:92px;resize:vertical}
   <div class="brand">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="3"/><path d="M12 1.5v4M12 18.5v4M1.5 12h4M18.5 12h4"/></svg>
     <h1>Kelime Avcısı</h1>
-    <span class="ver" title="Son güncelleme: 7 Kasım 2026 16:26">v1.24</span>
+    <span class="ver" title="Son güncelleme: 7 Kasım 2026 16:34">v1.25</span>
   </div>
   <div class="today">
     <div><span class="lbl">Tarih</span><span class="val date" id="dDate">—</span></div>
@@ -322,7 +322,7 @@ textarea{min-height:92px;resize:vertical}
   </section>
 </div>
 <footer class="foot">
-  <span>Kelime Avcısı <b>v1.24</b></span><span class="dotsep">·</span><span>Son güncelleme 7 Kasım 2026 16:26</span><span class="dotsep">·</span><a href="https://github.com/baqiKk/kelime-avcisi" target="_blank" rel="noopener">Kaynak kod</a>
+  <span>Kelime Avcısı <b>v1.25</b></span><span class="dotsep">·</span><span>Son güncelleme 7 Kasım 2026 16:34</span><span class="dotsep">·</span><a href="https://github.com/baqiKk/kelime-avcisi" target="_blank" rel="noopener">Kaynak kod</a>
 </footer>
 
 <script>
@@ -580,7 +580,7 @@ copyBtn.onclick=()=>{const msg=document.getElementById("copyMsg");
 
 // gece / gündüz: flaş bombası gündüze, sis bombası geceye geçirir
 const ICON_FLASH='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><rect x="9" y="7.5" width="6" height="15" rx=".8"/><path d="M10.3 7.5V5h3.4v2.5"/><path d="M13.7 5l3 1.1v7.4"/><circle cx="8.6" cy="3.6" r="1.7"/><path d="M10.1 4.1L11.2 5"/><circle cx="12" cy="11" r=".85" fill="currentColor" stroke="none"/><circle cx="12" cy="14.6" r=".85" fill="currentColor" stroke="none"/><circle cx="12" cy="18.2" r=".85" fill="currentColor" stroke="none"/></svg>';
-const ICON_SMOKE='<svg viewBox="0 0 24 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"><path d="M15.6 6.4L19.2 8V21"/><circle cx="6.8" cy="5.6" r="2.3"/><rect x="8.4" y="4.8" width="6.6" height="3.6" rx=".5"/><rect x="5" y="8.4" width="13.4" height="20.6" rx="1.8"/><rect x="5" y="12.2" width="13.4" height="1.7" fill="currentColor" stroke="none"/><rect x="5" y="23.6" width="13.4" height="1.7" fill="currentColor" stroke="none"/></svg>';
+const ICON_SMOKE='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"><rect x="7.6" y="8" width="8.4" height="14.2" rx="1.1"/><path d="M9.4 8V5.6h4.8V8"/><path d="M14.2 5.7l2.9 1.1v7.6"/><circle cx="8.2" cy="4.1" r="1.7"/><path d="M9.6 4.7l.9.9"/><rect x="7.6" y="10.6" width="8.4" height="1.4" fill="currentColor" stroke="none"/><rect x="7.6" y="18.4" width="8.4" height="1.4" fill="currentColor" stroke="none"/></svg>';
 const modeBtn=document.getElementById("modeBtn");
 function applyMode(m){document.documentElement.dataset.mode=m; const l=m==="light";
   modeBtn.innerHTML=l?ICON_SMOKE:ICON_FLASH; document.getElementById("modeLabel").textContent=l?"Aydınlık mod":"Karanlık mod"; const t=l?"Gece moduna geç":"Gündüz moduna geç"; modeBtn.title=t; modeBtn.setAttribute("aria-label",t);
