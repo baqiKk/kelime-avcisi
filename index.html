@@ -482,10 +482,9 @@ function scheduleBest(cand,topic,pool){
       daily=res.filter(r=>r[3]&&common.has(r[2])).slice(0,3)}
     const inTop=new Set(top.map(r=>r[2])), starSet=new Set(topicTop.filter(r=>inTop.has(r[2])).map(r=>r[2])), planetSet=new Set(daily.filter(r=>inTop.has(r[2])).map(r=>r[2]));
     const mk=r=>{const b=chip(r[2],topic),w=r[2],st=starSet.has(w),pl=planetSet.has(w);
-      if(pl){b.insertAdjacentHTML("beforeend",'<span class="pb">'+ICON_PLANET+'</span>')}
-      if(st){b.prepend("★ ")}
-      if(st){b.classList.add("star");b.title="En çok daraltanlarda ve konudan en iyilerde: ilk tercih"}
-      else if(pl){b.classList.add("planet");b.title="En çok daraltanlarda ve gündelik bir kelime: ilk tercih"}
+      // gezegen öncelikli: gündelik ortaklıkta yıldız gösterilmez, çerçeve renkli geçişli olur
+      if(pl){b.insertAdjacentHTML("beforeend",'<span class="pb">'+ICON_PLANET+'</span>');b.classList.add("planet");b.title="En çok daraltanlarda ve gündelik bir kelime: ilk tercih"}
+      else if(st){b.prepend("★ ");b.classList.add("star");b.title="En çok daraltanlarda ve konudan en iyilerde: ilk tercih"}
       else if(r[3])b.classList.add("can");
       const sm=document.createElement("small");sm.textContent="~"+r[0].toLocaleString("tr-TR",{maximumFractionDigits:1});b.appendChild(sm);return b};
     box.querySelector("b").remove();
