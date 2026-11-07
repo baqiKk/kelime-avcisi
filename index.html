@@ -271,6 +271,13 @@ button.pill{cursor:default;border-radius:0}
 .lt-send:disabled{opacity:.55;cursor:default}
 .mail-toast{position:absolute;right:0;bottom:96px;white-space:nowrap;background:var(--solid);color:var(--good);border:1px solid var(--good);padding:7px 10px;font:600 11px/1 var(--f-disp);letter-spacing:.1em;text-transform:uppercase;opacity:0;pointer-events:none;transition:opacity .3s}
 .mail-toast.on{opacity:1}
+.fold{position:absolute;right:0;bottom:92px;perspective:1100px;pointer-events:none;z-index:2}
+.fp{position:absolute;left:0;right:0;height:33.34%;background:var(--lt-bg) repeating-linear-gradient(transparent 0 25px,var(--lt-rule) 25px 26px);background-position:0 12px;border:1px solid var(--lt-rule);box-shadow:0 6px 18px rgba(0,0,0,.25);backface-visibility:visible}
+.fp1{top:0;transform-origin:50% 100%;z-index:3;padding:14px 16px;background-position:0 46px}
+.fp1 span{font:600 15px/1.2 var(--f-disp);color:var(--lt-head)}
+.fp2{top:33.33%;z-index:1}
+.fp3{top:66.66%;transform-origin:50% 0;z-index:2}
+@media (max-width:520px){.fold{bottom:76px}}
 .rk-cv{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:9998}
 .sr{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 @media (max-width:520px){.env{width:76px;height:70px}.letter{bottom:76px}.mail-toast{bottom:78px}.env-tip{display:none}}
@@ -302,7 +309,7 @@ textarea{min-height:92px;resize:vertical}
   <div class="brand">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="3"/><path d="M12 1.5v4M12 18.5v4M1.5 12h4M18.5 12h4"/></svg>
     <h1>Kelime Avcısı</h1>
-    <span class="ver" title="Son güncelleme: 7 Kasım 2026 19:36">v1.32</span>
+    <span class="ver" title="Son güncelleme: 7 Kasım 2026 19:39">v1.33</span>
   </div>
   <div class="today">
     <div><span class="lbl">Tarih</span><span class="val date" id="dDate">—</span></div>
@@ -378,12 +385,12 @@ textarea{min-height:92px;resize:vertical}
   </section>
 </div>
 <footer class="foot">
-  <span>Kelime Avcısı <b>v1.32</b></span><span class="dotsep">·</span><span>Son güncelleme 7 Kasım 2026 19:36</span><span class="dotsep">·</span><a href="https://github.com/baqiKk/kelime-avcisi" target="_blank" rel="noopener">Kaynak kod</a>
+  <span>Kelime Avcısı <b>v1.33</b></span><span class="dotsep">·</span><span>Son güncelleme 7 Kasım 2026 19:39</span><span class="dotsep">·</span><a href="https://github.com/baqiKk/kelime-avcisi" target="_blank" rel="noopener">Kaynak kod</a>
 </footer>
 
 <div class="mail" id="mail">
   <span class="env-tip" aria-hidden="true">Bize yaz</span>
-  <button class="env" id="envBtn" type="button" aria-label="Geri bildirim gönder" title="Geri bildirim gönder">
+  <button class="env" id="envBtn" type="button" aria-label="Geri bildirim gönder">
     <svg viewBox="0 0 100 92" aria-hidden="true">
       <rect class="e-back" x="4" y="32" width="92" height="56" rx="3"/>
       <path class="e-flapo" d="M4 33 L50 4 L96 33 Z"/>
@@ -946,14 +953,25 @@ const FEEDBACK_KEY="37da81da-05a0-4575-a3fe-f02b68cb08f6";
   let busy=false;
   try{msg.value=sessionStorage.getItem("ka_draft")||""}catch(e){}
   msg.addEventListener("input",()=>{try{sessionStorage.setItem("ka_draft",msg.value)}catch(e){}});
-  function open(){if(busy||!form.hidden)return;busy=true;mail.classList.add("open");
-    setTimeout(()=>{form.hidden=false;note.textContent=NOTE;note.classList.remove("err");
-      // katlı kâğıt zarftan yukarı çıkar, sonra kat yerlerinden açılır
-      const a=reduce?null:form.animate([{transform:"translateY(80px) scaleY(.33)",opacity:0},{transform:"translateY(30px) scaleY(.33)",opacity:1,offset:.22},{transform:"translateY(0) scaleY(.33)",offset:.42},{transform:"scaleY(.36)",offset:.5},{transform:"scaleY(.67)",offset:.68},{transform:"scaleY(.7)",offset:.76},{transform:"scaleY(1)"}],{duration:820,easing:"cubic-bezier(.3,.7,.4,1)"});
-      const fin=()=>{busy=false;msg.focus()};a?a.onfinish=fin:fin()},reduce?0:360)}
+  // üç katlı mektup: alt üçte bir yukarı, üst üçte bir aşağı katlı; zarftan çıkınca önce üst, sonra alt kat açılır
+  function makeFold(){const W=form.offsetWidth,H=form.offsetHeight,f=document.createElement("div");f.className="fold";f.style.width=W+"px";f.style.height=H+"px";
+    f.innerHTML='<div class="fp fp2"></div><div class="fp fp3"><i></i></div><div class="fp fp1"><span>Sevgili Kelime Avcısı,</span><i></i></div>';mail.appendChild(f);return f}
+  const flip=(el,from,to,ms,delay=0)=>el.animate([{transform:`rotateX(${from}deg)`,filter:`brightness(${from?0.82:1})`},{transform:`rotateX(${to}deg)`,filter:`brightness(${to?0.82:1})`}],{duration:ms,delay,easing:"cubic-bezier(.45,.05,.3,1)",fill:"forwards"});
+  function open(){if(busy||!form.hidden)return;busy=true;mail.classList.add("open");note.textContent=NOTE;note.classList.remove("err");
+    if(reduce){form.hidden=false;busy=false;msg.focus();return}
+    setTimeout(()=>{form.hidden=false;form.style.visibility="hidden";const f=makeFold(),p1=f.querySelector(".fp1"),p3=f.querySelector(".fp3");
+      p1.style.transform="rotateX(-180deg)";p3.style.transform="rotateX(180deg)";
+      f.animate([{transform:"translateY(120px)",opacity:0},{transform:"translateY(50px)",opacity:1,offset:.3},{transform:"translateY(0)"}],{duration:430,easing:"cubic-bezier(.3,.8,.4,1)",fill:"forwards"});
+      const sp=p1.querySelector("span");sp.style.opacity=0;sp.animate([{opacity:0},{opacity:0,offset:.5},{opacity:1,offset:.52},{opacity:1}],{duration:360,delay:520,fill:"forwards"});
+      flip(p1,-180,0,360,520);const last=flip(p3,180,0,360,860);
+      last.onfinish=()=>{form.style.visibility="";f.remove();busy=false;msg.focus()}},300)}
   function close(cb){if(form.hidden){mail.classList.remove("open");cb&&cb();return}busy=true;
-    const a=reduce?null:form.animate([{transform:"scaleY(1)"},{transform:"scaleY(.67)",offset:.35},{transform:"translateY(12px) scaleY(.34)",opacity:1,offset:.7},{transform:"translateY(40px) scaleY(.34)",opacity:0}],{duration:420,easing:"ease-in"});
-    const fin=()=>{form.hidden=true;mail.classList.remove("open");busy=false;setTimeout(()=>cb&&cb(),reduce?0:380)};a?a.onfinish=fin:fin()}
+    const end=()=>{mail.classList.remove("open");busy=false;setTimeout(()=>cb&&cb(),reduce?0:380)};
+    if(reduce){form.hidden=true;end();return}
+    const f=makeFold(),p1=f.querySelector(".fp1"),p3=f.querySelector(".fp3");form.style.visibility="hidden";
+    flip(p3,0,180,300);flip(p1,0,-180,300,280);p1.querySelector("span").animate([{opacity:1},{opacity:1,offset:.48},{opacity:0,offset:.5},{opacity:0}],{duration:300,delay:280,fill:"forwards"});
+    const s=f.animate([{transform:"translateY(0)",opacity:1},{transform:"translateY(50px)",opacity:1,offset:.6},{transform:"translateY(120px)",opacity:0}],{duration:380,delay:600,easing:"ease-in",fill:"forwards"});
+    s.onfinish=()=>{f.remove();form.hidden=true;form.style.visibility="";end()}}
   env.onclick=()=>form.hidden?open():close();
   document.getElementById("ltClose").onclick=()=>close();
   document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!form.hidden)close()});
