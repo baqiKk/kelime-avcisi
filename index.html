@@ -86,7 +86,7 @@ button.pill{cursor:default;border-radius:0}
 .a-board{grid-area:board}.a-list{grid-area:list}.a-topic{grid-area:topic}.a-prompt{grid-area:prompt}.a-sim{grid-area:sim}
 @media (max-width:860px){.wrap{grid-template-columns:minmax(0,1fr);grid-template-rows:auto;grid-template-areas:"board" "list" "sim" "topic" "prompt"}}
 /* yörünge simülatörü tanıtımı */
-.sim{display:flex;align-items:center;gap:12px;padding:8px 12px 8px 8px;text-decoration:none;color:inherit;box-shadow:none}
+.sim{display:flex;align-items:center;gap:12px;padding:8px 12px 8px 8px;text-decoration:none;color:inherit;box-shadow:none;background:color-mix(in srgb,var(--cyan) 7%,var(--panel));border-color:color-mix(in srgb,var(--cyan) 30%,var(--line2))}
 .sim:hover{border-color:var(--line3)}
 .sim:hover .sim-go{color:var(--accent)}
 .sim canvas{width:64px;height:64px;flex:none;border:1px solid var(--line);background:var(--well)}
@@ -94,7 +94,8 @@ button.pill{cursor:default;border-radius:0}
 .sim-t .lbl{display:flex;gap:8px;align-items:center}
 .sim-t .lbl em{font-style:normal;color:var(--faint);border:1px solid var(--line);padding:1px 4px;font-size:8.5px}
 .sim-t strong{display:block;font:600 13px/1.25 var(--f-disp);letter-spacing:.06em;text-transform:uppercase;color:var(--cyan);margin:4px 0 2px}
-.sim-t span.d{font-size:12.5px;color:var(--dim);line-height:1.4}
+.sim-t span.d{font-size:12.5px;color:var(--dim);line-height:1.4;display:block}
+.sim-n{display:block;margin-top:4px;font:500 10px/1.2 var(--f-disp);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
 .sim-go{flex:none;font:600 10.5px/1 var(--f-disp);letter-spacing:.14em;text-transform:uppercase;color:var(--dim);white-space:nowrap}
 
 /* window panels */
@@ -145,6 +146,9 @@ button.pill{cursor:default;border-radius:0}
 .best{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:14px;padding:10px;border:1px solid var(--line);background:var(--well)}
 .best b{font:600 10.5px/1 var(--f-disp);letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-right:4px}
 .best .sub{flex-basis:100%;order:9;font-size:12px;color:var(--dim)}
+.brow{flex-basis:100%;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.brow b{min-width:118px}
+.best .w.star{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent);color:var(--accent);background:var(--accent-soft)}
 .best .w{min-width:112px}
 .list{display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:5px}
 .w{border:1px solid var(--line);background:var(--chip);color:var(--ink);border-radius:0;padding:7px 4px;
@@ -233,6 +237,7 @@ textarea{min-height:92px;resize:vertical}
       <span class="lbl">Yörünge Simülatörü <em>Ücretsiz</em></span>
       <strong id="simTitle">Mars'a yolculuk</strong>
       <span class="d" id="simText">En verimli transfer penceresi yaklaşık 26 ayda bir açılır; yolculuk ~8,5 ay sürer.</span>
+      <span class="sim-n">↻ Sayfayı yenile, yeni bilgi gelsin</span>
     </div>
     <span class="sim-go">Dene →</span>
   </a>
@@ -448,13 +453,19 @@ function scheduleBest(cand,topic,pool){
       let s=0;for(const v of m.values())s+=v*v; const can=tset.has(g); if(can&&ansSet.has(g))s-=1;
       res.push([s/ans.length,can?0:1,g,can])}
     res.sort((x,y)=>x[0]-y[0]||x[1]-y[1]);
-    // skor yakınsa cevap olabilecek kelimeyi öne al: tahmin hakkı boşa gitmesin
-    const top=res[0], bestCan=res.find(r=>r[3]), pick=[top];
-    if(bestCan&&bestCan!==top&&bestCan[0]-top[0]<0.35){pick.unshift(bestCan)}
-    for(const r of res){if(pick.length>=3)break;if(!pick.includes(r))pick.push(r)}
-    sub.textContent=`${basis}. Sayı: bu tahminden sonra ortalama kaç aday kalır. Yeşil çerçeve: cevap da olabilir.`;
-    pick.forEach(r=>{const b=chip(r[2],topic); if(r[3])b.classList.add("can");
-      const sm=document.createElement("small");sm.textContent="~"+r[0].toLocaleString("tr-TR",{maximumFractionDigits:1});b.appendChild(sm);box.appendChild(b)});
+    // üst satır: kalan adayları en çok daraltan 3 kelime; alt satır: cevap olabilecek en iyi 3 konu kelimesi
+    const top=res.slice(0,3), topicTop=tc.length?res.filter(r=>r[3]).slice(0,3):[];
+    const both=new Set(top.filter(r=>topicTop.includes(r)).map(r=>r[2]));
+    const mk=r=>{const b=chip(r[2],topic);
+      if(both.has(r[2])){b.classList.add("star");b.prepend("★ ");b.title="Hem en çok daraltan hem konudan: ilk tercih"}
+      else if(r[3])b.classList.add("can");
+      const sm=document.createElement("small");sm.textContent="~"+r[0].toLocaleString("tr-TR",{maximumFractionDigits:1});b.appendChild(sm);return b};
+    box.querySelector("b").remove();
+    const row=(label,list)=>{const d=document.createElement("div");d.className="brow";const l=document.createElement("b");l.textContent=label;d.appendChild(l);
+      list.forEach(r=>d.appendChild(mk(r)));box.insertBefore(d,sub)};
+    row("En çok daraltan",top);
+    if(topicTop.length) row("Konudan en iyi",topicTop);
+    sub.textContent=`${basis}. Sayı: bu tahminden sonra ortalama kaç aday kalır.`+(topicTop.length?" Yeşil: cevap olabilir. ★ sarı: iki listede de var, ilk tercih.":" Yeşil: cevap olabilir.");
   },20);
 }
 function sec(el,t){const d=document.createElement("div"); d.className="sec"; d.textContent=t; el.appendChild(d)}
@@ -568,7 +579,56 @@ modeBtn.onclick=()=>{const m=document.documentElement.dataset.mode==="light"?"da
         const px=cx+a*Math.cos(E),py=C-b*Math.sin(E),dx=px-sx,dy=py-C,r=Math.hypot(dx,dy),L=4+20*(1-r/(a*(1+e)));
         const g=x.createLinearGradient(px,py,px+dx/r*L,py+dy/r*L);g.addColorStop(0,c.cy);g.addColorStop(1,"transparent");
         x.save();x.strokeStyle=g;x.lineWidth=3;x.lineCap="round";x.beginPath();x.moveTo(px,py);x.lineTo(px+dx/r*L,py+dy/r*L);x.stroke();x.restore();
-        dot(px,py,2.6,c.ink)}}
+        dot(px,py,2.6,c.ink)}},
+    venus:{title:"Venüs'te gün yıldan uzun",text:"Venüs kendi ekseni etrafında 243 günde, ters yönde döner; Güneş etrafındaki turu ise 225 gün sürer.",
+      draw(t,c){const tt=reduce?2:t,R=40,a=-tt*.6,vx=C+R*Math.cos(a),vy=C+R*Math.sin(a),sp=tt*.6*(224.7/243);
+        ring(C,C,R,c.fa,.6,[2,4]);dot(C,C,7,c.ac);x.save();x.globalAlpha=.2;dot(C,C,12,c.ac);x.restore();
+        dot(vx,vy,9,c.venus);x.save();x.globalAlpha=.3;x.strokeStyle=c.ink;x.beginPath();x.arc(vx,vy,9,0,TAU);x.stroke();x.restore();
+        dot(vx+5.5*Math.cos(sp),vy+5.5*Math.sin(sp),1.8,c.bad)}},
+    pluto:{title:"Plüton ile Charon'un dansı",text:"Ortak kütle merkezleri Plüton'un dışında kalır; ikisi de bu noktanın etrafında döner ve birbirine hep aynı yüzü gösterir.",
+      draw(t,c){const tt=reduce?1:t,a=tt*.9;ring(C,C,11,c.fa,.6,[2,3]);ring(C,C,38,c.fa,.6,[2,4]);
+        x.save();x.strokeStyle=c.ac;x.beginPath();x.moveTo(C-3,C);x.lineTo(C+3,C);x.moveTo(C,C-3);x.lineTo(C,C+3);x.stroke();x.restore();
+        dot(C-11*Math.cos(a),C-11*Math.sin(a),6.5,c.pluto);dot(C+38*Math.cos(a),C+38*Math.sin(a),4,c.moon);x.save();x.strokeStyle=c.ac;x.beginPath();x.moveTo(C-3,C);x.lineTo(C+3,C);x.moveTo(C,C-3);x.lineTo(C,C+3);x.stroke();x.restore()}},
+    uranus:{title:"Yan yatmış gezegen",text:"Uranüs'ün ekseni ~98° eğik. Her kutbu 84 yıllık yörüngesinin ~42 yılını gündüz, ~42 yılını gece geçirir.",
+      draw(t,c){const tt=reduce?1:t,tilt=1.71,ma=tt*.9;
+        const mx=C+40*Math.cos(ma)*Math.cos(tilt)-9*Math.sin(ma)*Math.sin(tilt), my=C+40*Math.cos(ma)*Math.sin(tilt)+9*Math.sin(ma)*Math.cos(tilt), behind=Math.sin(ma)<0;
+        x.save();x.translate(C,C);x.rotate(tilt);x.globalAlpha=.55;x.strokeStyle=c.fa;x.setLineDash([2,3]);x.beginPath();x.ellipse(0,0,40,9,0,0,TAU);x.stroke();x.restore();
+        if(behind)dot(mx,my,2.6,c.ink);
+        x.save();x.translate(C,C);x.rotate(tilt);x.translate(-C,-C);banded(C,C,17,c.uranus,c.uranus2,4);x.restore();
+        x.save();x.translate(C,C);x.rotate(tilt);x.strokeStyle=c.ac;x.globalAlpha=.8;x.beginPath();x.moveTo(0,-27);x.lineTo(0,27);x.stroke();x.restore();
+        x.save();x.translate(C,C);x.rotate(tilt);x.globalAlpha=.6;x.strokeStyle=c.ink;x.beginPath();x.ellipse(0,0,25,4,0,0,Math.PI);x.stroke();x.restore();
+        if(!behind)dot(mx,my,2.6,c.ink)}},
+    geo:{title:"Gökte asılı duran uydu",text:"35.786 km yükseklikteki uydu Dünya'yla aynı hızda döner; yerden bakınca gökyüzünde hep aynı noktada durur.",
+      draw(t,c){const tt=reduce?1:t,w=.7,a=-tt*w;ring(C,C,52,c.fa,.6,[2,4]);ring(C,C,30,c.fa,.35,[1,3]);
+        x.save();x.beginPath();x.arc(C,C,22,0,TAU);x.clip();x.fillStyle=c.cy;x.fillRect(C-22,C-22,44,44);
+        x.strokeStyle=c.well;x.globalAlpha=.4;for(let k=0;k<6;k++){const g=a+k*Math.PI/3;x.beginPath();x.moveTo(C,C);x.lineTo(C+22*Math.cos(g),C+22*Math.sin(g));x.stroke()}x.restore();
+        const cxp=C+22*Math.cos(a),cyp=C+22*Math.sin(a),sx=C+52*Math.cos(a),sy=C+52*Math.sin(a);
+        x.save();x.setLineDash([2,3]);x.strokeStyle=c.ac;x.globalAlpha=.7;x.beginPath();x.moveTo(cxp,cyp);x.lineTo(sx,sy);x.stroke();x.restore();
+        dot(cxp,cyp,2.4,c.bad);dot(sx,sy,3,c.ac);const la=-tt*w*3.2;dot(C+30*Math.cos(la),C+30*Math.sin(la),1.8,c.ink)}},
+    light:{title:"8 dakika 20 saniye",text:"Güneş'ten çıkan ışık Dünya'ya yaklaşık 8 dakika 20 saniyede ulaşır. Gördüğün Güneş, 8 dakika önceki Güneş.",
+      draw(t,c){const tt=reduce?1:t,sx=16,ex=112;dot(sx,C,13,c.ac);x.save();x.globalAlpha=.18;dot(sx,C,19,c.ac);x.restore();dot(ex,C,5,c.cy);
+        x.save();x.strokeStyle=c.fa;x.globalAlpha=.4;x.setLineDash([1,4]);x.beginPath();x.moveTo(sx+14,C);x.lineTo(ex-6,C);x.stroke();x.restore();
+        for(let k=0;k<3;k++){const p=((tt*.35+k/3)%1),px=sx+14+p*(ex-sx-20);const g=x.createLinearGradient(px-14,C,px,C);g.addColorStop(0,"transparent");g.addColorStop(1,c.ac);
+          x.save();x.strokeStyle=g;x.lineWidth=2.4;x.beginPath();x.moveTo(px-14,C);x.lineTo(px,C);x.stroke();x.restore();dot(px,C,1.8,c.ink)}
+        x.save();x.fillStyle=c.dim;x.font="600 11px "+css("--f-mono");x.textAlign="center";x.fillText("8:20",C+8,C+26);x.restore()}},
+    jwst:{title:"Webb, 1,5 milyon km ötede",text:"James Webb Uzay Teleskobu Dünya'nın gölge tarafındaki L2 noktasında, Dünya'yla birlikte Güneş'in etrafında döner.",
+      draw(t,c){const tt=reduce?1:t,a=-tt*.35,R1=34,R2=50,ex=C+R1*Math.cos(a),ey=C+R1*Math.sin(a),lx=C+R2*Math.cos(a),ly=C+R2*Math.sin(a);
+        ring(C,C,R1,c.fa,.6,[2,4]);dot(C,C,7,c.ac);x.save();x.globalAlpha=.2;dot(C,C,12,c.ac);x.restore();
+        x.save();x.strokeStyle=c.fa;x.globalAlpha=.45;x.setLineDash([1,3]);x.beginPath();x.moveTo(C,C);x.lineTo(lx,ly);x.stroke();x.restore();
+        dot(ex,ey,4.2,c.cy);ring(lx,ly,4,c.fa,.6,[1,2]);const h=tt*2.4;const jx=lx+4*Math.cos(h),jy=ly+4*Math.sin(h);
+        x.save();x.fillStyle=c.ac;x.translate(jx,jy);x.rotate(a);x.fillRect(-1.5,-3,3,6);x.restore()}},
+    neptune:{title:"Güneş Sistemi'nin en sert rüzgârları",text:"Neptün'de rüzgârlar saatte 2.000 km'yi aşar. 1846'daki keşfinden sonraki ilk tam turunu 2011'de tamamladı.",
+      draw(t,c){const tt=reduce?1:t;x.save();x.beginPath();x.arc(C,C,22,0,TAU);x.clip();banded(C,C,22,c.nep,c.nep2,5);
+        x.fillStyle="#fff";x.globalAlpha=.75;[[-8,.0,1],[4,.4,1.4],[12,.7,.8]].forEach(([dy,ph,sp])=>{const px=C-30+(((tt*sp*.5+ph)%1)*60);x.beginPath();x.ellipse(px,C+dy,6,1.2,0,0,TAU);x.fill()});
+        x.globalAlpha=.6;x.fillStyle="#1d2f6b";x.beginPath();x.ellipse(C-30+(((tt*.12+.3)%1)*60),C+3,4,2.4,0,0,TAU);x.fill();x.restore();
+        const ta=tt*.8,txp=C+44*Math.cos(ta),typ=C-12*Math.sin(ta);x.save();x.globalAlpha=.5;x.strokeStyle=c.fa;x.setLineDash([2,3]);x.beginPath();x.ellipse(C,C,44,12,0,0,TAU);x.stroke();x.restore();
+        dot(txp,typ,2.4,c.moon)}},
+    voyager:{title:"Bir gün uzaklıkta",text:"1977'de fırlatılan Voyager 1, 25 milyar km'den uzakta. Gönderdiği sinyal bize neredeyse bir günde ulaşıyor.",
+      draw(t,c){const tt=reduce?.5:t,e=1.35,p=22,rot=-Math.PI/2+.35,lim=Math.acos(-1/e)*.93,cyc=5,u=(tt%cyc)/cyc,phi=-lim+u*2*lim;
+        const pt=f=>{const r=p/(1+e*Math.cos(f));const xx=r*Math.cos(f),yy=r*Math.sin(f);return [C+xx*Math.cos(rot)-yy*Math.sin(rot),C+12+yy*Math.cos(rot)+xx*Math.sin(rot)]};
+        x.save();x.strokeStyle=c.ac;x.globalAlpha=.6;x.setLineDash([3,4]);x.beginPath();for(let f=-lim;f<=lim;f+=.02){const [a,b]=pt(f);f===-lim?x.moveTo(a,b):x.lineTo(a,b)}x.stroke();x.restore();
+        banded(C,C+12,12,c.tan,c.tan2,5);
+        const [vx,vy]=pt(phi);dot(vx,vy,2.6,c.ink)}}
   };
   const keys=Object.keys(P);
   let last=S.get("ka_promo",null), pick=keys[Math.floor(Math.random()*keys.length)];
@@ -579,7 +639,8 @@ modeBtn.onclick=()=>{const m=document.documentElement.dataset.mode==="light"?"da
   document.getElementById("simText").textContent=v.text;
   let pal=null; const readPal=()=>{const dark=document.documentElement.dataset.mode!=="light";
     pal={cy:css("--cyan"),ac:css("--accent"),fa:css("--faint"),ink:css("--ink"),bad:css("--bad"),good:css("--good"),well:css("--well"),void:css("--void"),
-      tan:dark?"#d9b273":"#c99a4e",tan2:dark?"#a77d43":"#9c7034",moon:dark?"#c9d2d4":"#9aa09c"}};
+      tan:dark?"#d9b273":"#c99a4e",tan2:dark?"#a77d43":"#9c7034",moon:dark?"#c9d2d4":"#9aa09c",dim:css("--dim"),
+      venus:dark?"#e9d29a":"#d8b664",pluto:dark?"#cdb49a":"#b08f6d",uranus:dark?"#9fdbe2":"#6fb9c3",uranus2:dark?"#7cc2cb":"#55a1ab",nep:dark?"#4d7bd8":"#3f6cc6",nep2:dark?"#3a62b8":"#2f58a8"}};
   readPal();
   let vis=true; const t0=performance.now();
   function frame(now){x.clearRect(0,0,W,W);x.lineWidth=1.4;v.draw((now-t0)/1000,pal);if(!reduce&&vis)requestAnimationFrame(frame)}
