@@ -56,12 +56,14 @@ body{background:var(--bg);color:var(--ink);font:13.5px/1.45 var(--f-body);-webki
 
 /* status bar */
 .bar{max-width:1180px;margin:0 auto 14px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px 18px;border:1px solid var(--line2);background:var(--panel);padding:10px 104px 10px 14px;position:relative}
-.mode{position:absolute;top:50%;transform:translateY(-50%);right:10px;min-width:58px;height:46px;padding:4px 6px 3px;flex-direction:column;gap:3px;border:1px solid var(--line2);background:var(--raise);color:var(--cyan);border-radius:0;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.bar{min-height:68px}
+.modew{position:absolute;top:50%;transform:translateY(-50%);right:10px;display:flex;flex-direction:column;align-items:center;gap:4px}
+.mode{width:38px;height:36px;border:1px solid var(--line2);background:var(--raise);color:var(--cyan);border-radius:0;cursor:pointer;display:grid;place-items:center;padding:0}
 .mode:hover{border-color:var(--line3);background:var(--raise2)}
 .mode svg{width:20px;height:20px}
-@media (max-width:980px){.mode{top:9px;transform:none}.bar{padding-right:14px}.brand{padding-right:80px;min-height:46px}h1{font-size:15px;letter-spacing:.1em;white-space:nowrap}}
+@media (max-width:980px){.modew{top:8px;transform:none}.bar{padding-right:14px}.brand{padding-right:80px;min-height:46px}h1{font-size:15px;letter-spacing:.1em;white-space:nowrap}}
 @media (max-width:440px){.brand .ver{display:none}}
-.mode-l{font:600 8.5px/1 var(--f-disp);letter-spacing:.12em;text-transform:uppercase;color:var(--dim);white-space:nowrap}
+.mode-l{font:600 8.5px/1 var(--f-disp);letter-spacing:.12em;text-transform:uppercase;color:var(--dim);white-space:nowrap;pointer-events:none}
 .mode:disabled{opacity:.5;cursor:default}
 /* bomba efektleri */
 .fx{position:fixed;inset:0;pointer-events:none;z-index:9999;overflow:hidden}
@@ -244,7 +246,7 @@ textarea{min-height:92px;resize:vertical}
   <div class="brand">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="3"/><path d="M12 1.5v4M12 18.5v4M1.5 12h4M18.5 12h4"/></svg>
     <h1>Kelime Avcısı</h1>
-    <span class="ver" title="Son güncelleme: 7 Kasım 2026 16:06">v1.19</span>
+    <span class="ver" title="Son güncelleme: 7 Kasım 2026 16:11">v1.20</span>
   </div>
   <div class="today">
     <div><span class="lbl">Tarih</span><span class="val date" id="dDate">—</span></div>
@@ -253,7 +255,7 @@ textarea{min-height:92px;resize:vertical}
     <button class="pill" id="dPill" type="button"><i></i><span></span></button>
   </div>
   <div class="legend"><span><i style="background:var(--t-grey)"></i>Yok</span><span><i style="background:var(--t-orange)"></i>Yeri yanlış</span><span><i style="background:var(--t-green)"></i>Doğru yer</span></div>
-  <button class="mode" id="modeBtn" type="button"></button>
+  <div class="modew"><span class="mode-l" id="modeLabel"></span><button class="mode" id="modeBtn" type="button"></button></div>
 </div>
 
 <div class="wrap">
@@ -320,7 +322,7 @@ textarea{min-height:92px;resize:vertical}
   </section>
 </div>
 <footer class="foot">
-  <span>Kelime Avcısı <b>v1.19</b></span><span class="dotsep">·</span><span>Son güncelleme 7 Kasım 2026 16:06</span><span class="dotsep">·</span><a href="https://github.com/baqiKk/kelime-avcisi" target="_blank" rel="noopener">Kaynak kod</a>
+  <span>Kelime Avcısı <b>v1.20</b></span><span class="dotsep">·</span><span>Son güncelleme 7 Kasım 2026 16:11</span><span class="dotsep">·</span><a href="https://github.com/baqiKk/kelime-avcisi" target="_blank" rel="noopener">Kaynak kod</a>
 </footer>
 
 <script>
@@ -572,10 +574,10 @@ copyBtn.onclick=()=>{const msg=document.getElementById("copyMsg");
 
 // gece / gündüz: flaş bombası gündüze, sis bombası geceye geçirir
 const ICON_FLASH='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><rect x="9" y="7.5" width="6" height="15" rx=".8"/><path d="M10.3 7.5V5h3.4v2.5"/><path d="M13.7 5l3 1.1v7.4"/><circle cx="8.6" cy="3.6" r="1.7"/><path d="M10.1 4.1L11.2 5"/><circle cx="12" cy="11" r=".85" fill="currentColor" stroke="none"/><circle cx="12" cy="14.6" r=".85" fill="currentColor" stroke="none"/><circle cx="12" cy="18.2" r=".85" fill="currentColor" stroke="none"/></svg>';
-const ICON_SMOKE='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"><rect x="6" y="10" width="9" height="11.5" rx="1"/><path d="M8 10V7.5h5V10"/><path d="M13 7.5l3.4 1.3v5.6"/><circle cx="6.6" cy="6" r="2"/><path d="M6 14h9M6 17.5h9"/><path d="M16.5 5.2c.9-1.3 2.4-1.3 3.2-.3M18 2.6c.7-.6 1.7-.5 2.3.2"/></svg>';
+const ICON_SMOKE='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"><rect x="4.5" y="10.5" width="10" height="11.5" rx="1.6"/><path d="M6 10.5V8.4h7v2.1"/><path d="M13 8.6l2.7 1.1v6.6"/><circle cx="5.6" cy="6.6" r="1.6"/><path d="M6.9 7.4L8 8.4"/><rect x="4.5" y="14.2" width="10" height="3.2" fill="currentColor" stroke="none" opacity=".55"/><path d="M15.2 6.9a2.1 2.1 0 0 1 3.1-2.2a2.3 2.3 0 0 1 3.9 1.3a1.7 1.7 0 0 1-.7 3.3h-5.1a1.3 1.3 0 0 1-1.2-2.4z"/><circle cx="17.2" cy="11.8" r=".9"/></svg>';
 const modeBtn=document.getElementById("modeBtn");
 function applyMode(m){document.documentElement.dataset.mode=m; const l=m==="light";
-  modeBtn.innerHTML='<span class="mode-l">'+(l?"Aydınlık mod":"Karanlık mod")+'</span>'+(l?ICON_SMOKE:ICON_FLASH); const t=l?"Gece moduna geç":"Gündüz moduna geç"; modeBtn.title=t; modeBtn.setAttribute("aria-label",t);
+  modeBtn.innerHTML=l?ICON_SMOKE:ICON_FLASH; document.getElementById("modeLabel").textContent=l?"Aydınlık mod":"Karanlık mod"; const t=l?"Gece moduna geç":"Gündüz moduna geç"; modeBtn.title=t; modeBtn.setAttribute("aria-label",t);
   document.dispatchEvent(new Event("modechange"))}
 (function(){let m=S.get("ka_mode",null);
   if(!m){const h=document.documentElement.getAttribute("data-theme");
