@@ -24,8 +24,8 @@
   --t-grey-ink:#d9e7eb;
   --pg1:#5ee7b0; --pg2:#43c6e8; --pg3:#6f8bff;
   --sb-thumb:rgba(140,196,212,.32); --sb-track:rgba(3,5,7,.5);
-  --env-back:#1b2340; --env-front:#26325c; --env-flap:#2e3c6e; --env-flapo:#182039; --env-line:rgba(214,184,110,.85); --env-paper:#16191d; --env-pline:#3b424b;
-  --lt-bg:#121417; --lt-ink:#e4e7ea; --lt-head:#d6b86e; --lt-rule:#2a3037; --lt-muted:#8a939e; --lt-ph:#5f6873; --lt-fold:rgba(255,255,255,.07);
+  --env-back:#1b2340; --env-front:#26325c; --env-flap:#2e3c6e; --env-flapo:#182039; --env-line:rgba(214,184,110,.85); --env-paper:#1b2438; --env-pline:#3d4c66;
+  --lt-bg:#1b2438; --lt-ink:#e9eef6; --lt-head:#9fd6e4; --lt-rule:rgba(159,214,228,.16); --lt-muted:#8e9bb3; --lt-ph:#62708a; --lt-fold:rgba(159,214,228,.12);
   --cell:rgba(3,5,7,.6); --chip:rgba(3,5,7,.5); --well:rgba(3,5,7,.35); --field:rgba(3,5,7,.7);
   --glow1:rgba(159,214,228,.07); --glow2:rgba(255,181,71,.04);
   --shadow:0 12px 32px rgba(0,0,0,.5);
@@ -257,8 +257,7 @@ button.pill{cursor:default;border-radius:0}
 @media (prefers-reduced-motion:no-preference){.mail:not(.open) .env{animation:envNudge 9s ease-in-out 4s infinite}}
 @keyframes envNudge{0%,90%,100%{transform:none}92%{transform:rotate(-6deg)}94%{transform:rotate(5deg)}96%{transform:rotate(-3deg)}98%{transform:rotate(1deg)}}
 .letter{position:absolute;right:0;bottom:92px;width:min(320px,calc(100vw - 36px));background:var(--lt-bg);color:var(--lt-ink);border:1px solid var(--lt-rule);padding:14px 16px 12px;border-radius:3px;box-shadow:0 18px 40px rgba(0,0,0,.35);transform-origin:50% 100%}
-.letter::before,.letter::after{content:"";position:absolute;left:0;right:0;border-top:1px dashed var(--lt-fold);pointer-events:none}
-.letter::before{top:33.3%}.letter::after{top:66.6%}
+.letter::before{content:"";position:absolute;left:0;right:0;top:50%;border-top:1px dashed var(--lt-fold);pointer-events:none}
 .lt-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
 .lt-to{font:600 15px/1.2 var(--f-disp);letter-spacing:.02em;color:var(--lt-head)}
 .lt-x{border:0;background:none;color:var(--lt-muted);font-size:22px;line-height:1;cursor:pointer;padding:0 2px}
@@ -271,13 +270,9 @@ button.pill{cursor:default;border-radius:0}
 .lt-send:disabled{opacity:.55;cursor:default}
 .mail-toast{position:absolute;right:0;bottom:96px;white-space:nowrap;background:var(--solid);color:var(--good);border:1px solid var(--good);padding:7px 10px;font:600 11px/1 var(--f-disp);letter-spacing:.1em;text-transform:uppercase;opacity:0;pointer-events:none;transition:opacity .3s}
 .mail-toast.on{opacity:1}
-.fold{position:absolute;right:0;bottom:92px;perspective:1100px;pointer-events:none;z-index:2}
-.fp{position:absolute;left:0;right:0;height:33.34%;background:var(--lt-bg) repeating-linear-gradient(transparent 0 25px,var(--lt-rule) 25px 26px);background-position:0 12px;border:1px solid var(--lt-rule);box-shadow:0 6px 18px rgba(0,0,0,.25);backface-visibility:visible}
-.fp1{top:0;transform-origin:50% 100%;z-index:3;padding:14px 16px;background-position:0 46px}
-.fp1 span{font:600 15px/1.2 var(--f-disp);color:var(--lt-head)}
-.fp2{top:33.33%;z-index:1}
-.fp3{top:66.66%;transform-origin:50% 0;z-index:2}
-@media (max-width:520px){.fold{bottom:76px}}
+.lt-top{clip-path:inset(0 0 50% 0);backface-visibility:hidden;transform-origin:50% 50%;pointer-events:none;z-index:3}
+.lt-back{position:absolute;right:0;bottom:92px;clip-path:inset(50% 0 0 0);backface-visibility:hidden;transform-origin:50% 50%;background:var(--lt-bg);border:1px solid var(--lt-rule);border-radius:3px;filter:brightness(.9);box-shadow:inset 0 0 0 999px var(--lt-fold);pointer-events:none;z-index:4}
+@media (max-width:520px){.lt-back{bottom:76px}}
 .rk-cv{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:9998}
 .sr{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 @media (max-width:520px){.env{width:76px;height:70px}.letter{bottom:76px}.mail-toast{bottom:78px}.env-tip{display:none}}
@@ -309,7 +304,7 @@ textarea{min-height:92px;resize:vertical}
   <div class="brand">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="3"/><path d="M12 1.5v4M12 18.5v4M1.5 12h4M18.5 12h4"/></svg>
     <h1>Kelime Avcısı</h1>
-    <span class="ver" title="Son güncelleme: 7 Kasım 2026 19:39">v1.33</span>
+    <span class="ver" title="Son güncelleme: 7 Kasım 2026 19:43">v1.34</span>
   </div>
   <div class="today">
     <div><span class="lbl">Tarih</span><span class="val date" id="dDate">—</span></div>
@@ -385,7 +380,7 @@ textarea{min-height:92px;resize:vertical}
   </section>
 </div>
 <footer class="foot">
-  <span>Kelime Avcısı <b>v1.33</b></span><span class="dotsep">·</span><span>Son güncelleme 7 Kasım 2026 19:39</span><span class="dotsep">·</span><a href="https://github.com/baqiKk/kelime-avcisi" target="_blank" rel="noopener">Kaynak kod</a>
+  <span>Kelime Avcısı <b>v1.34</b></span><span class="dotsep">·</span><span>Son güncelleme 7 Kasım 2026 19:43</span><span class="dotsep">·</span><a href="https://github.com/baqiKk/kelime-avcisi" target="_blank" rel="noopener">Kaynak kod</a>
 </footer>
 
 <div class="mail" id="mail">
@@ -953,25 +948,28 @@ const FEEDBACK_KEY="37da81da-05a0-4575-a3fe-f02b68cb08f6";
   let busy=false;
   try{msg.value=sessionStorage.getItem("ka_draft")||""}catch(e){}
   msg.addEventListener("input",()=>{try{sessionStorage.setItem("ka_draft",msg.value)}catch(e){}});
-  // üç katlı mektup: alt üçte bir yukarı, üst üçte bir aşağı katlı; zarftan çıkınca önce üst, sonra alt kat açılır
-  function makeFold(){const W=form.offsetWidth,H=form.offsetHeight,f=document.createElement("div");f.className="fold";f.style.width=W+"px";f.style.height=H+"px";
-    f.innerHTML='<div class="fp fp2"></div><div class="fp fp3"><i></i></div><div class="fp fp1"><span>Sevgili Kelime Avcısı,</span><i></i></div>';mail.appendChild(f);return f}
-  const flip=(el,from,to,ms,delay=0)=>el.animate([{transform:`rotateX(${from}deg)`,filter:`brightness(${from?0.82:1})`},{transform:`rotateX(${to}deg)`,filter:`brightness(${to?0.82:1})`}],{duration:ms,delay,easing:"cubic-bezier(.45,.05,.3,1)",fill:"forwards"});
+  // tek katlı mektup: üst yarı alt yarının üstüne katlı çıkar ve orta çizgi etrafında açılır.
+  // Açılan üst yarı formun birebir kopyasıdır; animasyon bitince gerçek form aynı piksellerle devralır, atlama olmaz.
+  const P3="perspective(1000px)";
+  function foldParts(){const top=form.cloneNode(true);top.removeAttribute("id");top.querySelectorAll("[id]").forEach(n=>n.removeAttribute("id"));
+    top.querySelector("textarea").value=msg.value;top.classList.add("lt-top");top.style.clipPath="inset(0 0 50% 0)";top.style.visibility="";top.setAttribute("aria-hidden","true");top.inert=true;
+    const back=document.createElement("div");back.className="lt-back";back.style.width=form.offsetWidth+"px";back.style.height=form.offsetHeight+"px";
+    mail.appendChild(back);mail.appendChild(top);return{top,back}}
+  const KF=(rise,a0,a1,back)=>{const r=a=>back?`rotateX(${a+180}deg)`:`rotateX(${a}deg)`;return rise
+      ?[{transform:`${P3} translateY(90px) ${r(a0)}`,opacity:0},{transform:`${P3} translateY(30px) ${r(a0)}`,opacity:1,offset:.25},{transform:`${P3} translateY(0) ${r(a0)}`,offset:.42},{transform:`${P3} translateY(0) ${r(a1)}`}]
+      :[{transform:`${P3} translateY(0) ${r(a0)}`},{transform:`${P3} translateY(0) ${r(a1)}`,offset:.58},{transform:`${P3} translateY(30px) ${r(a1)}`,opacity:1,offset:.78},{transform:`${P3} translateY(90px) ${r(a1)}`,opacity:0}]};
+  const BOTTOM="inset(50% 0 0 0)";
   function open(){if(busy||!form.hidden)return;busy=true;mail.classList.add("open");note.textContent=NOTE;note.classList.remove("err");
     if(reduce){form.hidden=false;busy=false;msg.focus();return}
-    setTimeout(()=>{form.hidden=false;form.style.visibility="hidden";const f=makeFold(),p1=f.querySelector(".fp1"),p3=f.querySelector(".fp3");
-      p1.style.transform="rotateX(-180deg)";p3.style.transform="rotateX(180deg)";
-      f.animate([{transform:"translateY(120px)",opacity:0},{transform:"translateY(50px)",opacity:1,offset:.3},{transform:"translateY(0)"}],{duration:430,easing:"cubic-bezier(.3,.8,.4,1)",fill:"forwards"});
-      const sp=p1.querySelector("span");sp.style.opacity=0;sp.animate([{opacity:0},{opacity:0,offset:.5},{opacity:1,offset:.52},{opacity:1}],{duration:360,delay:520,fill:"forwards"});
-      flip(p1,-180,0,360,520);const last=flip(p3,180,0,360,860);
-      last.onfinish=()=>{form.style.visibility="";f.remove();busy=false;msg.focus()}},300)}
+    setTimeout(()=>{form.hidden=false;form.style.clipPath=BOTTOM;const {top,back}=foldParts(),o={duration:620,easing:"cubic-bezier(.35,.7,.3,1)",fill:"forwards"};
+      form.animate(KF(true,0,0),o);back.animate(KF(true,-180,0,true),o);const a=top.animate(KF(true,-180,0),o);
+      a.onfinish=()=>{form.style.clipPath="";form.getAnimations().forEach(x=>x.cancel());top.remove();back.remove();busy=false;msg.focus()}},260)}
   function close(cb){if(form.hidden){mail.classList.remove("open");cb&&cb();return}busy=true;
-    const end=()=>{mail.classList.remove("open");busy=false;setTimeout(()=>cb&&cb(),reduce?0:380)};
+    const end=()=>{mail.classList.remove("open");busy=false;setTimeout(()=>cb&&cb(),reduce?0:340)};
     if(reduce){form.hidden=true;end();return}
-    const f=makeFold(),p1=f.querySelector(".fp1"),p3=f.querySelector(".fp3");form.style.visibility="hidden";
-    flip(p3,0,180,300);flip(p1,0,-180,300,280);p1.querySelector("span").animate([{opacity:1},{opacity:1,offset:.48},{opacity:0,offset:.5},{opacity:0}],{duration:300,delay:280,fill:"forwards"});
-    const s=f.animate([{transform:"translateY(0)",opacity:1},{transform:"translateY(50px)",opacity:1,offset:.6},{transform:"translateY(120px)",opacity:0}],{duration:380,delay:600,easing:"ease-in",fill:"forwards"});
-    s.onfinish=()=>{f.remove();form.hidden=true;form.style.visibility="";end()}}
+    const {top,back}=foldParts();form.style.clipPath=BOTTOM;const o={duration:560,easing:"cubic-bezier(.5,0,.6,1)",fill:"forwards"};
+    form.animate(KF(false,0,0),o);back.animate(KF(false,0,-180,true),o);const a=top.animate(KF(false,0,-180),o);
+    a.onfinish=()=>{top.remove();back.remove();form.hidden=true;form.style.clipPath="";form.getAnimations().forEach(x=>x.cancel());end()}}
   env.onclick=()=>form.hidden?open():close();
   document.getElementById("ltClose").onclick=()=>close();
   document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!form.hidden)close()});
