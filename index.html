@@ -306,7 +306,7 @@ textarea{min-height:92px;resize:vertical}
   <div class="brand">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="3"/><path d="M12 1.5v4M12 18.5v4M1.5 12h4M18.5 12h4"/></svg>
     <h1>Kelime Avcısı</h1>
-    <span class="ver" title="Son güncelleme: 8 Kasım 2026 13:18">v1.46</span>
+    <span class="ver" title="Son güncelleme: 8 Kasım 2026 13:42">v1.47</span>
   </div>
   <div class="today">
     <div><span class="lbl">Tarih</span><span class="val date" id="dDate">—</span></div>
@@ -382,7 +382,7 @@ textarea{min-height:92px;resize:vertical}
   </section>
 </div>
 <footer class="foot">
-  <span>Kelime Avcısı <b>v1.46</b></span><span class="dotsep">·</span><span>Son güncelleme 8 Kasım 2026 13:18</span><span class="dotsep">·</span><a href="https://github.com/baqiKk/kelime-avcisi" target="_blank" rel="noopener">Kaynak kod</a>
+  <span>Kelime Avcısı <b>v1.47</b></span><span class="dotsep">·</span><span>Son güncelleme 8 Kasım 2026 13:42</span><span class="dotsep">·</span><a href="https://github.com/baqiKk/kelime-avcisi" target="_blank" rel="noopener">Kaynak kod</a>
 </footer>
 
 <div class="mail" id="mail">
@@ -1079,8 +1079,9 @@ const FEEDBACK_KEY="37da81da-05a0-4575-a3fe-f02b68cb08f6";
           g.fillStyle=gr;g.beginPath();g.moveTo(-5.5,22);g.quadraticCurveTo(0,22+fl+14,5.5,22);g.closePath();g.fill()}
         g.fillStyle=dark2;g.beginPath();g.moveTo(-5,20);g.lineTo(5,20);g.lineTo(6,23);g.lineTo(-6,23);g.closePath();g.fill();
         // bacaklar: kapalıyken gövdeye yatık, açılınca dışa
-        g.fillStyle=red;[-1,1].forEach(sd=>{g.save();g.translate(sd*7,8);g.rotate(sd*legs*.75);g.beginPath();g.moveTo(0,0);g.lineTo(sd*4,13);g.lineTo(0,13);g.closePath();g.fill();g.stroke();g.restore()});
         g.fillStyle=white;g.fillRect(-7,-4,14,24);g.strokeRect(-7,-4,14,24);
+        // bacaklar gövdenin dışında, üst uçlarından menteşeli: kapalıyken gövdeye yaslı, açılınca dışa ve aşağı
+        g.fillStyle=red;[-1,1].forEach(sd=>{g.save();g.translate(sd*7,8);g.rotate(-sd*legs*.6);g.beginPath();g.moveTo(0,0);g.lineTo(sd*3.5,13);g.lineTo(0,14);g.closePath();g.fill();g.stroke();g.restore()});
         g.fillStyle=dark2;g.fillRect(-7,-8,14,4);g.strokeRect(-7,-8,14,4);
         if(part==="booster"){g.fillStyle=dark2;[-1,1].forEach(sd=>{g.fillRect(sd>0?7:-11,-7,4,3)});g.beginPath();g.moveTo(-7,-8);g.lineTo(7,-8);g.stroke()}}
       if(part!=="booster"){
