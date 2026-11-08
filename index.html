@@ -304,7 +304,7 @@ textarea{min-height:92px;resize:vertical}
   <div class="brand">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="3"/><path d="M12 1.5v4M12 18.5v4M1.5 12h4M18.5 12h4"/></svg>
     <h1>Kelime Avcısı</h1>
-    <span class="ver" title="Son güncelleme: 8 Kasım 2026 11:42">v1.38</span>
+    <span class="ver" title="Son güncelleme: 8 Kasım 2026 11:49">v1.39</span>
   </div>
   <div class="today">
     <div><span class="lbl">Tarih</span><span class="val date" id="dDate">—</span></div>
@@ -380,7 +380,7 @@ textarea{min-height:92px;resize:vertical}
   </section>
 </div>
 <footer class="foot">
-  <span>Kelime Avcısı <b>v1.38</b></span><span class="dotsep">·</span><span>Son güncelleme 8 Kasım 2026 11:42</span><span class="dotsep">·</span><a href="https://github.com/baqiKk/kelime-avcisi" target="_blank" rel="noopener">Kaynak kod</a>
+  <span>Kelime Avcısı <b>v1.39</b></span><span class="dotsep">·</span><span>Son güncelleme 8 Kasım 2026 11:49</span><span class="dotsep">·</span><a href="https://github.com/baqiKk/kelime-avcisi" target="_blank" rel="noopener">Kaynak kod</a>
 </footer>
 
 <div class="mail" id="mail">
@@ -1055,11 +1055,16 @@ const FEEDBACK_KEY="37da81da-05a0-4575-a3fe-f02b68cb08f6";
     const sprite=(rgb,a,n=7)=>{const s=document.createElement("canvas");s.width=s.height=96;const c=s.getContext("2d");
       for(let j=0;j<n;j++){const ox=48+(Math.random()-.5)*34,oy=48+(Math.random()-.5)*34,r=18+Math.random()*20,gr=c.createRadialGradient(ox,oy,0,ox,oy,r);gr.addColorStop(0,`rgba(${rgb},${a})`);gr.addColorStop(1,`rgba(${rgb},0)`);c.fillStyle=gr;c.beginPath();c.arc(ox,oy,r,0,7);c.fill()}return s};
     const smokeS=[sprite(dark?"215,222,226":"160,158,152",.55),sprite(dark?"185,194,200":"182,178,170",.55),sprite(dark?"235,238,240":"200,196,188",.5)];
-    const cloudS=[sprite("255,255,255",.8,9),sprite("246,249,252",.85,9),sprite("255,255,255",.75,9)],shadeS=sprite(dark?"110,124,136":"165,156,140",.55,9);
+    const warmS=[sprite("255,214,170",.55),sprite("255,196,150",.5)];
+    const cloudS=[sprite("255,255,255",.7,11),sprite("248,250,253",.75,11),sprite("255,255,255",.65,11),sprite("242,246,250",.7,11)],shadeS=sprite(dark?"120,132,145":"176,170,160",.5,11),backS=sprite(dark?"200,210,220":"236,238,240",.55,11);
     // bulut tabakası: ekranın tamamını kesen, dünya eğriliğini andıran geniş bir yay
     const Rc=Math.max(W,H)*1.7,ccx=W/2,ccy=H*.44+Rc,arcY=xx=>ccy-Math.sqrt(Math.max(0,Rc*Rc-(xx-ccx)*(xx-ccx)));
-    const clouds=[];for(let xx=-80;xx<W+80;xx+=34){for(let row=0;row<3;row++){clouds.push({x:xx+(Math.random()-.5)*26,y:arcY(xx)+(row-1)*24+(Math.random()-.5)*14,r:40+Math.random()*36+(row==1?18:0),s:cloudS[(((Math.floor(xx/34)+row)%3)+3)%3],dx:0,dy:0,ph:Math.random()*6})}}
-    let smoke=[],t0=performance.now(),last=t0,passT=0;
+    const clouds=[];
+    for(let xx=-120;xx<W+120;xx+=70+Math.random()*90){if(Math.random()<.12)continue;const by=arcY(xx)+(Math.random()-.5)*26,size=.7+Math.random()*.8,layer=Math.random()<.4?0:1,n=4+((Math.random()*5)|0);
+      for(let j=0;j<n;j++){const f=j/(n-1||1),ox=(f-.5)*110*size+(Math.random()-.5)*18,dome=Math.sin(f*Math.PI);
+        clouds.push({x:xx+ox,y:by-dome*26*size-(Math.random()*10)+(layer?0:-22),r:(26+dome*30+Math.random()*14)*size*(layer?1:.85),s:(layer?cloudS:[backS])[(Math.random()*(layer?4:1))|0],layer,dx:0,dy:0,ph:Math.random()*6,drift:(layer?6:3)})}}
+    clouds.sort((a,b)=>a.layer-b.layer);
+    let smoke=[],t0=performance.now(),last=t0,passT=0,tw=null,doneCalled=false;
     const T_IN=350,T_BOARD=950,T_IGN=1700,T_ASC=2700,T_STAR=520,T_END=T_IGN+T_ASC;
     const rocket=(px,py,ang,sc,flame,hatch)=>{g.save();g.translate(px,py);g.rotate(ang);g.scale(sc,sc);
       if(flame>0){const fl=(8+Math.random()*8)*flame,gr=g.createLinearGradient(0,22,0,22+fl+12);gr.addColorStop(0,"#fff6c8");gr.addColorStop(.4,"#ffb547");gr.addColorStop(1,"rgba(255,90,40,0)");
@@ -1079,9 +1084,12 @@ const FEEDBACK_KEY="37da81da-05a0-4575-a3fe-f02b68cb08f6";
       const kA=Math.max(0,(el-T_IGN)/T_ASC),k=Math.min(1,kA),u=Math.pow(k,2.4),p=B(u),d=D(Math.max(u,.002)),ang=Math.atan2(d[0],-d[1]),sc=SC*(1-.72*Math.max(0,Math.min(1,(u-.55)/.45)));
       const nozX=p[0]-Math.sin(ang)*24*sc,nozY=p[1]+Math.cos(ang)*24*sc;
       // ateşleme: yanlara yayılan yoğun yer dumanı
-      if(el>T_BOARD&&el<T_IGN+500){const n=el<T_IGN?6:4;for(let i=0;i<n;i++){const side=Math.random()<.5?-1:1;puff(nozX+(Math.random()-.5)*10,nozY+4,side*(90+Math.random()*260),-(10+Math.random()*50),8+Math.random()*8,40+Math.random()*50,1.6+Math.random()*1.2)}}
+      if(el>T_BOARD+150&&el<T_IGN+650){const ramp=Math.min(1,(el-T_BOARD-150)/400),n=Math.round(2+6*ramp);for(let i=0;i<n;i++){const side=Math.random()<.5?-1:1,sp=(160+Math.random()*300)*(.5+.5*ramp);
+          const q={x:nozX+(Math.random()-.5)*8,y:nozY+2+Math.random()*4,vx:side*sp,vy:-(Math.random()*40),r:5+Math.random()*6,gr:55+Math.random()*60,life:0,ttl:2.2+Math.random()*1,s:(el<T_IGN?warmS:smokeS)[(Math.random()*2)|0],rot:Math.random()*6,buoy:14+Math.random()*16,dec:3.2};smoke.push(q)}}
+      if(el>T_BOARD+100&&el<T_IGN+700){const gk=Math.min(1,(el-T_BOARD-100)/500)*(el>T_IGN+300?Math.max(0,1-(el-T_IGN-300)/400):1),gl=g.createRadialGradient(nozX,nozY+6,0,nozX,nozY+6,70);
+        gl.addColorStop(0,`rgba(255,190,110,${.55*gk})`);gl.addColorStop(1,"rgba(255,150,80,0)");g.fillStyle=gl;g.fillRect(nozX-80,nozY-70,160,150)}
       if(el>=T_IGN&&el<T_END){const n=2+Math.round(2*(1-k));for(let i=0;i<n;i++)puff(nozX,nozY,(Math.random()-.5)*40-Math.sin(ang)*30,(Math.random()-.5)*40+Math.cos(ang)*30,(5+Math.random()*5)*sc,(22+Math.random()*22)*sc,.9+Math.random()*.7)}
-      for(const q of smoke){q.life+=dt;q.vx*=Math.exp(-1.6*dt);q.vy=q.vy*Math.exp(-1.6*dt)-10*dt;q.x+=q.vx*dt;q.y+=q.vy*dt;q.r+=q.gr*dt*Math.exp(-q.life*.6);const a=Math.max(0,1-q.life/q.ttl)*.8;if(a<.01)continue;g.save();g.globalAlpha=a;g.translate(q.x,q.y);g.rotate(q.rot);g.drawImage(q.s,-q.r,-q.r,2*q.r,2*q.r);g.restore()}
+      for(const q of smoke){q.life+=dt;const dc=q.dec||1.6;q.vx*=Math.exp(-dc*dt);q.vy=q.vy*Math.exp(-dc*dt)-(q.buoy?q.buoy*Math.min(1,q.life):10)*dt;q.x+=q.vx*dt;q.y+=q.vy*dt;q.r+=q.gr*dt*Math.exp(-q.life*.6);const a=Math.max(0,1-q.life/q.ttl)*.8;if(a<.01)continue;g.save();g.globalAlpha=a;g.translate(q.x,q.y);g.rotate(q.rot);g.drawImage(q.s,-q.r,-q.r,2*q.r,2*q.r);g.restore()}
       smoke=smoke.filter(q=>q.life<q.ttl);
       // roket: alttan beliriş, mektubun binişi, ateşleme titremesi, kalkış
       if(el<T_END){const inA=Math.min(1,el/T_IN),shake=el>T_BOARD&&el<T_IGN+250?(Math.random()-.5)*1.6:0;
@@ -1092,10 +1100,19 @@ const FEEDBACK_KEY="37da81da-05a0-4575-a3fe-f02b68cb08f6";
       if(el>T_BOARD-120&&el<T_BOARD+200){const kk=(el-T_BOARD+120)/320;g.save();g.globalAlpha=1-kk;g.strokeStyle="#ffcf7a";g.lineWidth=2;g.beginPath();g.arc(x0,yr+4.5*SC,6+kk*16,0,7);g.stroke();g.restore()}
       // bulut tabakası
       const cIn=Math.min(1,Math.max(0,(el-T_BOARD)/700));if(!passT&&p[1]<H*.44)passT=el;const cOut=passT?Math.max(0,1-(el-passT-350)/900):1;
-      if(cIn>0&&cOut>0)clouds.forEach(c2=>{if(passT||Math.abs(c2.y-p[1])<70){const dx=c2.x+c2.dx-p[0],dy=c2.y+c2.dy-p[1],dd=Math.hypot(dx,dy);if(dd<90&&el>T_IGN){const f=(90-dd)/90*160*dt;c2.dx+=dx/(dd||1)*f;c2.dy+=dy/(dd||1)*f*.5}}
-        const cx2=c2.x+c2.dx+Math.sin(el/1600+c2.ph)*4,cy2=c2.y+c2.dy;g.save();g.globalAlpha=(dark?.4:.5)*cIn*cOut;g.drawImage(shadeS,cx2-c2.r,cy2-c2.r*.55+8,2*c2.r,1.1*c2.r);g.globalAlpha=(dark?.55:.92)*cIn*cOut;g.drawImage(c2.s,cx2-c2.r,cy2-c2.r*.55,2*c2.r,1.1*c2.r);g.restore()});
-      if(el>=T_END)star(P[3][0],P[3][1],(el-T_END)/T_STAR);
-      if(el<T_END+T_STAR)requestAnimationFrame(loop);else{cv.remove();done()}};
+      if(cIn>0&&cOut>0){
+        // atmosfer pusu: bulutların altında dünya eğrisi boyunca yumuşak bir bant
+        g.save();g.globalAlpha=(dark?.18:.35)*cIn*cOut;g.strokeStyle=dark?"rgba(190,215,235,1)":"rgba(255,255,255,1)";g.lineWidth=70;g.filter="blur(18px)";g.beginPath();g.arc(ccx,ccy+18,Rc,Math.PI*1.25,Math.PI*1.75);g.stroke();g.restore();
+        clouds.forEach(c2=>{const dx=c2.x+c2.dx-p[0],dy=c2.y+c2.dy-p[1],dd=Math.hypot(dx,dy);if(dd<95&&el>T_IGN){const f=(95-dd)/95*170*dt;c2.dx+=dx/(dd||1)*f;c2.dy+=dy/(dd||1)*f*.45}
+          const cx2=c2.x+c2.dx+Math.sin(el/2200+c2.ph)*c2.drift+(el/1000)*c2.drift*.6,cy2=c2.y+c2.dy,al=(c2.layer?(dark?.6:.95):(dark?.35:.6))*cIn*cOut;
+          g.save();if(c2.layer){g.globalAlpha=al*.55;g.drawImage(shadeS,cx2-c2.r*.95,cy2-c2.r*.35+c2.r*.22,1.9*c2.r,c2.r*.9)}g.globalAlpha=al;g.drawImage(c2.s,cx2-c2.r,cy2-c2.r,2*c2.r,2*c2.r);g.restore()})}
+      if(el>=T_END&&el<T_END+T_STAR)star(P[3][0],P[3][1],(el-T_END)/T_STAR);
+      // parıltının ardından etrafta yanıp sönen minik yıldızlar
+      if(el>=T_END+T_STAR*.45){if(!tw)tw=Array.from({length:26},()=>{const a=Math.random()*6.283,r=12+Math.random()*80;return{x:P[3][0]+Math.cos(a)*r,y:P[3][1]+Math.sin(a)*r*.8,d:Math.random()*.6,l:.9+Math.random()*.9,s:.8+Math.random()*1.6,ph:Math.random()*6,cross:Math.random()<.35}});
+        const tt2=(el-T_END-T_STAR*.45)/1000;tw.forEach(s=>{const k=(tt2-s.d)/s.l;if(k<=0||k>=1)return;const a=Math.sin(k*Math.PI)*(.55+.45*Math.sin(tt2*18+s.ph));g.save();g.globalAlpha=a;g.fillStyle="#fffbe6";
+          if(s.cross){g.translate(s.x,s.y);g.beginPath();for(let i=0;i<8;i++){const an=i*Math.PI/4,rr=i%2?s.s*.35:s.s*2.6;g.lineTo(Math.cos(an)*rr,Math.sin(an)*rr)}g.closePath();g.fill()}else{g.beginPath();g.arc(s.x,s.y,s.s*.8,0,7);g.fill()}g.restore()})}
+      if(el>=T_END+T_STAR&&!doneCalled){doneCalled=true;done()}
+      if(el<T_END+T_STAR+1900)requestAnimationFrame(loop);else cv.remove()};
     requestAnimationFrame(loop);
   }
   window.roketiDene=()=>{close(()=>launch(()=>showToast("Test: roket fırlatıldı, mesaj gönderilmedi")));return "Roket hazırlanıyor… (mesaj gönderilmez)"};
