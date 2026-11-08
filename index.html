@@ -305,7 +305,7 @@ textarea{min-height:92px;resize:vertical}
   <div class="brand">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="3"/><path d="M12 1.5v4M12 18.5v4M1.5 12h4M18.5 12h4"/></svg>
     <h1>Kelime Avcısı</h1>
-    <span class="ver" title="Son güncelleme: 8 Kasım 2026 12:15">v1.43</span>
+    <span class="ver" title="Son güncelleme: 8 Kasım 2026 12:18">v1.44</span>
   </div>
   <div class="today">
     <div><span class="lbl">Tarih</span><span class="val date" id="dDate">—</span></div>
@@ -381,7 +381,7 @@ textarea{min-height:92px;resize:vertical}
   </section>
 </div>
 <footer class="foot">
-  <span>Kelime Avcısı <b>v1.43</b></span><span class="dotsep">·</span><span>Son güncelleme 8 Kasım 2026 12:15</span><span class="dotsep">·</span><a href="https://github.com/baqiKk/kelime-avcisi" target="_blank" rel="noopener">Kaynak kod</a>
+  <span>Kelime Avcısı <b>v1.44</b></span><span class="dotsep">·</span><span>Son güncelleme 8 Kasım 2026 12:18</span><span class="dotsep">·</span><a href="https://github.com/baqiKk/kelime-avcisi" target="_blank" rel="noopener">Kaynak kod</a>
 </footer>
 
 <div class="mail" id="mail">
@@ -1117,15 +1117,17 @@ const FEEDBACK_KEY="37da81da-05a0-4575-a3fe-f02b68cb08f6";
       if(el>=T_END+T_STAR&&!doneCalled){doneCalled=true;done()}
       // dönüş: sağ taraftan gelen yeni roket; kısa giriş yanması, ardından giderek güçlenen iniş yanmasıyla yavaşlar
       // ve dokunma anında hızı sıfıra iner (konum eğrisinin sonundaki türev sıfır).
-      const L0=T_END+T_STAR+300,LD=4200,lm=(el-L0)/LD;
+      const L0=T_END+T_STAR+1500,LD=4200,lm=(el-L0)/LD;
       if(lm>0&&lm<1.3){const m=Math.min(1,lm),s=1-Math.pow(1-m,3),Q=[[W+60,H*.08],[W*.88,H*.1],[x0+50,yr-H*.3],[x0,yr]],
           qb=w=>{const z=1-w;return[0,1].map(i=>z*z*z*Q[0][i]+3*z*z*w*Q[1][i]+3*z*w*w*Q[2][i]+w*w*w*Q[3][i])},q=qb(s),qd=qb(Math.min(1,s+.01)),
           tilt=Math.max(-.5,Math.min(.5,Math.atan2(q[0]-qd[0],qd[1]-q[1])*-.6))*(1-Math.min(1,m/.85));
         const entry=m>.06&&m<.2,land=m>.38&&m<1,burn=entry?.7:land?(.75+.25*Math.min(1,(m-.38)/.3)):0;
         const nz=[q[0]-Math.sin(tilt)*22*SC,q[1]+Math.cos(tilt)*22*SC];
-        if(land){const n=m>.8?3:2;for(let i=0;i<n;i++)puff(nz[0],nz[1],(Math.random()-.5)*50,50+Math.random()*60,4,18,.6+Math.random()*.4)}
-        if(land&&m>.86){const k=(m-.86)/.14;for(let i=0;i<3;i++){const sd=Math.random()<.5?-1:1;puff(x0+(Math.random()-.5)*8,yr+22*SC,sd*(60+Math.random()*140)*k,-(Math.random()*20),4,30,.9+Math.random()*.6)}}
-        if(lm>=1&&!this_touch){this_touch=true;for(let i=0;i<20;i++){const sd=Math.random()<.5?-1:1;puff(x0,yr+22*SC,sd*(70+Math.random()*160),-(Math.random()*30),5,40,1.2+Math.random()*.8)}}
+        // iniş yanması dumanı: yere yaklaştıkça artar; son kısımda egzoz yere çarpıp iki yana kabaran bulutlar oluşturur
+        if(land){const n=m>.75?4:2;for(let i=0;i<n;i++)puff(nz[0],nz[1],(Math.random()-.5)*60,60+Math.random()*70,5,22+Math.random()*14,.7+Math.random()*.5)}
+        if(land&&m>.7){const k=Math.min(1,(m-.7)/.25),n=Math.round(3+6*k);for(let i=0;i<n;i++){const sd=Math.random()<.5?-1:1;
+          smoke.push({x:x0+(Math.random()-.5)*10,y:yr+22*SC+Math.random()*4,vx:sd*(120+Math.random()*240)*(.4+.6*k),vy:-(Math.random()*35),r:5+Math.random()*6,gr:45+Math.random()*50,life:0,ttl:1.8+Math.random()*1.1,s:smokeS[(Math.random()*3)|0],rot:Math.random()*6,buoy:12+Math.random()*14,dec:3})}}
+        if(lm>=1&&!this_touch){this_touch=true;for(let i=0;i<34;i++){const sd=Math.random()<.5?-1:1;smoke.push({x:x0,y:yr+22*SC,vx:sd*(90+Math.random()*220),vy:-(Math.random()*40),r:6,gr:50+Math.random()*40,life:0,ttl:1.8+Math.random()*1,s:smokeS[(Math.random()*3)|0],rot:Math.random()*6,buoy:14,dec:3})}}
         const fadeR=lm>1.08?Math.max(0,1-(lm-1.08)/.2):1;g.save();g.globalAlpha=fadeR;rocket(q[0],q[1],tilt,SC,m<1?burn:0,false,Math.max(0,Math.min(1,(m-.78)/.15)));g.restore()}
       if(lm>=1.3&&!landedCalled){landedCalled=true;landed&&landed()}
       if(lm<1.3||smoke.length)requestAnimationFrame(loop);else cv.remove()};
