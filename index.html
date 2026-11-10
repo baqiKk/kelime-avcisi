@@ -327,7 +327,7 @@ textarea{min-height:92px;resize:vertical}
   <div class="brand">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="3"/><path d="M12 1.5v4M12 18.5v4M1.5 12h4M18.5 12h4"/></svg>
     <h1>Kelime Avcısı</h1>
-    <span class="ver" title="Son güncelleme: 10 Kasım 2026 08:41">v1.50</span>
+    <span class="ver" title="Son güncelleme: 10 Kasım 2026 09:35">v1.51</span>
   </div>
   <div class="today">
     <div><span class="lbl">Tarih</span><span class="val date" id="dDate">—</span></div>
@@ -403,7 +403,7 @@ textarea{min-height:92px;resize:vertical}
   </section>
 </div>
 <footer class="foot">
-  <span>Kelime Avcısı <b>v1.50</b></span><span class="dotsep">·</span><span>Son güncelleme 10 Kasım 2026 08:41</span><span class="dotsep">·</span><a href="https://github.com/baqiKk/kelime-avcisi" target="_blank" rel="noopener">Kaynak kod</a>
+  <span>Kelime Avcısı <b>v1.51</b></span><span class="dotsep">·</span><span>Son güncelleme 10 Kasım 2026 09:35</span><span class="dotsep">·</span><a href="https://github.com/baqiKk/kelime-avcisi" target="_blank" rel="noopener">Kaynak kod</a>
 </footer>
 
 <div class="mail" id="mail">
@@ -611,7 +611,7 @@ function scheduleBest(cand,topic,pool){
     // satırlar: en çok daraltan / konudan en iyi / gündelik (konu adaylarının en sık kullanılanları içinden)
     // her kelime tek satırda görünür: üst satırda olan kelime alttakilerde tekrar edilmez, yerine sıradaki gelir; ortaklık işaretle gösterilir
     const top=res.slice(0,3), inTop=new Set(top.map(r=>r[2]));
-    let topicTop=[], daily=[], starSet=new Set(), planetSet=new Set();
+    let topicTop=[], daily=[], popular=[], starSet=new Set(), planetSet=new Set();
     if(tc.length){
       const fq=w=>FREQ[w]||0, byF=[...tc].sort((a,b)=>fq(b)-fq(a)), common=new Set(byF.slice(0,Math.max(3,Math.ceil(byF.length*.35))));
       const topicRank=res.filter(r=>r[3]), dailyRank=topicRank.filter(r=>common.has(r[2]));
@@ -619,7 +619,10 @@ function scheduleBest(cand,topic,pool){
       planetSet=new Set(dailyRank.slice(0,3).filter(r=>inTop.has(r[2])).map(r=>r[2]));
       topicTop=topicRank.filter(r=>!inTop.has(r[2])).slice(0,3);
       const used=new Set([...inTop,...topicTop.map(r=>r[2])]);
-      daily=dailyRank.filter(r=>!used.has(r[2])).slice(0,3)}
+      daily=dailyRank.filter(r=>!used.has(r[2])).slice(0,3);
+      // en popüler: kalan konu adaylarından dilde en sık kullanılanlar (eleme gücüne bakmadan, sadece sıklık)
+      daily.forEach(r=>used.add(r[2]));const byW=new Map(res.map(r=>[r[2],r]));
+      popular=[...tc].sort((a,b)=>fq(b)-fq(a)).filter(w=>!used.has(w)&&byW.has(w)).slice(0,3).map(w=>byW.get(w))}
     const mk=r=>{const b=chip(r[2],topic),w=r[2],st=starSet.has(w),pl=planetSet.has(w);
       // gezegen öncelikli: gündelik ortaklıkta yıldız gösterilmez, çerçeve renkli geçişli olur
       if(pl){b.insertAdjacentHTML("beforeend",'<span class="pb">'+ICON_PLANET+'</span>');b.classList.add("planet");b.title="En çok daraltanlarda ve gündelik bir kelime: ilk tercih"}
@@ -632,11 +635,12 @@ function scheduleBest(cand,topic,pool){
     row("En çok daraltan",top);
     if(topicTop.length) row("Konudan en iyi",topicTop);
     if(daily.length) row("Gündelik",daily);
+    if(popular.length) row("En popüler",popular);
     sub.textContent=`${basis}. ~sayı: bu tahminden sonra ortalama kaç aday kalır; küçük olan daha iyi.`;
     const lg=document.createElement("div"); lg.className="legend2";
     lg.innerHTML=(topicTop.length?'<span class="lg-t">Kabaca öncelik</span><span class="lg lg-p" title="Hem çok daraltır hem gündelik bir konu kelimesi">'+ICON_PLANET+'Gezegen</span><i>›</i><span class="lg lg-s" title="Hem çok daraltır hem konudan en iyilerden">★ Yıldız</span><i>›</i>':'<span class="lg-t">Kabaca öncelik</span>')
       +'<span class="lg lg-g" title="Cevap olabilir">Yeşil</span><i>›</i><span class="lg lg-n" title="Cevap olmayabilir, sadece aday eler">Düz</span>'
-      +'<span class="lg-x">Gezegen ve yıldız hem eler hem cevap olabilir; yeşil cevap olabilir; düz sadece eler. Kesin kural değil, ~sayıya da bak.</span>';
+      +'<span class="lg-x">Gezegen ve yıldız hem eler hem cevap olabilir; yeşil cevap olabilir; düz sadece eler. Kesin kural değil, ~sayıya da bak. "En popüler" satırı dilde en sık geçen konu kelimeleridir; cevap olma ihtimali yüksek ama az eleyebilir.</span>';
     box.appendChild(lg);
   },20);
 }
