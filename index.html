@@ -219,6 +219,7 @@ button.pill{cursor:default;border-radius:0}
 .w.topic{border-color:color-mix(in srgb,var(--cyan) 50%,transparent);background:color-mix(in srgb,var(--cyan) 10%,transparent);color:var(--cyan)}
 .w.can{border-color:var(--good);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--good) 40%,transparent)}
 .w small{font:500 11px var(--f-mono);color:var(--dim);letter-spacing:0;margin-left:5px}
+.tnote{grid-column:1/-1;display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:8px 10px;border:1px solid var(--t-orange);background:color-mix(in srgb,var(--t-orange) 10%,transparent);font-size:12.5px;color:var(--ink)}
 .oth{grid-column:1/-1;margin-top:8px;justify-self:start}
 .list .w:not(.topic){opacity:.7}
 .sec{grid-column:1/-1;font:500 10px/1 var(--f-disp);letter-spacing:.16em;text-transform:uppercase;color:var(--faint);margin:8px 0 2px;display:flex;align-items:center;gap:8px}
@@ -348,7 +349,7 @@ textarea{min-height:92px;resize:vertical}
   <div class="brand">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="3"/><path d="M12 1.5v4M12 18.5v4M1.5 12h4M18.5 12h4"/></svg>
     <h1>Kelime Avcısı</h1>
-    <span class="ver" title="Son güncelleme: 16 Kasım 2026 10:53">v1.61</span>
+    <span class="ver" title="Son güncelleme: 16 Kasım 2026 10:55">v1.62</span>
   </div>
   <div class="today">
     <div><span class="lbl">Tarih</span><span class="val date" id="dDate">—</span></div>
@@ -448,7 +449,7 @@ textarea{min-height:92px;resize:vertical}
   </section>
 </div>
 <footer class="foot">
-  <span>Kelime Avcısı <b>v1.61</b></span><span class="dotsep">·</span><span>Son güncelleme 16 Kasım 2026 10:53</span><span class="dotsep">·</span><a href="https://github.com/baqiKk/kelime-avcisi" target="_blank" rel="noopener">Kaynak kod</a>
+  <span>Kelime Avcısı <b>v1.62</b></span><span class="dotsep">·</span><span>Son güncelleme 16 Kasım 2026 10:55</span><span class="dotsep">·</span><a href="https://github.com/baqiKk/kelime-avcisi" target="_blank" rel="noopener">Kaynak kod</a>
 </footer>
 
 <div class="mail" id="mail">
@@ -514,7 +515,9 @@ let topicName=S.get("ka_topic",DAILY.topic), topicText=S.get("ka_topicText",null
 let customText=S.get("ka_custom","");
 // yeni gün yayınlandıysa: günün konusuna geç, tahtayı temizle
 if(S.get("ka_daily",null)!==DAILY.date){topicName=DAILY.topic; topicText=null; rows=[]; S.set("ka_daily",DAILY.date); S.set("ka_topic",topicName); S.set("ka_rows",rows); inc=["","","","",""]; S.set("ka_inc",inc)}
-if(topicText==null) topicText=topicName==="Özel liste"?customText:(TOPICS[topicName]??"");
+// hazır konular her açılışta güncel listeden okunur (eski kayıtlı metin kullanılmaz); sadece Özel liste saklanır
+if(topicName!=="Özel liste"&&!(topicName in TOPICS)) topicName=DAILY.topic;
+topicText=topicName==="Özel liste"?customText:(TOPICS[topicName]??"");
 
 // durum çubuğu
 (function(){
@@ -631,6 +634,10 @@ function renderList(){
   document.getElementById("count").innerHTML=`${cand.length}<small>kelime</small>`;
   scheduleBest(cand,topic,[...pool]);
   const list=document.getElementById("list"); list.innerHTML="";
+  if(topicName!==DAILY.topic){const n=document.createElement("div"); n.className="tnote";
+    n.innerHTML=`<span>Seçili konu günün konusu değil: <b></b></span>`; n.querySelector("b").textContent=topicName;
+    const bt=document.createElement("button"); bt.type="button"; bt.className="btn"; bt.textContent="Günün konusuna dön";
+    bt.onclick=()=>{sel.value=DAILY.topic; sel.onchange()}; n.appendChild(bt); list.appendChild(n)}
   if(!cand.length){list.innerHTML='<p class="empty">Hiç kelime kalmadı. Renkleri kontrol et ya da kelimeyi konu listesine ekle.</p>'}
   const tc=cand.filter(w=>topic.has(w)), oc=cand.filter(w=>!topic.has(w));
   if(tc.length){sec(list,`Konu listesinden · ${tc.length}`); tc.forEach(w=>list.appendChild(chip(w,topic)))}
