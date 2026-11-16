@@ -109,10 +109,10 @@ button.pill{cursor:default;border-radius:0}
 
 /* grid */
 .wrap{max-width:1180px;margin:0 auto;display:grid;gap:14px;align-items:start;
-  grid-template-columns:minmax(0,420px) minmax(0,1fr);grid-template-rows:auto auto auto 1fr;
-  grid-template-areas:"board list" "sim list" "topic list" "prompt list"}
+  grid-template-columns:minmax(0,420px) minmax(0,1fr);grid-template-rows:auto auto auto auto 1fr;
+  grid-template-areas:"board list" "letters list" "sim list" "topic list" "prompt list"}
 .a-board{grid-area:board}.a-list{grid-area:list}.a-topic{grid-area:topic}.a-prompt{grid-area:prompt}.a-sim{grid-area:sim}
-@media (max-width:860px){.wrap{grid-template-columns:minmax(0,1fr);grid-template-rows:auto;grid-template-areas:"board" "list" "sim" "topic" "prompt"}}
+@media (max-width:860px){.wrap{grid-template-columns:minmax(0,1fr);grid-template-rows:auto;grid-template-areas:"board" "list" "letters" "sim" "topic" "prompt"}}
 /* yörünge simülatörü tanıtımı */
 .win.sim{display:flex;align-items:center;gap:12px;padding:8px 12px 8px 8px;text-decoration:none;color:inherit;box-shadow:none;border:2px solid transparent;background:linear-gradient(color-mix(in srgb,var(--cyan) 6%,var(--solid)),color-mix(in srgb,var(--cyan) 6%,var(--solid))) padding-box,linear-gradient(120deg,var(--pg1),var(--pg2),var(--pg3)) border-box}
 .sim:hover{border-color:var(--line3)}
@@ -164,6 +164,25 @@ button.pill{cursor:default;border-radius:0}
 .key.s1{background:var(--t-orange);color:var(--t-dark);border-color:transparent}
 .key.s2{background:var(--t-green);color:var(--t-dark);border-color:transparent}
 .tools{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.inc{margin-top:14px;padding-top:12px;border-top:1px dashed var(--line2)}
+.inc label small{text-transform:none;letter-spacing:.02em;color:var(--faint);font-weight:400}
+.incw{display:flex;gap:6px;align-items:center}
+.incb{width:42px!important;height:42px;flex:0 0 42px;text-align:center;padding:0!important;font:700 20px/1 var(--f-disp)!important;text-transform:uppercase;color:var(--ink)}
+.incb.on{background:var(--t-orange)!important;color:var(--t-dark)!important;border-color:transparent!important}
+.incw .btn{margin-left:auto;padding:0 12px;height:42px}
+.a-letters{grid-area:letters}
+.ltabs{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}
+.ltab{flex:1 1 auto;padding:6px 8px;border:1px solid var(--line2);background:var(--raise2);color:var(--dim);font:600 10px/1 var(--f-disp);letter-spacing:.1em;text-transform:uppercase;cursor:pointer;border-radius:0}
+.ltab.on{border-color:var(--cyan);color:var(--cyan);background:color-mix(in srgb,var(--cyan) 10%,transparent)}
+.lgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(46px,1fr));gap:5px}
+.lc{position:relative;border:1px solid var(--line2);background:var(--cell);padding:5px 4px 8px;text-align:center;overflow:hidden}
+.lc b{display:block;font:700 17px/1 var(--f-disp);color:var(--ink)}
+.lc span{display:block;margin-top:3px;font:500 10px/1 var(--f-mono);color:var(--dim)}
+.lc i{position:absolute;left:0;bottom:0;height:3px;background:var(--cyan);opacity:.75}
+.lc.s0{opacity:.38}
+.lc.s1{border-color:var(--t-orange)}.lc.s1 i{background:var(--t-orange);opacity:1}
+.lc.s2{border-color:var(--t-green)}.lc.s2 i{background:var(--t-green);opacity:1}
+.lc.z b,.lc.z span{color:var(--faint)}
 .btn{border-radius:0;padding:8px 12px;font:600 11px/1 var(--f-disp);letter-spacing:.12em;text-transform:uppercase;cursor:pointer;border:1px solid var(--line2);background:var(--raise);color:var(--ink)}
 .btn:hover{border-color:var(--line3);background:var(--raise2)}
 .note{font-size:12.5px;color:var(--dim);margin:10px 0 0;line-height:1.5}
@@ -327,7 +346,7 @@ textarea{min-height:92px;resize:vertical}
   <div class="brand">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="3"/><path d="M12 1.5v4M12 18.5v4M1.5 12h4M18.5 12h4"/></svg>
     <h1>Kelime Avcısı</h1>
-    <span class="ver" title="Son güncelleme: 16 Kasım 2026 09:31">v1.58</span>
+    <span class="ver" title="Son güncelleme: 16 Kasım 2026 09:41">v1.59</span>
   </div>
   <div class="today">
     <div><span class="lbl">Tarih</span><span class="val date" id="dDate">—</span></div>
@@ -345,11 +364,35 @@ textarea{min-height:92px;resize:vertical}
     <div class="win-b">
       <div class="board" id="board"></div>
       <div class="kb" id="kb"></div>
+      <div class="inc">
+        <label for="inc0">İçinde olan harfler <small>(yeri bilinmiyor, en fazla 5)</small></label>
+        <div class="incw" id="incw">
+          <input type="text" class="incb" id="inc0" maxlength="1" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-label="İçinde olan harf 1">
+          <input type="text" class="incb" maxlength="1" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-label="İçinde olan harf 2">
+          <input type="text" class="incb" maxlength="1" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-label="İçinde olan harf 3">
+          <input type="text" class="incb" maxlength="1" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-label="İçinde olan harf 4">
+          <input type="text" class="incb" maxlength="1" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-label="İçinde olan harf 5">
+          <button class="btn" id="incClr" type="button">Temizle</button>
+        </div>
+      </div>
       <div class="tools">
         <button class="btn" id="undo" type="button">Son satırı sil</button>
         <button class="btn" id="reset" type="button">Yeni oyun</button>
       </div>
       <p class="note">Harfe tıkla: gri → turuncu → yeşil. Listeden bir kelimeye tıklarsan direkt tahmin olarak girilir. Satırın yanındaki süpürge renkleri sıfırlar, çarpı satırı siler.</p>
+    </div>
+  </section>
+
+  <section class="win a-letters">
+    <div class="win-h"><h2>Harf tablosu</h2></div>
+    <div class="win-b">
+      <div class="ltabs" role="tablist">
+        <button class="ltab on" type="button" data-m="topic">Konu listesi</button>
+        <button class="ltab" type="button" data-m="left">Kalan adaylar</button>
+        <button class="ltab" type="button" data-m="tr">Türkçe genel</button>
+      </div>
+      <div class="lgrid" id="lgrid"></div>
+      <p class="note" id="lnote"></p>
     </div>
   </section>
 
@@ -403,7 +446,7 @@ textarea{min-height:92px;resize:vertical}
   </section>
 </div>
 <footer class="foot">
-  <span>Kelime Avcısı <b>v1.58</b></span><span class="dotsep">·</span><span>Son güncelleme 16 Kasım 2026 09:31</span><span class="dotsep">·</span><a href="https://github.com/baqiKk/kelime-avcisi" target="_blank" rel="noopener">Kaynak kod</a>
+  <span>Kelime Avcısı <b>v1.59</b></span><span class="dotsep">·</span><span>Son güncelleme 16 Kasım 2026 09:41</span><span class="dotsep">·</span><a href="https://github.com/baqiKk/kelime-avcisi" target="_blank" rel="noopener">Kaynak kod</a>
 </footer>
 
 <div class="mail" id="mail">
@@ -463,10 +506,12 @@ const S={get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.pars
          set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
 let cur=[], shown=PAGE;
 let rows=S.get("ka_rows",[]);
+let inc=S.get("ka_inc",["","","","",""]); if(!Array.isArray(inc)||inc.length!==5) inc=["","","","",""];
+let lmode=S.get("ka_lmode","topic");
 let topicName=S.get("ka_topic",DAILY.topic), topicText=S.get("ka_topicText",null);
 let customText=S.get("ka_custom","");
 // yeni gün yayınlandıysa: günün konusuna geç, tahtayı temizle
-if(S.get("ka_daily",null)!==DAILY.date){topicName=DAILY.topic; topicText=null; rows=[]; S.set("ka_daily",DAILY.date); S.set("ka_topic",topicName); S.set("ka_rows",rows)}
+if(S.get("ka_daily",null)!==DAILY.date){topicName=DAILY.topic; topicText=null; rows=[]; S.set("ka_daily",DAILY.date); S.set("ka_topic",topicName); S.set("ka_rows",rows); inc=["","","","",""]; S.set("ka_inc",inc)}
 if(topicText==null) topicText=topicName==="Özel liste"?customText:(TOPICS[topicName]??"");
 
 // durum çubuğu
@@ -504,6 +549,8 @@ function constraints(){
     for(const l in cnt) minC[l]=Math.max(minC[l]||0,cnt[l]);
     for(const l in grey){const m=cnt[l]||0; maxC[l]=maxC[l]==null?m:Math.min(maxC[l],m)}
   }
+  const ic={}; inc.forEach(l=>{if(l)ic[l]=(ic[l]||0)+1});
+  for(const l in ic) minC[l]=Math.max(minC[l]||0,ic[l]);
   return {fixed,notPos,minC,maxC};
 }
 function matches(w,c){
@@ -549,7 +596,7 @@ function render(){
 }
 
 const KB=[["e","r","t","y","u","ı","o","p","ğ","ü"],["a","s","d","f","g","h","j","k","l","ş","i"],["GİR","z","c","v","b","n","m","ö","ç","SİL"]];
-function keyStates(){const st={}; for(const r of rows) r.w.split("").forEach((l,i)=>{st[l]=Math.max(st[l]??-1,r.s[i])}); return st}
+function keyStates(){const st={}; for(const r of rows) r.w.split("").forEach((l,i)=>{st[l]=Math.max(st[l]??-1,r.s[i])}); inc.forEach(l=>{if(l)st[l]=Math.max(st[l]??-1,1)}); return st}
 function renderKeys(){
   const kb=document.getElementById("kb"); kb.innerHTML=""; const st=keyStates();
   for(const line of KB){const d=document.createElement("div"); d.className="kr";
@@ -584,6 +631,24 @@ function renderList(){
   if(tc.length){sec(list,`Konuyla ilgili · ${tc.length}`); tc.forEach(w=>list.appendChild(chip(w,topic)))}
   if(oc.length){ if(tc.length) sec(list,`Diğer · ${oc.length}`); oc.slice(0,Math.max(0,shown-tc.length)).forEach(w=>list.appendChild(chip(w,topic)))}
   document.getElementById("more").hidden=cand.length<=shown;
+  renderLetters(topic,cand);
+}
+const TR_FREQ={a:11.92,e:8.91,i:8.6,n:7.49,r:6.95,l:5.75,ı:5.12,d:4.73,k:4.68,m:3.75,y:3.34,t:3.31,u:3.23,s:3.01,b:2.84,o:2.48,ü:1.85,ş:1.78,z:1.5,g:1.25,ç:1.16,h:1.09,ğ:1.07,v:.96,c:.96,p:.89,ö:.78,f:.44,j:.03};
+function renderLetters(topic,cand){
+  const g=document.getElementById("lgrid"), note=document.getElementById("lnote"); if(!g) return;
+  document.querySelectorAll(".ltab").forEach(b=>b.classList.toggle("on",b.dataset.m===lmode));
+  const st=keyStates(); let data={}, words=[], fmt;
+  if(lmode==="tr"){data=TR_FREQ; fmt=v=>"%"+v.toLocaleString("tr-TR",{maximumFractionDigits:1});
+    note.textContent="Türkçe metinlerde harflerin genel kullanım sıklığı (yaklaşık). Renkler tahtadaki durumunu gösterir."}
+  else{let fb=false; words=lmode==="left"?cand.filter(w=>topic.has(w)):[...topic];
+    if(lmode==="left"&&!words.length&&cand.length){words=cand; fb=true}
+    for(const l of LETTERS) data[l]=0; words.forEach(w=>{for(const l of w) data[l]++});
+    fmt=v=>String(v);
+    note.textContent=lmode==="left"?(fb?`Konudan aday kalmadı; kalan ${words.length} sözlük kelimesindeki toplam harf sayısı.`:`Kalan ${words.length} konu adayındaki toplam harf sayısı.`):`Konu listesindeki ${words.length} kelimede her harfin toplam geçiş sayısı.`}
+  const arr=Object.keys(data).filter(l=>LETTERS.includes(l)).sort((a,b)=>data[b]-data[a]||a.localeCompare(b,"tr"));
+  const mx=Math.max(1,...arr.map(l=>data[l]));
+  g.innerHTML=arr.map(l=>{const v=data[l], s=st[l]!=null?" s"+st[l]:"", z=v?"":" z";
+    return `<div class="lc${s}${z}" title="${l.toLocaleUpperCase("tr-TR")}: ${fmt(v)}"><b>${l.toLocaleUpperCase("tr-TR")}</b><span>${fmt(v)}</span><i style="width:${(v/mx*100).toFixed(1)}%"></i></div>`}).join("");
 }
 function patCode(g,a){const r=[0,0,0,0,0],rem={};
   for(let i=0;i<N;i++){if(g[i]===a[i])r[i]=2;else rem[a[i]]=(rem[a[i]]||0)+1}
@@ -655,7 +720,23 @@ function chip(w,topic){const b=document.createElement("button"); b.type="button"
 
 document.getElementById("more").onclick=()=>{shown+=PAGE; renderList()};
 document.getElementById("undo").onclick=()=>{ if(cur.length) cur=[]; else rows.pop(); save(); render()};
-document.getElementById("reset").onclick=()=>{rows=[];cur=[];shown=PAGE;save();render()};
+document.getElementById("reset").onclick=()=>{rows=[];cur=[];shown=PAGE;inc=["","","","",""];S.set("ka_inc",inc);syncInc();save();render()};
+const incBoxes=[...document.querySelectorAll(".incb")];
+function syncInc(){incBoxes.forEach((b,i)=>{b.value=inc[i]?inc[i].toLocaleUpperCase("tr-TR"):""; b.classList.toggle("on",!!inc[i])})}
+incBoxes.forEach((b,i)=>{
+  b.addEventListener("input",()=>{const v=lower(b.value).replace(/â/g,"a").replace(/î/g,"i").replace(/û/g,"u").split("").filter(c=>LETTERS.includes(c));
+    inc[i]=v.length?v[v.length-1]:""; S.set("ka_inc",inc); syncInc(); shown=PAGE; render();
+    if(inc[i]&&i<4) incBoxes[i+1].focus()});
+  b.addEventListener("keydown",e=>{
+    if(e.key==="Backspace"&&!b.value&&i>0){e.preventDefault(); inc[i-1]=""; S.set("ka_inc",inc); syncInc(); incBoxes[i-1].focus(); render()}
+    else if(e.key==="ArrowLeft"&&i>0){e.preventDefault(); incBoxes[i-1].focus()}
+    else if(e.key==="ArrowRight"&&i<4){e.preventDefault(); incBoxes[i+1].focus()}
+    else if(e.key==="Enter"){b.blur()}});
+  b.addEventListener("focus",()=>b.select());
+});
+document.getElementById("incClr").onclick=()=>{inc=["","","","",""]; S.set("ka_inc",inc); syncInc(); shown=PAGE; render()};
+document.querySelectorAll(".ltab").forEach(b=>b.onclick=()=>{lmode=b.dataset.m; S.set("ka_lmode",lmode); renderList()});
+syncInc();
 
 const sel=document.getElementById("topicSel"), ta=document.getElementById("topicWords");
 Object.keys(TOPICS).forEach(n=>{const o=document.createElement("option"); o.value=n; o.textContent=n===DAILY.topic?`${n} (günün konusu)`:n; sel.appendChild(o)});
