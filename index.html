@@ -338,6 +338,76 @@ textarea{min-height:92px;resize:vertical}
 .copyic svg{width:16px;height:16px}
 #copyMsg{display:block;min-height:16px;margin-top:6px;font:500 11px var(--f-disp);letter-spacing:.08em;color:var(--good)}
 
+/* ---- Günlük Oyun ---- */
+[hidden]{display:none!important}
+.gcta{max-width:1180px;margin:0 auto 14px;display:flex;align-items:center;gap:12px 16px;flex-wrap:wrap;border:1px solid var(--accent);background:linear-gradient(90deg,var(--accent-soft),transparent 70%);padding:10px 14px}
+.gcta b{font:700 13px/1.2 var(--f-disp);letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+.gcta span{color:var(--dim);font-size:13px;flex:1 1 220px}
+.gcta .btn{border-color:var(--accent);color:var(--accent);height:36px;padding:0 16px;position:relative}
+.gcta .btn.done{border-color:var(--line2);color:var(--dim)}
+.gcta .btn i{position:absolute;top:-4px;right:-4px;width:9px;height:9px;background:var(--accent);border-radius:50%;box-shadow:0 0 0 2px var(--bg)}
+.gm{position:fixed;inset:0;z-index:2000;display:flex;align-items:flex-start;justify-content:center;padding:28px 12px;overflow-y:auto;background:color-mix(in srgb,var(--void) 78%,transparent);backdrop-filter:blur(3px)}
+.gm-box{width:min(760px,100%);border:1px solid var(--line3);background:var(--solid);box-shadow:0 24px 60px rgba(0,0,0,.45)}
+.gm-h{display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid var(--line2)}
+.gm-h h2{margin:0;font:700 14px/1 var(--f-disp);letter-spacing:.16em;text-transform:uppercase;color:var(--ink)}
+.gm-h span{color:var(--dim);font:500 11px/1.3 var(--f-mono);flex:1}
+.gm-x{width:32px;height:32px;border:1px solid var(--line2);background:transparent;color:var(--ink);font-size:20px;line-height:1;cursor:pointer}
+.gm-tabs{display:flex;border-bottom:1px solid var(--line2)}
+.gm-tabs button{flex:1;padding:10px;border:0;border-right:1px solid var(--line2);background:transparent;color:var(--dim);font:600 11px/1 var(--f-disp);letter-spacing:.14em;text-transform:uppercase;cursor:pointer}
+.gm-tabs button:last-child{border-right:0}
+.gm-tabs button.on{color:var(--accent);background:var(--accent-soft)}
+.gm-pane{padding:16px 14px 18px}
+.gm-steps{display:flex;justify-content:center;gap:8px;margin-bottom:12px}
+.gm-steps span{font:600 10.5px/1 var(--f-disp);letter-spacing:.12em;text-transform:uppercase;padding:6px 10px;border:1px solid var(--line2);color:var(--dim)}
+.gm-steps span.on{border-color:var(--cyan);color:var(--cyan)}
+.gm-steps span.ok{border-color:var(--t-green);color:var(--t-green)}
+.gm-steps span.no{border-color:var(--bad,#d9534f);color:var(--bad,#d9534f)}
+.gm-grid{display:grid;gap:6px;justify-content:center;margin:0 auto}
+.gm-row{display:grid;grid-template-columns:repeat(5,52px);gap:6px}
+.gm-c{height:52px;border:1px solid var(--line2);display:grid;place-items:center;font:700 24px/1 var(--f-disp);text-transform:uppercase;color:var(--ink);background:var(--cell,transparent)}
+.gm-c.f{border-color:var(--line3)}
+.gm-c.s0{background:var(--t-grey);border-color:transparent;color:var(--t-grey-ink,#d9e7eb)}
+.gm-c.s1{background:var(--t-orange);border-color:transparent;color:var(--t-dark)}
+.gm-c.s2{background:var(--t-green);border-color:transparent;color:var(--t-dark)}
+.gm-row.shake{animation:gmshake .35s}
+@keyframes gmshake{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+.gm-msg{min-height:20px;text-align:center;margin:10px 0 6px;font:600 12px/1.4 var(--f-disp);letter-spacing:.06em;color:var(--accent)}
+.gm-kb{display:grid;gap:5px;max-width:560px;margin:0 auto}
+.gm-kr{display:flex;gap:4px;justify-content:center}
+.gm-k{flex:1 1 0;min-width:0;max-width:44px;height:44px;border:1px solid var(--line2);background:var(--raise2);color:var(--ink);font:600 15px/1 var(--f-disp);text-transform:uppercase;cursor:pointer;padding:0}
+.gm-k.w{max-width:72px;flex:1.6 1 0;font-size:11px;letter-spacing:.06em}
+.gm-k.s0{background:var(--t-grey);opacity:.55}.gm-k.s1{background:var(--t-orange);color:var(--t-dark)}.gm-k.s2{background:var(--t-green);color:var(--t-dark)}
+.gm-end{text-align:center;padding:6px 0 0}
+.gm-score{font:700 26px/1.2 var(--f-disp);letter-spacing:.06em;color:var(--ink);margin:4px 0 2px}
+.gm-sub{color:var(--dim);font-size:13px;margin:0 0 12px}
+.gm-words{display:flex;justify-content:center;gap:8px;margin:0 0 14px;flex-wrap:wrap}
+.gm-words b{font:700 13px/1 var(--f-disp);letter-spacing:.14em;padding:7px 10px;border:1px solid var(--line2)}
+.gm-words b.ok{border-color:var(--t-green);color:var(--t-green)}.gm-words b.no{border-color:var(--bad,#d9534f);color:var(--bad,#d9534f)}
+.gm-form{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:0 auto;max-width:460px}
+.gm-form input,.gm-form textarea{flex:1 1 200px;min-width:0;border:1px solid var(--line2);background:var(--raise);color:var(--ink);padding:9px 10px;font:500 14px/1.3 var(--f-body,inherit);border-radius:0}
+.gm-form textarea{resize:vertical;min-height:58px;flex-basis:100%}
+.gm-form .btn{height:40px;padding:0 16px}
+.gm-note{color:var(--faint);font-size:12px;margin:8px 0 0;text-align:center}
+.lb{list-style:none;margin:0;padding:0;display:grid;gap:4px}
+.lb li{display:grid;grid-template-columns:34px minmax(0,1fr) auto;gap:4px 10px;align-items:center;padding:8px 10px;border:1px solid var(--line);background:var(--raise)}
+.lb li.me{border-color:var(--cyan)}
+.lb li.top{border-color:var(--accent);background:var(--accent-soft)}
+.lb .r{font:700 15px/1 var(--f-disp);color:var(--dim);text-align:center}
+.lb li.top .r{color:var(--accent)}
+.lb .n{font:600 14px/1.2 var(--f-disp);letter-spacing:.04em;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lb .n em{font-style:normal;color:var(--accent);margin-left:6px}
+.lb .st{font:500 12px/1 var(--f-mono);color:var(--dim);white-space:nowrap}
+.lb .m{grid-column:2/-1;font-size:13px;color:var(--ink);opacity:.85;border-left:2px solid var(--accent);padding:2px 0 2px 8px;overflow-wrap:anywhere}
+.lb-empty{color:var(--dim);text-align:center;padding:18px 0}
+.lb-mine{margin-top:14px;padding-top:14px;border-top:1px dashed var(--line2)}
+.lb-mine h3{margin:0 0 8px;font:600 11px/1 var(--f-disp);letter-spacing:.14em;text-transform:uppercase;color:var(--dim);text-align:center}
+.rkb{border-color:var(--accent)!important;background:var(--accent)!important;color:var(--accent-ink)!important;font-weight:700}
+.rk-banner{position:fixed;left:50%;top:16px;transform:translate(-50%,-140%);z-index:10000;max-width:min(92vw,560px);padding:10px 16px;border:1px solid var(--accent);background:var(--solid);color:var(--ink);font:600 13px/1.4 var(--f-disp);letter-spacing:.04em;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.35);transition:transform .5s cubic-bezier(.2,.8,.2,1)}
+.rk-banner{visibility:hidden}.rk-banner.on{transform:translate(-50%,0);visibility:visible}
+.rk-banner b{color:var(--accent)}
+.rk-banner q{display:block;margin-top:4px;font-weight:400;color:var(--dim);quotes:"“" "”"}
+@media (max-width:520px){.gm{padding:0}.gm-box{min-height:100%;border:0}.gm-row{grid-template-columns:repeat(5,min(15vw,52px))}.gm-c{height:min(15vw,52px);font-size:21px}.gm-k{height:46px;font-size:14px}}
+
 :focus-visible{outline:1px solid var(--accent);outline-offset:2px}
 @media (prefers-reduced-motion:no-preference){.tile,.w,.key,.btn,.ic{transition:background-color .12s,border-color .12s,color .12s}}
 </style>
@@ -349,7 +419,7 @@ textarea{min-height:92px;resize:vertical}
   <div class="brand">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="3"/><path d="M12 1.5v4M12 18.5v4M1.5 12h4M18.5 12h4"/></svg>
     <h1>Kelime Avcısı</h1>
-    <span class="ver" title="Son güncelleme: 24 Kasım 2026 08:46">v1.67</span>
+    <span class="ver" title="Son güncelleme: 25 Kasım 2026 20:50">v1.68</span>
   </div>
   <div class="today">
     <div><span class="lbl">Tarih</span><span class="val date" id="dDate">—</span></div>
@@ -359,6 +429,12 @@ textarea{min-height:92px;resize:vertical}
   </div>
   <div class="legend"><span><i style="background:var(--t-grey)"></i>Yok</span><span><i style="background:var(--t-orange)"></i>Yeri yanlış</span><span><i style="background:var(--t-green)"></i>Doğru yer</span></div>
   <div class="modew"><span class="mode-l" id="modeLabel"></span><button class="mode" id="modeBtn" type="button"></button></div>
+</div>
+
+<div class="gcta" id="gcta">
+  <b>Günlük Oyun</b>
+  <span id="gctaTxt">Sana özel 2 kelime. En az tahminle bul, sıralamaya gir; birinci roketi fırlatır.</span>
+  <button class="btn" id="gameBtn" type="button">Oyna<i id="gameDot"></i></button>
 </div>
 
 <div class="wrap">
@@ -449,8 +525,30 @@ textarea{min-height:92px;resize:vertical}
   </section>
 </div>
 <footer class="foot">
-  <span>Kelime Avcısı <b>v1.67</b></span><span class="dotsep">·</span><span>Son güncelleme 24 Kasım 2026 08:46</span><span class="dotsep">·</span><a href="https://github.com/baqiKk/kelime-avcisi" target="_blank" rel="noopener">Kaynak kod</a>
+  <span>Kelime Avcısı <b>v1.68</b></span><span class="dotsep">·</span><span>Son güncelleme 25 Kasım 2026 20:50</span><span class="dotsep">·</span><a href="https://github.com/baqiKk/kelime-avcisi" target="_blank" rel="noopener">Kaynak kod</a>
 </footer>
+
+<div class="gm" id="gm" hidden role="dialog" aria-modal="true" aria-labelledby="gmT">
+  <div class="gm-box">
+    <div class="gm-h"><h2 id="gmT">Günlük Oyun</h2><span id="gmDay"></span><button class="gm-x" id="gmX" type="button" aria-label="Kapat">×</button></div>
+    <div class="gm-tabs" role="tablist"><button type="button" data-t="play" class="on">Oyna</button><button type="button" data-t="lb">Sıralama</button></div>
+    <div class="gm-pane" id="gmPlay">
+      <div class="gm-steps" id="gmSteps"></div>
+      <div id="gmBoard">
+        <div class="gm-grid" id="gmGrid"></div>
+        <p class="gm-msg" id="gmMsg" role="status"></p>
+        <div class="gm-kb" id="gmKb"></div>
+      </div>
+      <div class="gm-end" id="gmEnd" hidden></div>
+    </div>
+    <div class="gm-pane" id="gmLb" hidden>
+      <ol class="lb" id="lbList"></ol>
+      <div class="lb-mine" id="lbMine" hidden></div>
+      <p class="gm-note" id="lbNote"></p>
+    </div>
+  </div>
+</div>
+<div class="rk-banner" id="rkBanner" role="status"></div>
 
 <div class="mail" id="mail">
   <span class="env-tip" aria-hidden="true">Bize yaz<small>Mektubun roketle gider</small></span>
@@ -1312,6 +1410,193 @@ const FEEDBACK_KEY="37da81da-05a0-4575-a3fe-f02b68cb08f6";
   window.__kaLaunch=launch;
   if(location.hash==="#roket"){setTimeout(()=>window.roketiDene(),800)}
 })();
+
+// ---- Günlük Oyun: kişiye özel 2 kelime, liderlik sıralaması, mesaj ve birinciye roket ----
+(()=>{
+const GEN="zaman güzel büyük doğru küçük sorun bayan devam selam çocuk hazır kabul kadın yarın akşam erkek haber hafta insan karar merak mutlu polis sakin yalan yemek cevap dünya kolay sabah sahip takip yeter çabuk araba bebek ciddi durum garip güçlü hayal hayat hızlı kesin rahat savaş yakın acele beyaz evlat fikir gelin gizli hasta komik tatlı tuhaf uygun yaşlı zarar çıkar basit bilgi dalga doğum düşün erken haklı kahve köpek mesaj nefes parti sebep sefer sıcak vakit yavaş şarkı bağlı bölüm canlı davet gurur güneş ifade kavga kayıp müzik saçma siyah soğuk süper takım temiz yarım yazık şehir ahbap altın arama aşırı balık deniz derin değer görev güven kalın kitap konuş kulak ortak parça resmi sahte saygı sekiz suçlu türlü yaşam çeşit asker beyin bilim doğal giriş güney hedef iptal kanıt kuzey masum memur metre resim sever seçim yatak yeşil zayıf özgür üzgün şarap şeker banka barış baskı bölge cesur dokuz domuz düğün engel hanım idare karın kayıt kredi müdür nazik pazar rapor sanat sinir sonuç sınıf tamir tavuk vahşi yarar yasal yüzde çıkış ödeme şükür bozuk bıçak düşük eksik eşlik genel geniş hakim huzur iddia imdat kalıp kağıt korku kızıl mısır nokta prens sahne sevgi sezon sokak taksi tanık tarih temel tepki tuzak tıbbi utanç yasak yerel yirmi yoğun çiçek ödünç örnek üzücü şüphe alkol aşkın bakış banyo basın bilet bravo buçuk delik demir döner dönüş dövüş ekmek göğüs günah hafif hasar hesap ipucu kadeh kibar kirli koyun kural kırık madde meyve minik motor nakit oğlan pizza sadık talep taraf tatil temin testi teyze video vücut yazar yılan zafer çizgi çözüm şirin alarm anlam aracı aylık bakan böcek daire darbe delil devre direk dosya duvar duygu gümüş halka hukuk kanlı kanun kaçak kılıç melek metal mezun model nişan paket pasta pembe pilot posta radyo rezil roman sabit saray satış sıfır sınır tarif tekne temas tutar uyarı uzman vergi yarış yedek yüzük çanta çekim öğlen üstün ısrar adres aktif alçak bahar bakım beden boyun cüret duman dönem düzen eylül fakir görgü görüş ilham inkar kader kalem kaçış kemik kilit kutlu köprü lider maruz nadir nehir orman panik robot sayfa sivil tahta teker terfi virüs yanıt yavru yemiş zorlu çağrı şapka alıcı arazi aslan bahis bahçe bağış bekar biçim burun cadde casus dayak deney elmas espri evren eşsiz fiyat flört geçit geçiş gölge hatun hitap hücre hüküm içten kabus kanal kaçık keyif keşif kulüp kısım liste makul mayıs nisan proje prova sapan sağır sihir stres surat takas vuruş yakıt yayın yazın yerli yolcu yorum çalar çelik çifte çorba şahit şeref şifre aktör amber antik bacak birim bitki buzlu ceket damla dikiş dilek dilim duyar dövme esrar evrak evsiz geyik hamle havlu havuz hisse ihlal ikram itaat kaset kasım kesik komşu kopya kuruş kuzen kürek layık maden marka masaj medya miras nabız nöbet pamuk poker rehin sahil saklı sefil subay sınav tanış tavan tekme tenis teori tipik toplu tören tıraş yapay yetki yüzme zalim zarif zombi çamur çevre çörek ördek ücret ıslak şekil şoför acemi ahlak ayırt bariz bedel belge biber boylu buluş delta dergi diken dolap doğan düzey evcil eyvah final fizik gitar gizem havai hindi hokey iflas ihmal imkan inanç isyan işlem kablo kanat kapak kargo kazan konuk küfür lazer maske mekan mesai metro milli mühim nakil nefis olgun ortam papel perde rakip roket sakat sakız sanal sebze sinek soluk sosis soylu süslü sıçan sığır tabak teyit tokat turta tutku tünel yaban yanık yaver yağlı yüklü zemin çorap şubat albüm alkış anlık arıza azgın açlık aşama balon baron bilge bulut cahil cihaz cümle damar damat diyet drama dönüm ebedi ejder emlak fayda fidye giysi göbek halim harap hücum hıyar ideal ilahi ilkel ispat istek işsiz karma kasap kayak kazık kaşık kimya kolye kukla kurul kutup kömür köylü leziz liman limon litre maddi masal mevzu moral nesil opera organ parka rakam rutin sabun sabır seyir sinsi sivri sorgu soğan sözlü süreç sıska tablo tilki tuzlu tümör yudum zihin ziyan çetin çürük ödlek önlem ıssız şafak acılı barut beleş besin buhar bölük bütçe dalış davul denge detay deyim duble dudak durak düğme ekran ender enfes esmer evrim eylem fener fırın galip garaj gazoz gönül gözde hasat havuç horoz ikili kalça kazak kemer keyfi konum krema kucak kumaş kurgu köfte kıllı kılık kışın lamba lokma makas malik mazur mekik metin meşru monte motel narin nesne nihai niyet peşin piliç rekor reşit sakal salon sayım serin serum siper somut tarım tavır tayin torba tütün tüylü ukala vatan vekil yetim yürek yıkım yığın zerre züppe çakal çatal çekiç çizik çubuk çukur şahin ahşap artış astım avans aylak bakır balta batıl bağır bekçi beton beyan borsa boyut cazip ceviz dekan desen dişçi dümen düşüş enkaz ergen erzak esnek etkin etraf gidiş güreş gıcık hakem hamur hurda idrar itici izole kadim kanca karlı katlı keder kefil keman kiraz kitle klişe kuduz kuşku kıyak melez mikro mimar mizah nemli nüfus omlet panda peruk pilav plaka radar rozet saman sergi sonda sunum tango tesis titiz tohum turşu tuğla tövbe varış".split(" ").filter(Boolean);
+const SB_URL="", SB_KEY="";
+const $=id=>document.getElementById(id);
+const DSET=new Set(DICT); GEN.forEach(w=>DSET.add(w));
+const TRY=6, FAIL=TRY+1;
+const day=new Intl.DateTimeFormat("en-CA",{timeZone:"Europe/Istanbul"}).format(new Date());
+let pid=S.get("ka_pid",null); if(!pid){pid=(crypto.randomUUID?crypto.randomUUID():"xxxxxxxx-xxxx-4xxx-8xxx-xxxxxxxxxxxx".replace(/x/g,()=>(Math.random()*16|0).toString(16))); S.set("ka_pid",pid)}
+// oyuncu+gün tohumuyla herkese farklı iki kelime
+function h32(s){let h=2166136261>>>0;for(const c of s){h^=c.codePointAt(0);h=Math.imul(h,16777619)>>>0}return h}
+function rng(a){return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const R=rng(h32(pid+"|"+day)); const i1=Math.floor(R()*GEN.length); let i2=Math.floor(R()*GEN.length); if(i2===i1) i2=(i1+1)%GEN.length;
+const WORDS=[GEN[i1],GEN[i2]];
+let G=S.get("ka_g",null);
+if(!G||G.day!==day) G={day,r:0,rows:[[],[]],res:[null,null],t0:0,t1:0,sent:false,msg:false,rk:false};
+const save=()=>S.set("ka_g",G);
+let cur="", busy=false, tab="play";
+const up=s=>s.toLocaleUpperCase("tr-TR");
+function score(g,a){const r=[0,0,0,0,0],c={};for(let i=0;i<5;i++){if(g[i]===a[i])r[i]=2;else c[a[i]]=(c[a[i]]||0)+1}
+  for(let i=0;i<5;i++){if(r[i])continue;if(c[g[i]]){r[i]=1;c[g[i]]--}}return r}
+const done=()=>G.res[0]&&G.res[1];
+const tot=()=>({solved:G.res.filter(x=>x&&x.ok).length,guesses:G.res.reduce((s,x)=>s+(x?x.n:0),0),secs:Math.max(3,Math.min(86400,Math.round(((G.t1||Date.now())-(G.t0||Date.now()))/1000)))});
+const fmtT=s=>{const m=Math.floor(s/60),x=s%60;return m>=60?`${Math.floor(m/60)}sa ${m%60}dk`:`${m}:${String(x).padStart(2,"0")}`};
+const BAD=["amk","amq","aq ","orospu","piç","sik","yarra","göt","oç ","siktir","amına","ananı","pezevenk","kahpe","ibne","gavat","fuck","bok "];
+const clean=t=>{const s=" "+lower(t)+" ";return !BAD.some(b=>s.includes(b))};
+
+// --- arayüz ---
+const gm=$("gm"), grid=$("gmGrid"), kb=$("gmKb"), msgEl=$("gmMsg");
+$("gmDay").textContent=new Intl.DateTimeFormat("tr-TR",{day:"numeric",month:"long",timeZone:"Europe/Istanbul"}).format(new Date())+" · herkese farklı 2 kelime";
+const KROWS=["ertyuıopğü","asdfghjklşi","zcvbnmöç"];
+kb.innerHTML=KROWS.map((r,ri)=>`<div class="gm-kr">${ri===2?'<button class="gm-k w" type="button" data-k="Enter">Gir</button>':""}${[...r].map(c=>`<button class="gm-k" type="button" data-k="${c}">${up(c)}</button>`).join("")}${ri===2?'<button class="gm-k w" type="button" data-k="Backspace">Sil</button>':""}</div>`).join("");
+kb.addEventListener("click",e=>{const b=e.target.closest("[data-k]");if(b)press(b.dataset.k)});
+function flash(t,ms=1800){msgEl.textContent=t;clearTimeout(flash.t);if(ms)flash.t=setTimeout(()=>{if(msgEl.textContent===t)msgEl.textContent=""},ms)}
+function renderSteps(){$("gmSteps").innerHTML=[0,1].map(i=>{const r=G.res[i];const c=r?(r.ok?"ok":"no"):(G.r===i&&!done()?"on":"");return`<span class="${c}">Kelime ${i+1}${r?(r.ok?` · ${r.n}`:" · ✗"):""}</span>`}).join("")}
+function renderBoard(){
+  const r=Math.min(G.r,1), rows=G.rows[r], ans=WORDS[r]; let h="";
+  for(let i=0;i<TRY;i++){const w=rows[i]; let cells="";
+    if(w){const sc=score(w,ans);for(let j=0;j<5;j++)cells+=`<div class="gm-c s${sc[j]}">${up(w[j])}</div>`}
+    else if(i===rows.length&&!G.res[r]){for(let j=0;j<5;j++)cells+=`<div class="gm-c${cur[j]?" f":""}">${cur[j]?up(cur[j]):""}</div>`}
+    else for(let j=0;j<5;j++)cells+=`<div class="gm-c"></div>`;
+    h+=`<div class="gm-row"${i===rows.length?' id="gmCur"':""}>${cells}</div>`}
+  grid.innerHTML=h;
+  const st={}; rows.forEach(w=>score(w,ans).forEach((s,j)=>{st[w[j]]=Math.max(st[w[j]]??-1,s)}));
+  kb.querySelectorAll(".gm-k[data-k]").forEach(b=>{const k=b.dataset.k;b.className="gm-k"+(k.length>1?" w":"")+(st[k]!=null?" s"+st[k]:"")});
+}
+function render(){renderSteps();
+  const fin=done(); $("gmBoard").hidden=fin; $("gmEnd").hidden=!fin;
+  if(fin) renderEnd(); else renderBoard();
+  const d=$("gameDot"); if(d) d.hidden=fin; $("gameBtn").classList.toggle("done",fin); $("gameBtn").firstChild.textContent=fin?"Sonucum":"Oyna";
+}
+function press(k){
+  if(busy||done())return; const r=G.r;
+  if(k==="Backspace"){cur=cur.slice(0,-1);renderBoard();return}
+  if(k==="Enter"){
+    if(cur.length<5){flash("5 harf olmalı");shake();return}
+    if(!DSET.has(cur)){flash("Sözlükte yok");shake();return}
+    if(!G.t0)G.t0=Date.now();
+    G.rows[r].push(cur); const w=cur; cur="";
+    if(w===WORDS[r]){G.res[r]={ok:true,n:G.rows[r].length}; flash(["Dahi!","Harika!","Süper!","Güzel!","İyi!","Kıl payı!"][G.rows[r].length-1]||"Bildin!",1400)}
+    else if(G.rows[r].length>=TRY){G.res[r]={ok:false,n:FAIL}; flash("Kelime: "+up(WORDS[r]),2400)}
+    save(); renderBoard(); renderSteps();
+    if(G.res[r]){busy=true; setTimeout(()=>{busy=false; if(r===0){G.r=1}else{G.t1=Date.now()} save(); render(); if(done()) submitScore()},r===0?1300:1600)}
+    return}
+  if(LETTERS.includes(k)&&cur.length<5){cur+=k;renderBoard()}
+}
+function shake(){const el=$("gmCur");if(el){el.classList.remove("shake");void el.offsetWidth;el.classList.add("shake")}}
+addEventListener("keydown",e=>{
+  if(gm.hidden)return;
+  if(e.key==="Escape"){close();e.preventDefault();e.stopImmediatePropagation();return}
+  if(e.target.closest&&e.target.closest("input,textarea"))return;
+  if(e.ctrlKey||e.metaKey||e.altKey)return;
+  if(tab!=="play")return;
+  let k=e.key; if(k!=="Enter"&&k!=="Backspace")k=lower(k);
+  if(k==="Enter"||k==="Backspace"||(k.length===1&&LETTERS.includes(k))){e.preventDefault();e.stopImmediatePropagation();press(k)}
+},true);
+
+function renderEnd(){
+  const t=tot(); const el=$("gmEnd");
+  el.innerHTML=`<p class="gm-sub">Bugünkü sonucun</p>
+    <div class="gm-score">${t.solved}/2 · ${t.guesses} tahmin · ${fmtT(t.secs)}</div>
+    <div class="gm-words">${WORDS.map((w,i)=>`<b class="${G.res[i].ok?"ok":"no"}">${up(w)}</b>`).join("")}</div>
+    <div id="gmSend"></div>
+    <p class="gm-note">Sıralama: önce çözülen kelime sayısı, sonra toplam tahmin (bilinemeyen kelime ${FAIL} sayılır), sonra süre. Yarın yeni kelimeler.</p>`;
+  renderSend();
+}
+function renderSend(){
+  const box=$("gmSend"); if(!box)return;
+  if(G.sent){box.innerHTML=`<p class="gm-sub">Sıralamaya <b>${esc(S.get("ka_nick",""))}</b> adıyla girdin.</p><button class="btn" type="button" id="gmToLb">Sıralamayı gör</button>`;$("gmToLb").onclick=()=>setTab("lb");return}
+  if(!SB_URL||!SB_KEY){box.innerHTML=`<p class="gm-note">Sıralama çok yakında açılıyor; sonucun bu cihazda saklandı.</p>`;return}
+  box.innerHTML=`<form class="gm-form" id="gmNickF"><input id="gmNick" maxlength="20" placeholder="Sıralamada görünecek adın" autocomplete="nickname" value="${esc(S.get("ka_nick",""))}"><button class="btn rkb" type="submit">Sıralamaya gönder</button></form><p class="gm-note" id="gmSendNote"></p>`;
+  $("gmNickF").onsubmit=e=>{e.preventDefault();submitScore(true)};
+}
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+// --- Supabase ---
+let sb=null, sbReady=null;
+function getSb(){
+  if(!SB_URL||!SB_KEY)return Promise.resolve(null);
+  if(sbReady)return sbReady;
+  sbReady=new Promise(res=>{const s=document.createElement("script");s.src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js";
+    s.onload=()=>{try{sb=window.supabase.createClient(SB_URL,SB_KEY,{auth:{persistSession:false}});res(sb)}catch(e){res(null)}};s.onerror=()=>res(null);document.head.appendChild(s)});
+  return sbReady;
+}
+async function submitScore(manual){
+  if(!done()||G.sent)return;
+  const nickIn=$("gmNick"); let nick=(nickIn?nickIn.value:S.get("ka_nick","")).trim().replace(/\s+/g," ");
+  if(!manual&&!nick)return;
+  const note=$("gmSendNote"); const say=t=>{if(note)note.textContent=t};
+  if(nick.length<2){say("Ad en az 2 harf olmalı.");return}
+  if(!clean(nick)){say("Bu adı kullanamazsın, başka bir ad dene.");return}
+  const c=await getSb(); if(!c){say("Sıralamaya şu an ulaşılamıyor, birazdan tekrar dene.");return}
+  S.set("ka_nick",nick); say("Gönderiliyor…");
+  const t=tot(); const {error}=await c.from("ka_scores").insert({day,player:pid,nick,solved:t.solved,guesses:t.guesses,secs:t.secs});
+  if(error&&error.code!=="23505"){say("Gönderilemedi: "+(error.message||"hata"));return}
+  G.sent=true; save(); renderSend(); setTab("lb");
+}
+let LB={scores:[],msgs:{},launches:[]};
+async function loadLb(){
+  const c=await getSb(); const list=$("lbList"), note=$("lbNote");
+  if(!c){list.innerHTML=`<li class="lb-empty" style="display:block">${SB_URL?"Sıralamaya şu an ulaşılamıyor.":"Sıralama çok yakında açılıyor."}</li>`;$("lbMine").hidden=true;note.textContent="";return}
+  const [a,b,l]=await Promise.all([
+    c.from("ka_scores").select("player,nick,solved,guesses,secs,created_at").eq("day",day).order("solved",{ascending:false}).order("guesses").order("secs").order("created_at").limit(50),
+    c.from("ka_messages").select("player,body").eq("day",day),
+    c.from("ka_launches").select("id,player,nick,created_at").eq("day",day).order("created_at",{ascending:false})]);
+  LB.scores=a.data||[]; LB.msgs={}; (b.data||[]).forEach(m=>LB.msgs[m.player]=m.body); LB.launches=l.data||[];
+  renderLb();
+}
+function renderLb(){
+  const list=$("lbList"), sc=LB.scores, lp=new Set(LB.launches.map(x=>x.player));
+  if(!sc.length){list.innerHTML=`<li class="lb-empty" style="display:block">Bugün henüz kimse bitirmedi. İlk sen ol!</li>`}
+  else{let rank=0,prev=null;list.innerHTML=sc.map((s,i)=>{const key=s.solved+"|"+s.guesses+"|"+s.secs;if(key!==prev){rank=i+1;prev=key}
+    const m=LB.msgs[s.player];return`<li class="${rank===1?"top":""}${s.player===pid?" me":""}"><span class="r">${rank===1?"🏆":rank}</span><span class="n">${esc(s.nick)}${lp.has(s.player)?"<em>🚀</em>":""}${s.player===pid?' <em style="color:var(--cyan)">sen</em>':""}</span><span class="st">${s.solved}/2 · ${s.guesses} · ${fmtT(s.secs)}</span>${m?`<span class="m">${esc(m)}</span>`:""}</li>`}).join("")}
+  const myI=sc.findIndex(s=>s.player===pid); const mine=$("lbMine");
+  $("lbNote").textContent=`${sc.length} oyuncu · ilk 10 mesaj bırakabilir · 1. olan roketi fırlatır`;
+  if(myI<0){mine.hidden=true;return}
+  const me=sc[myI]; const myRank=sc.filter(s=>s.solved>me.solved||(s.solved===me.solved&&(s.guesses<me.guesses||(s.guesses===me.guesses&&s.secs<me.secs)))).length+1;
+  let h=""; const hasMsg=LB.msgs[pid]!=null, launched=lp.has(pid);
+  if(myRank===1&&!launched) h+=`<h3>Günün birincisisin!</h3><div class="gm-form"><button class="btn rkb" type="button" id="lbRk">🚀 Roketi fırlat</button></div><p class="gm-note">Fırlattığında siteye giren herkes roketini adınla görür.</p>`;
+  if(myRank<=10&&!hasMsg) h+=`<h3 style="margin-top:12px">İlk 10'dasın · bir mesaj bırak</h3><form class="gm-form" id="lbMsgF"><textarea id="lbMsg" maxlength="140" placeholder="Herkese görünecek kısa mesajın (en fazla 140 harf)"></textarea><button class="btn" type="submit">Paylaş</button></form><p class="gm-note" id="lbMsgNote"></p>`;
+  if(!h){mine.hidden=true;return}
+  mine.hidden=false; mine.innerHTML=h;
+  const rb=$("lbRk"); if(rb) rb.onclick=fireRocket;
+  const f=$("lbMsgF"); if(f) f.onsubmit=async e=>{e.preventDefault(); const t=$("lbMsg").value.trim(), n=$("lbMsgNote");
+    if(!t){n.textContent="Boş mesaj gönderilemez.";return} if(!clean(t)){n.textContent="Mesajında uygun olmayan bir ifade var.";return}
+    const c=await getSb(); const {error}=await c.from("ka_messages").insert({day,player:pid,nick:S.get("ka_nick",""),body:t});
+    if(error&&error.code!=="23505"){n.textContent=error.code==="42501"?"Mesaj sadece ilk 10'a açık.":"Gönderilemedi.";return}
+    G.msg=true; save(); loadLb()};
+}
+async function fireRocket(){
+  const b=$("lbRk"); if(b){b.disabled=true;b.textContent="Hazırlanıyor…"}
+  const c=await getSb(); const {data,error}=await c.from("ka_launches").insert({day,player:pid,nick:S.get("ka_nick","")}).select("id").single();
+  if(error&&error.code!=="23505"){if(b){b.disabled=false;b.textContent="🚀 Roketi fırlat"} const n=document.createElement("p");n.className="gm-note";n.textContent=error.code==="42501"?"Artık 1. değilsin, roket birinciye ait.":"Fırlatılamadı.";$("lbMine").appendChild(n);return}
+  G.rk=true; save(); if(data) markSeen(data.id); close(); playRocket(S.get("ka_nick",""),LB.msgs[pid],true); loadLb();
+}
+// --- roket: siteye giren herkes görür ---
+const seen=()=>S.get("ka_rk_seen",[]); const markSeen=id=>{const s=seen();if(!s.includes(id)){s.push(id);S.set("ka_rk_seen",s.slice(-30))}};
+let rkBusy=false;
+function playRocket(nick,msg,mine){
+  if(rkBusy)return; const L=window.__kaLaunch; if(!L)return; rkBusy=true;
+  const bn=$("rkBanner"); bn.innerHTML=(mine?`🚀 Roketi fırlattın, <b>${esc(nick)}</b>!`:`🚀 <b>${esc(nick)}</b> günün birincisi oldu ve roketi fırlattı!`)+(msg?`<q>${esc(msg)}</q>`:"");
+  bn.classList.add("on"); setTimeout(()=>bn.classList.remove("on"),7000);
+  const r=L(()=>{},()=>{rkBusy=false}); setTimeout(()=>r.go(),400);
+}
+async function watchRockets(){
+  const c=await getSb(); if(!c)return;
+  const {data}=await c.from("ka_launches").select("id,player,nick").eq("day",day).order("created_at",{ascending:false}).limit(1);
+  const last=data&&data[0]; if(last&&!seen().includes(last.id)){markSeen(last.id); const m=await c.from("ka_messages").select("body").eq("day",day).eq("player",last.player).maybeSingle(); setTimeout(()=>playRocket(last.nick,m.data&&m.data.body,last.player===pid),1200)}
+  c.channel("ka-live").on("postgres_changes",{event:"INSERT",schema:"public",table:"ka_launches"},async p=>{const x=p.new;if(!x||x.day!==day||seen().includes(x.id))return;markSeen(x.id);
+      const m=await c.from("ka_messages").select("body").eq("day",day).eq("player",x.player).maybeSingle(); playRocket(x.nick,m.data&&m.data.body,x.player===pid); if(!gm.hidden&&tab==="lb")loadLb()})
+    .on("postgres_changes",{event:"INSERT",schema:"public",table:"ka_scores"},()=>{if(!gm.hidden&&tab==="lb")loadLb()})
+    .on("postgres_changes",{event:"INSERT",schema:"public",table:"ka_messages"},()=>{if(!gm.hidden&&tab==="lb")loadLb()}).subscribe();
+}
+// --- aç/kapat, sekmeler ---
+function setTab(t){tab=t;document.querySelectorAll(".gm-tabs button").forEach(b=>b.classList.toggle("on",b.dataset.t===t));$("gmPlay").hidden=t!=="play";$("gmLb").hidden=t!=="lb";if(t==="lb")loadLb()}
+document.querySelectorAll(".gm-tabs button").forEach(b=>b.onclick=()=>setTab(b.dataset.t));
+let lastFocus=null;
+function open(t){lastFocus=document.activeElement;gm.hidden=false;document.body.style.overflow="hidden";render();setTab(t||(done()&&G.sent?"lb":"play"));$("gmX").focus()}
+function close(){gm.hidden=true;document.body.style.overflow="";if(lastFocus&&lastFocus.focus)lastFocus.focus()}
+$("gameBtn").onclick=()=>open(); $("gmX").onclick=close; gm.addEventListener("click",e=>{if(e.target===gm)close()});
+window.kaOyun={open}; if(/[?&]debug\b/.test(location.search)) window.kaOyun.words=()=>WORDS.slice();
+render();
+if(location.hash==="#oyun") setTimeout(()=>open(),300);
+watchRockets();
+})();
+
 
 render();
 </script>
