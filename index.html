@@ -399,6 +399,17 @@ textarea{min-height:92px;resize:vertical}
 .lb .st{font:500 12px/1 var(--f-mono);color:var(--dim);white-space:nowrap}
 .lb .m{grid-column:2/-1;font-size:13px;color:var(--ink);opacity:.85;border-left:2px solid var(--accent);padding:2px 0 2px 8px;overflow-wrap:anywhere}
 .lb-empty{color:var(--dim);text-align:center;padding:18px 0}
+.adm-top{display:flex;justify-content:space-between;align-items:center;gap:10px;color:var(--dim);font-size:13px;margin-bottom:6px}
+.adm-h{margin:16px 0 8px;font:600 11px/1 var(--f-disp);letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+.lb.adm li{grid-template-columns:34px minmax(0,1fr) auto}
+.adm-b{grid-column:1/-1;display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.adm-b .btn{height:28px;padding:0 10px;font-size:10.5px}
+.btn.bad{border-color:var(--bad,#d9534f);color:var(--bad,#d9534f)}
+.adm-words{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.adm-words span{display:inline-flex;align-items:center;gap:6px;padding:4px 4px 4px 8px;border:1px solid var(--line2);font:500 12px/1 var(--f-mono);color:var(--ink)}
+.adm-words small{color:var(--faint);font-size:10px}
+.adm-words button{border:0;background:transparent;color:var(--dim);font-size:16px;line-height:1;cursor:pointer;padding:0 4px}
+.gm-form select{flex:1 1 180px;border:1px solid var(--line2);background:var(--raise);color:var(--ink);padding:9px 8px;border-radius:0}
 .lb-mine{margin-top:14px;padding-top:14px;border-top:1px dashed var(--line2)}
 .lb-mine h3{margin:0 0 8px;font:600 11px/1 var(--f-disp);letter-spacing:.14em;text-transform:uppercase;color:var(--dim);text-align:center}
 .rkb{border-color:var(--accent)!important;background:var(--accent)!important;color:var(--accent-ink)!important;font-weight:700}
@@ -419,7 +430,7 @@ textarea{min-height:92px;resize:vertical}
   <div class="brand">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="3"/><path d="M12 1.5v4M12 18.5v4M1.5 12h4M18.5 12h4"/></svg>
     <h1>Kelime Avcısı</h1>
-    <span class="ver" title="Son güncelleme: 25 Kasım 2026 21:31">v1.69</span>
+    <span class="ver" title="Son güncelleme: 25 Kasım 2026 22:13">v1.70</span>
   </div>
   <div class="today">
     <div><span class="lbl">Tarih</span><span class="val date" id="dDate">—</span></div>
@@ -525,13 +536,13 @@ textarea{min-height:92px;resize:vertical}
   </section>
 </div>
 <footer class="foot">
-  <span>Kelime Avcısı <b>v1.69</b></span><span class="dotsep">·</span><span>Son güncelleme 25 Kasım 2026 21:31</span><span class="dotsep">·</span><a href="https://github.com/baqiKk/kelime-avcisi" target="_blank" rel="noopener">Kaynak kod</a>
+  <span>Kelime Avcısı <b>v1.70</b></span><span class="dotsep">·</span><span>Son güncelleme 25 Kasım 2026 22:13</span><span class="dotsep">·</span><a href="https://github.com/baqiKk/kelime-avcisi" target="_blank" rel="noopener">Kaynak kod</a>
 </footer>
 
 <div class="gm" id="gm" hidden role="dialog" aria-modal="true" aria-labelledby="gmT">
   <div class="gm-box">
     <div class="gm-h"><h2 id="gmT">Günlük Oyun</h2><span id="gmDay"></span><button class="gm-x" id="gmX" type="button" aria-label="Kapat">×</button></div>
-    <div class="gm-tabs" role="tablist"><button type="button" data-t="play" class="on">Oyna</button><button type="button" data-t="lb">Sıralama</button></div>
+    <div class="gm-tabs" role="tablist"><button type="button" data-t="play" class="on">Oyna</button><button type="button" data-t="lb">Sıralama</button><button type="button" data-t="adm" id="tabAdm" hidden>Yönetim</button></div>
     <div class="gm-pane" id="gmPlay">
       <div class="gm-steps" id="gmSteps"></div>
       <div id="gmBoard">
@@ -541,6 +552,7 @@ textarea{min-height:92px;resize:vertical}
       </div>
       <div class="gm-end" id="gmEnd" hidden></div>
     </div>
+    <div class="gm-pane" id="gmAdm" hidden></div>
     <div class="gm-pane" id="gmLb" hidden>
       <ol class="lb" id="lbList"></ol>
       <div class="lb-mine" id="lbMine" hidden></div>
@@ -1435,8 +1447,12 @@ function score(g,a){const r=[0,0,0,0,0],c={};for(let i=0;i<5;i++){if(g[i]===a[i]
 const done=()=>G.res[0]&&G.res[1];
 const tot=()=>({solved:G.res.filter(x=>x&&x.ok).length,guesses:G.res.reduce((s,x)=>s+(x?x.n:0),0),secs:Math.max(3,Math.min(86400,Math.round(((G.t1||Date.now())-(G.t0||Date.now()))/1000)))});
 const fmtT=s=>{const m=Math.floor(s/60),x=s%60;return m>=60?`${Math.floor(m/60)}sa ${m%60}dk`:`${m}:${String(x).padStart(2,"0")}`};
-const BAD=["amk","amq","aq ","orospu","piç","sik","yarra","göt","oç ","siktir","amına","ananı","pezevenk","kahpe","ibne","gavat","fuck","bok "];
-const clean=t=>{const s=" "+lower(t)+" ";return !BAD.some(b=>s.includes(b))};
+// küfür filtresi (sunucudaki ka_clean ile aynı mantık; asıl kontrol veritabanında, bu sadece anında uyarı için)
+const BADW="amk:x amq:x aq:x mk:x oc:x pic:x got:x sg:x piç:x amına:s amina:s amcık:s amcik:s amını:s orospu:a orosbu:a oruspu:a sik:s siktir:a sikerim:a sikeyim:a sok:x sokarım:s yarrak:a yarak:s dalyarak:a götveren:a götü:x götün:x ibne:s gavat:s pezevenk:a kahpe:s kaltak:s sürtük:s yavşak:s şerefsiz:s puşt:s ananı:s ananın:s anasını:s bacını:s avradını:s fuck:a shit:s bitch:s porno:a penis:s vajina:s".split(" ").map(x=>x.split(":"));
+const NMAP={"ş":"s","ç":"c","ğ":"g","ö":"o","ü":"u","â":"a","î":"i","û":"u","0":"o","1":"i","3":"e","4":"a","5":"s","7":"t","@":"a","$":"s","€":"e"};
+const norm=t=>String(t||"").replace(/İ/g,"i").replace(/I/g,"ı").toLowerCase().replace(/̇/g,"").replace(/./g,c=>NMAP[c]||c).replace(/([a-zı])\1+/g,"$1");
+const clean=t=>{const n=norm(t),j=n.replace(/[^a-zı]/g,""),tk=n.split(/[^a-zı]+/).filter(Boolean);
+  return !BADW.some(([w0,m])=>{const w=norm(w0);if(m==="a"&&j.includes(w))return true;return tk.some(k=>m==="x"?k===w:m==="s"?k.startsWith(w):k.includes(w))})};
 
 // --- arayüz ---
 const gm=$("gm"), grid=$("gmGrid"), kb=$("gmKb"), msgEl=$("gmMsg");
@@ -1512,7 +1528,7 @@ function getSb(){
   if(!SB_URL||!SB_KEY)return Promise.resolve(null);
   if(sbReady)return sbReady;
   sbReady=new Promise(res=>{const s=document.createElement("script");s.src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/dist/umd/supabase.js";
-    s.onload=()=>{try{sb=window.supabase.createClient(SB_URL,SB_KEY,{auth:{persistSession:false}});res(sb)}catch(e){res(null)}};s.onerror=()=>res(null);document.head.appendChild(s)});
+    s.onload=()=>{try{sb=window.supabase.createClient(SB_URL,SB_KEY,{auth:{persistSession:true,storageKey:"ka-sb-auth"}});res(sb)}catch(e){res(null)}};s.onerror=()=>res(null);document.head.appendChild(s)});
   return sbReady;
 }
 async function submitScore(manual){
@@ -1525,7 +1541,7 @@ async function submitScore(manual){
   const c=await getSb(); if(!c){say("Sıralamaya şu an ulaşılamıyor, birazdan tekrar dene.");return}
   S.set("ka_nick",nick); say("Gönderiliyor…");
   const t=tot(); const {error}=await c.from("ka_scores").insert({day,player:pid,nick,solved:t.solved,guesses:t.guesses,secs:t.secs});
-  if(error&&error.code!=="23505"){say("Gönderilemedi: "+(error.message||"hata"));return}
+  if(error&&error.code!=="23505"){say(error.code==="42501"?"Bu ad kabul edilmedi. Uygunsuz bir ifade olabilir ya da bu cihaz engellenmiş olabilir.":"Gönderilemedi: "+(error.message||"hata"));return}
   G.sent=true; save(); renderSend(); setTab("lb");
 }
 let LB={scores:[],msgs:{},launches:[]};
@@ -1557,7 +1573,7 @@ function renderLb(){
   const f=$("lbMsgF"); if(f) f.onsubmit=async e=>{e.preventDefault(); const t=$("lbMsg").value.trim(), n=$("lbMsgNote");
     if(!t){n.textContent="Boş mesaj gönderilemez.";return} if(!clean(t)){n.textContent="Mesajında uygun olmayan bir ifade var.";return}
     const c=await getSb(); const {error}=await c.from("ka_messages").insert({day,player:pid,nick:S.get("ka_nick",""),body:t});
-    if(error&&error.code!=="23505"){n.textContent=error.code==="42501"?"Mesaj sadece ilk 10'a açık.":"Gönderilemedi.";return}
+    if(error&&error.code!=="23505"){n.textContent=error.code==="42501"?"Mesaj kabul edilmedi: sadece ilk 10'a açık ve uygunsuz ifade içeremez.":"Gönderilemedi.";return}
     G.msg=true; save(); loadLb()};
 }
 async function fireRocket(){
@@ -1581,11 +1597,62 @@ async function watchRockets(){
   const last=data&&data[0]; if(last&&!seen().includes(last.id)){markSeen(last.id); const m=await c.from("ka_messages").select("body").eq("day",day).eq("player",last.player).maybeSingle(); setTimeout(()=>playRocket(last.nick,m.data&&m.data.body,last.player===pid),1200)}
   c.channel("ka-live").on("postgres_changes",{event:"INSERT",schema:"public",table:"ka_launches"},async p=>{const x=p.new;if(!x||x.day!==day||seen().includes(x.id))return;markSeen(x.id);
       const m=await c.from("ka_messages").select("body").eq("day",day).eq("player",x.player).maybeSingle(); playRocket(x.nick,m.data&&m.data.body,x.player===pid); if(!gm.hidden&&tab==="lb")loadLb()})
-    .on("postgres_changes",{event:"INSERT",schema:"public",table:"ka_scores"},()=>{if(!gm.hidden&&tab==="lb")loadLb()})
-    .on("postgres_changes",{event:"INSERT",schema:"public",table:"ka_messages"},()=>{if(!gm.hidden&&tab==="lb")loadLb()}).subscribe();
+    .on("postgres_changes",{event:"*",schema:"public",table:"ka_scores"},()=>{if(!gm.hidden&&tab==="lb")loadLb()})
+    .on("postgres_changes",{event:"*",schema:"public",table:"ka_messages"},()=>{if(!gm.hidden&&tab==="lb")loadLb()}).subscribe();
 }
 // --- aç/kapat, sekmeler ---
-function setTab(t){tab=t;document.querySelectorAll(".gm-tabs button").forEach(b=>b.classList.toggle("on",b.dataset.t===t));$("gmPlay").hidden=t!=="play";$("gmLb").hidden=t!=="lb";if(t==="lb")loadLb()}
+function setTab(t){tab=t;document.querySelectorAll(".gm-tabs button").forEach(b=>b.classList.toggle("on",b.dataset.t===t));$("gmPlay").hidden=t!=="play";$("gmLb").hidden=t!=="lb";$("gmAdm").hidden=t!=="adm";if(t==="lb")loadLb();if(t==="adm")renderAdmin()}
+// --- Yönetim: #admin ile açılır; Supabase'te ka_admins tablosundaki hesaplar görebilir ---
+let isAdmin=false;
+async function checkAdmin(){const c=await getSb();if(!c)return false;const {data:se}=await c.auth.getSession();if(!se||!se.session){isAdmin=false;return false}
+  const {data}=await c.rpc("ka_is_admin");isAdmin=!!data;if(isAdmin)$("tabAdm").hidden=false;return isAdmin}
+async function renderAdmin(){
+  const box=$("gmAdm"), c=await getSb();
+  if(!c){box.innerHTML=`<p class="lb-empty">Veritabanına ulaşılamıyor.</p>`;return}
+  const {data:se}=await c.auth.getSession();
+  if(!se||!se.session){
+    box.innerHTML=`<h3 class="adm-h">Yönetici girişi</h3><form class="gm-form" id="admLogin"><input id="admMail" type="email" placeholder="E-posta" autocomplete="username" required><input id="admPass" type="password" placeholder="Şifre" autocomplete="current-password" required><button class="btn rkb" type="submit">Giriş</button></form><p class="gm-note" id="admNote">Hesap Supabase › Authentication › Users bölümünde oluşturulur ve ka_admins tablosuna eklenir.</p>`;
+    $("admLogin").onsubmit=async e=>{e.preventDefault();const n=$("admNote");n.textContent="Giriş yapılıyor…";
+      const {error}=await c.auth.signInWithPassword({email:$("admMail").value.trim(),password:$("admPass").value});
+      if(error){n.textContent="Giriş başarısız: e-posta ya da şifre hatalı.";return}
+      if(!await checkAdmin()){n.textContent="Bu hesap yönetici değil.";await c.auth.signOut();return}renderAdmin()};
+    return}
+  if(!isAdmin&&!await checkAdmin()){box.innerHTML=`<p class="lb-empty">Bu hesap yönetici değil.</p><div class="gm-form"><button class="btn" type="button" id="admOut">Çıkış yap</button></div>`;$("admOut").onclick=async()=>{await c.auth.signOut();renderAdmin()};return}
+  box.innerHTML=`<p class="lb-empty">Yükleniyor…</p>`;
+  const [a,b,l,bn,bw]=await Promise.all([
+    c.from("ka_scores").select("player,nick,solved,guesses,secs,created_at").eq("day",day).order("solved",{ascending:false}).order("guesses").order("secs").order("created_at").limit(300),
+    c.from("ka_messages").select("player,body").eq("day",day),
+    c.from("ka_launches").select("player").eq("day",day),
+    c.from("ka_bans").select("player,nick,reason,created_at").order("created_at",{ascending:false}).limit(200),
+    c.from("ka_badwords").select("word,mode").order("word")]);
+  const msgs={};(b.data||[]).forEach(m=>msgs[m.player]=m.body); const rk=new Set((l.data||[]).map(x=>x.player));
+  const ML={start:"başlangıç",exact:"tam",any:"içinde"};
+  box.innerHTML=`<div class="adm-top"><span>Yönetici: <b>${esc(se.session.user.email||"")}</b></span><button class="btn" type="button" id="admOut">Çıkış</button></div>
+    <h3 class="adm-h">Bugünün kayıtları · ${(a.data||[]).length}</h3>
+    <ol class="lb adm">${(a.data||[]).map((x,i)=>`<li><span class="r">${i+1}</span><span class="n">${esc(x.nick)}${rk.has(x.player)?"<em>🚀</em>":""}</span><span class="st">${x.solved}/2 · ${x.guesses} · ${fmtT(x.secs)}</span>${msgs[x.player]!=null?`<span class="m">${esc(msgs[x.player])}</span>`:""}
+      <span class="adm-b">${msgs[x.player]!=null?`<button class="btn" data-a="msg" data-p="${x.player}">Mesajı sil</button>`:""}<button class="btn" data-a="del" data-p="${x.player}">Kaydı sil</button><button class="btn bad" data-a="ban" data-p="${x.player}" data-n="${esc(x.nick)}">Banla</button></span></li>`).join("")||'<li class="lb-empty" style="display:block">Bugün kayıt yok.</li>'}</ol>
+    <h3 class="adm-h">Banlananlar · ${(bn.data||[]).length}</h3>
+    <ol class="lb adm">${(bn.data||[]).map(x=>`<li><span class="r">⛔</span><span class="n">${esc(x.nick||"?")}</span><span class="st">${new Date(x.created_at).toLocaleDateString("tr-TR")}</span><span class="adm-b"><button class="btn" data-a="unban" data-p="${x.player}">Banı kaldır</button></span></li>`).join("")||'<li class="lb-empty" style="display:block">Banlanan yok.</li>'}</ol>
+    <h3 class="adm-h">Yasaklı kelimeler · ${(bw.data||[]).length}</h3>
+    <div class="adm-words">${(bw.data||[]).map(x=>`<span title="${ML[x.mode]}">${esc(x.word)}<small>${ML[x.mode]}</small><button type="button" data-a="unword" data-w="${esc(x.word)}" aria-label="${esc(x.word)} kelimesini kaldır">×</button></span>`).join("")}</div>
+    <form class="gm-form" id="admWord"><input id="admW" placeholder="Yeni yasaklı kelime" maxlength="30" required><select id="admM"><option value="start">başlangıç (kelime bununla başlarsa)</option><option value="exact">tam (sadece bu kelime)</option><option value="any">içinde (boşluklu yazılsa bile)</option></select><button class="btn" type="submit">Ekle</button></form>
+    <p class="gm-note" id="admNote">Banlanan cihaz bir daha sıralamaya giremez, mesaj yazamaz. Banla, o kişinin bugünkü kaydını, mesajını ve roketini de siler.</p>`;
+  $("admOut").onclick=async()=>{await c.auth.signOut();isAdmin=false;renderAdmin()};
+  const note=t=>{const n=$("admNote");if(n)n.textContent=t};
+  const delAll=async p=>{await c.from("ka_messages").delete().eq("day",day).eq("player",p);await c.from("ka_launches").delete().eq("day",day).eq("player",p);return c.from("ka_scores").delete().eq("day",day).eq("player",p)};
+  box.querySelectorAll("[data-a]").forEach(bt=>bt.onclick=async()=>{const p=bt.dataset.p,a2=bt.dataset.a;let r;
+    if(a2==="msg"){r=await c.from("ka_messages").delete().eq("day",day).eq("player",p)}
+    else if(a2==="del"){if(!confirm2(bt,"Emin misin?"))return;r=await delAll(p)}
+    else if(a2==="ban"){if(!confirm2(bt,"Banlansın mı?"))return;r=await c.from("ka_bans").upsert({player:p,nick:bt.dataset.n,reason:"yönetici"});if(!r.error)r=await delAll(p)}
+    else if(a2==="unban"){r=await c.from("ka_bans").delete().eq("player",p)}
+    else if(a2==="unword"){r=await c.from("ka_badwords").delete().eq("word",bt.dataset.w)}
+    if(r&&r.error){note("İşlem yapılamadı: "+r.error.message);return}
+    renderAdmin();loadLb()});
+  $("admWord").onsubmit=async e=>{e.preventDefault();const w=$("admW").value.trim().toLocaleLowerCase("tr-TR");if(!w)return;
+    const r=await c.from("ka_badwords").upsert({word:w,mode:$("admM").value});if(r.error){note("Eklenemedi: "+r.error.message);return}renderAdmin()};
+}
+// iki adımlı onay: ilk tıkta düğme "Emin misin?" olur, 3 sn içinde ikinci tık işlemi yapar (tarayıcı onay penceresi kullanmadan)
+function confirm2(bt,txt){if(bt.dataset.ok==="1")return true;const o=bt.textContent;bt.dataset.ok="1";bt.textContent=txt;setTimeout(()=>{bt.dataset.ok="";bt.textContent=o},3000);return false}
 document.querySelectorAll(".gm-tabs button").forEach(b=>b.onclick=()=>setTab(b.dataset.t));
 let lastFocus=null;
 function open(t){lastFocus=document.activeElement;gm.hidden=false;document.body.style.overflow="hidden";render();setTab(t||(done()&&G.sent?"lb":"play"));$("gmX").focus()}
@@ -1594,6 +1661,8 @@ $("gameBtn").onclick=()=>open(); $("gmX").onclick=close; gm.addEventListener("cl
 window.kaOyun={open}; if(/[?&]debug\b/.test(location.search)) window.kaOyun.words=()=>WORDS.slice();
 render();
 if(location.hash==="#oyun") setTimeout(()=>open(),300);
+if(location.hash==="#admin"){$("tabAdm").hidden=false;setTimeout(()=>open("adm"),300)}
+if(SB_URL&&SB_KEY) checkAdmin();
 watchRockets();
 })();
 
