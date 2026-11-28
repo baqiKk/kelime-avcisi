@@ -417,6 +417,68 @@ textarea{min-height:92px;resize:vertical}
 .rk-banner{visibility:hidden}.rk-banner.on{transform:translate(-50%,0);visibility:visible}
 .rk-banner b{color:var(--accent)}
 .rk-banner q{display:block;margin-top:4px;font-weight:400;color:var(--dim);quotes:"“" "”"}
+/* oyun v2: daha okunur durumlar ve canlı geri bildirim */
+.gm-box{position:relative;overflow:hidden;background:linear-gradient(180deg,color-mix(in srgb,var(--accent) 7%,var(--solid)) 0,var(--solid) 160px)}
+.gm-box::before{content:"";position:absolute;left:0;right:0;top:0;height:2px;background:linear-gradient(90deg,var(--t-green),var(--accent),var(--t-orange))}
+.gm-h{gap:14px}
+.gm-ht{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px}
+.gm-h .gm-hcd{flex:0 0 auto;font:500 12px/1 var(--f-mono);color:var(--dim);white-space:nowrap;border:1px solid var(--line2);padding:7px 9px}
+.gm-hcd b{color:var(--ink);font-weight:600}
+.gm-steps{gap:10px;margin-bottom:16px}
+.gm-step{flex:0 1 200px;border:1px solid var(--line2);padding:8px 10px 9px;display:grid;grid-template-columns:1fr auto;gap:4px 8px;align-items:center;background:var(--raise)}
+.gm-step b{font:700 11px/1 var(--f-disp);letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+.gm-step span{font:500 11px/1 var(--f-mono);color:var(--faint);text-align:right;border:0;padding:0;letter-spacing:0;text-transform:none;white-space:nowrap}
+.gm-step b{white-space:nowrap}
+.gm-step em{grid-column:1/-1;display:flex;gap:3px}
+.gm-step em i{flex:1;height:4px;background:var(--line2)}
+.gm-step em i.u{background:var(--dim)}.gm-step em i.g{background:var(--t-green)}
+.gm-step.on{border-color:var(--cyan);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--cyan) 35%,transparent)}.gm-step.on b{color:var(--cyan)}
+.gm-step.ok{border-color:var(--t-green)}.gm-step.ok b,.gm-step.ok span{color:var(--t-green)}
+.gm-step.no{border-color:var(--bad,#d9534f)}.gm-step.no b,.gm-step.no span{color:var(--bad,#d9534f)}
+.gm-grid{perspective:600px}
+.gm-c{border-width:2px;background:var(--cell);transition:border-color .12s}
+.gm-c.f{border-color:var(--dim)}
+.gm-c.pop{animation:gmpop .12s ease-out}
+@keyframes gmpop{0%{transform:scale(.86)}60%{transform:scale(1.08)}100%{transform:scale(1)}}
+.gm-c.s0{background:var(--t-grey);color:var(--t-grey-ink);opacity:.9}
+.gm-c.rev{animation:gmflip .5s ease-in-out both}
+@keyframes gmflip{0%{transform:rotateX(0);background:var(--cell);color:var(--ink);border-color:var(--dim)}49%{transform:rotateX(90deg);background:var(--cell);color:var(--ink);border-color:var(--dim)}50%{transform:rotateX(90deg)}100%{transform:rotateX(0)}}
+.gm-row.win .gm-c{animation:gmjump .5s ease both}
+.gm-row.win .gm-c:nth-child(2){animation-delay:.07s}.gm-row.win .gm-c:nth-child(3){animation-delay:.14s}.gm-row.win .gm-c:nth-child(4){animation-delay:.21s}.gm-row.win .gm-c:nth-child(5){animation-delay:.28s}
+@keyframes gmjump{0%,100%{transform:translateY(0)}40%{transform:translateY(-14px)}70%{transform:translateY(3px)}}
+.gm-cf{position:absolute;width:7px;height:11px;pointer-events:none;z-index:3;animation:gmcf 1.2s cubic-bezier(.2,.7,.4,1) forwards}
+@keyframes gmcf{0%{transform:translate(0,0) rotate(0);opacity:1}100%{transform:translate(var(--dx),calc(var(--dy) + 160px)) rotate(var(--rt));opacity:0}}
+.gm-leg{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin:0 0 12px;font:500 11px/1 var(--f-mono);color:var(--dim)}
+.gm-leg span{display:inline-flex;align-items:center;gap:6px}
+.gm-leg i{width:14px;height:14px;display:inline-block}
+.gm-leg i.s2{background:var(--t-green)}.gm-leg i.s1{background:var(--t-orange)}
+.gm-leg i.s0{border:1px dashed var(--faint);background:repeating-linear-gradient(135deg,transparent 0 3px,color-mix(in srgb,var(--faint) 55%,transparent) 3px 4px)}
+/* klavye: kullanılmamış = dolu tuş; yok = çizgili, sönük, üstü çizili harf */
+.gm-k{background:var(--raise2);border-color:var(--line3);box-shadow:inset 0 -2px 0 color-mix(in srgb,var(--void) 30%,transparent);transition:background .2s,color .2s,opacity .2s}
+.gm-k:active{transform:translateY(1px)}
+.gm-k.s0{background:repeating-linear-gradient(135deg,transparent 0 5px,color-mix(in srgb,var(--faint) 22%,transparent) 5px 6px);border:1px dashed var(--line2);color:var(--faint);opacity:1;text-decoration:line-through;text-decoration-thickness:2px;box-shadow:none}
+.gm-k.s1{background:var(--t-orange);color:var(--t-dark);border-color:transparent}
+.gm-k.s2{background:var(--t-green);color:var(--t-dark);border-color:transparent}
+.gm-res{text-align:center}
+.gm-ver{font:700 22px/1.2 var(--f-disp);letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin:2px 0 14px}
+.gm-big{display:grid;grid-template-columns:repeat(3,1fr);max-width:420px;margin:0 auto 16px;border:1px solid var(--line2)}
+.gm-big div{padding:10px 4px;border-right:1px solid var(--line2)}.gm-big div:last-child{border-right:0}
+.gm-big b,.gm-stats b{display:block;font:700 22px/1.1 var(--f-disp);color:var(--ink)}
+.gm-big span,.gm-stats span{display:block;margin-top:4px;font:500 10.5px/1 var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--dim)}
+.gm-pair{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.gm-wc{border:1px solid var(--line2);padding:10px 14px;min-width:150px;display:grid;justify-items:center;gap:6px;background:var(--raise)}
+.gm-wc b{font:700 16px/1 var(--f-disp);letter-spacing:.2em}
+.gm-wc span{font:500 11px/1 var(--f-mono);color:var(--dim)}
+.gm-wc.ok{border-color:var(--t-green)}.gm-wc.ok b{color:var(--t-green)}.gm-wc.no{border-color:var(--bad,#d9534f)}.gm-wc.no b{color:var(--bad,#d9534f)}
+.gm-mini{display:grid;gap:2px}.gm-mini div{display:flex;gap:2px}
+.gm-mini i{width:12px;height:12px;display:block;background:var(--t-grey)}.gm-mini i.s1{background:var(--t-orange)}.gm-mini i.s2{background:var(--t-green)}
+.gm-acts{display:flex;justify-content:center;gap:8px;margin-bottom:14px}
+.gm-acts .btn{height:38px;padding:0 18px;border-color:var(--cyan);color:var(--cyan)}
+.gm-stats{display:grid;grid-template-columns:repeat(4,1fr);max-width:420px;margin:0 auto 10px}
+.gm-stats b{font-size:18px}
+.gm-cd{margin:6px 0 14px;font:500 12px/1 var(--f-mono);color:var(--dim)}.gm-cd b{color:var(--ink)}
+@media (prefers-reduced-motion:reduce){.gm-c.rev,.gm-c.pop,.gm-row.win .gm-c{animation:none!important}}
+@media (max-width:520px){.gm-hcd{display:none}.gm-step{padding:7px 8px}.gm-wc{min-width:0;flex:1 1 40%}.gm-big b{font-size:19px}}
 @media (max-width:520px){.gm{padding:0}.gm-box{min-height:100%;border:0}.gm-row{grid-template-columns:repeat(5,min(15vw,52px))}.gm-c{height:min(15vw,52px);font-size:21px}.gm-k{height:46px;font-size:14px}}
 
 :focus-visible{outline:1px solid var(--accent);outline-offset:2px}
@@ -430,7 +492,7 @@ textarea{min-height:92px;resize:vertical}
   <div class="brand">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="3"/><path d="M12 1.5v4M12 18.5v4M1.5 12h4M18.5 12h4"/></svg>
     <h1>Kelime Avcısı</h1>
-    <span class="ver" title="Son güncelleme: 25 Kasım 2026 22:39">v1.71</span>
+    <span class="ver" title="Son güncelleme: 28 Kasım 2026 12:35">v1.72</span>
   </div>
   <div class="today">
     <div><span class="lbl">Tarih</span><span class="val date" id="dDate">—</span></div>
@@ -536,18 +598,19 @@ textarea{min-height:92px;resize:vertical}
   </section>
 </div>
 <footer class="foot">
-  <span>Kelime Avcısı <b>v1.71</b></span><span class="dotsep">·</span><span>Son güncelleme 25 Kasım 2026 22:39</span><span class="dotsep">·</span><a href="https://github.com/baqiKk/kelime-avcisi" target="_blank" rel="noopener">Kaynak kod</a>
+  <span>Kelime Avcısı <b>v1.72</b></span><span class="dotsep">·</span><span>Son güncelleme 28 Kasım 2026 12:35</span><span class="dotsep">·</span><a href="https://github.com/baqiKk/kelime-avcisi" target="_blank" rel="noopener">Kaynak kod</a>
 </footer>
 
 <div class="gm" id="gm" hidden role="dialog" aria-modal="true" aria-labelledby="gmT">
   <div class="gm-box">
-    <div class="gm-h"><h2 id="gmT">Günlük Oyun</h2><span id="gmDay"></span><button class="gm-x" id="gmX" type="button" aria-label="Kapat">×</button></div>
+    <div class="gm-h"><div class="gm-ht"><h2 id="gmT">Günlük Oyun</h2><span id="gmDay"></span></div><span class="gm-hcd" title="Yeni kelimelere kalan süre">⟳ <b data-cd></b></span><button class="gm-x" id="gmX" type="button" aria-label="Kapat">×</button></div>
     <div class="gm-tabs" role="tablist"><button type="button" data-t="play" class="on">Oyna</button><button type="button" data-t="lb">Sıralama</button><button type="button" data-t="adm" id="tabAdm" hidden>Yönetim</button></div>
     <div class="gm-pane" id="gmPlay">
       <div class="gm-steps" id="gmSteps"></div>
       <div id="gmBoard">
         <div class="gm-grid" id="gmGrid"></div>
         <p class="gm-msg" id="gmMsg" role="status"></p>
+        <div class="gm-leg"><span><i class="s2"></i>doğru yerde</span><span><i class="s1"></i>kelimede var</span><span><i class="s0"></i>kelimede yok</span></div>
         <div class="gm-kb" id="gmKb"></div>
       </div>
       <div class="gm-end" id="gmEnd" hidden></div>
@@ -1461,17 +1524,23 @@ const KROWS=["ertyuıopğü","asdfghjklşi","zcvbnmöç"];
 kb.innerHTML=KROWS.map((r,ri)=>`<div class="gm-kr">${ri===2?'<button class="gm-k w" type="button" data-k="Enter">Gir</button>':""}${[...r].map(c=>`<button class="gm-k" type="button" data-k="${c}">${up(c)}</button>`).join("")}${ri===2?'<button class="gm-k w" type="button" data-k="Backspace">Sil</button>':""}</div>`).join("");
 kb.addEventListener("click",e=>{const b=e.target.closest("[data-k]");if(b)press(b.dataset.k)});
 function flash(t,ms=1800){msgEl.textContent=t;clearTimeout(flash.t);if(ms)flash.t=setTimeout(()=>{if(msgEl.textContent===t)msgEl.textContent=""},ms)}
-function renderSteps(){$("gmSteps").innerHTML=[0,1].map(i=>{const r=G.res[i];const c=r?(r.ok?"ok":"no"):(G.r===i&&!done()?"on":"");return`<span class="${c}">Kelime ${i+1}${r?(r.ok?` · ${r.n}`:" · ✗"):""}</span>`}).join("")}
+function renderSteps(){$("gmSteps").innerHTML=[0,1].map(i=>{const r=G.res[i];const on=G.r===i&&!done();const c=r?(r.ok?"ok":"no"):(on?"on":"");
+  const n=G.rows[i].length;const dots=Array.from({length:TRY},(_,k)=>`<i class="${k<n?(r&&r.ok&&k===n-1?"g":"u"):""}"></i>`).join("");
+  return`<div class="gm-step ${c}"><b>Kelime ${i+1}</b><span>${r?(r.ok?`${r.n}. tahminde`:"bulunamadı"):(on?"oynanıyor":"sırada")}</span><em>${dots}</em></div>`}).join("")}
+let revRow=-1, popAt=-1, winRow=-1;
+function kbStates(r,upto){const st={};G.rows[r].slice(0,upto).forEach(w=>score(w,WORDS[r]).forEach((x,j)=>{st[w[j]]=Math.max(st[w[j]]??-1,x)}));return st}
+function paintKb(st){kb.querySelectorAll(".gm-k[data-k]").forEach(b=>{const k=b.dataset.k;b.className="gm-k"+(k.length>1?" w":"")+(st[k]!=null?" s"+st[k]:"");
+  if(k.length===1)b.setAttribute("aria-label",up(k)+(st[k]===2?", doğru yerde":st[k]===1?", kelimede var":st[k]===0?", kelimede yok":""))})}
 function renderBoard(){
   const r=Math.min(G.r,1), rows=G.rows[r], ans=WORDS[r]; let h="";
   for(let i=0;i<TRY;i++){const w=rows[i]; let cells="";
-    if(w){const sc=score(w,ans);for(let j=0;j<5;j++)cells+=`<div class="gm-c s${sc[j]}">${up(w[j])}</div>`}
-    else if(i===rows.length&&!G.res[r]){for(let j=0;j<5;j++)cells+=`<div class="gm-c${cur[j]?" f":""}">${cur[j]?up(cur[j]):""}</div>`}
+    if(w){const sc=score(w,ans);for(let j=0;j<5;j++)cells+=`<div class="gm-c s${sc[j]}${i===revRow?" rev":""}"${i===revRow?` style="animation-delay:${j*0.16}s"`:""}>${up(w[j])}</div>`}
+    else if(i===rows.length&&!G.res[r]){for(let j=0;j<5;j++)cells+=`<div class="gm-c${cur[j]?" f":""}${j===popAt?" pop":""}">${cur[j]?up(cur[j]):""}</div>`}
     else for(let j=0;j<5;j++)cells+=`<div class="gm-c"></div>`;
-    h+=`<div class="gm-row"${i===rows.length?' id="gmCur"':""}>${cells}</div>`}
-  grid.innerHTML=h;
-  const st={}; rows.forEach(w=>score(w,ans).forEach((s,j)=>{st[w[j]]=Math.max(st[w[j]]??-1,s)}));
-  kb.querySelectorAll(".gm-k[data-k]").forEach(b=>{const k=b.dataset.k;b.className="gm-k"+(k.length>1?" w":"")+(st[k]!=null?" s"+st[k]:"")});
+    h+=`<div class="gm-row${i===winRow?" win":""}"${i===rows.length?' id="gmCur"':""}>${cells}</div>`}
+  grid.innerHTML=h; popAt=-1;
+  if(revRow>=0){const n=rows.length;paintKb(kbStates(r,n-1));setTimeout(()=>paintKb(kbStates(r,n)),5*160+280);revRow=-1}
+  else paintKb(kbStates(r,rows.length));
 }
 function render(){renderSteps();
   const fin=done(); $("gmBoard").hidden=fin; $("gmEnd").hidden=!fin;
@@ -1485,14 +1554,36 @@ function press(k){
     if(cur.length<5){flash("5 harf olmalı");shake();return}
     if(!DSET.has(cur)){flash("Sözlükte yok");shake();return}
     if(!G.t0)G.t0=Date.now();
-    G.rows[r].push(cur); const w=cur; cur="";
-    if(w===WORDS[r]){G.res[r]={ok:true,n:G.rows[r].length}; flash(["Dahi!","Harika!","Süper!","Güzel!","İyi!","Kıl payı!"][G.rows[r].length-1]||"Bildin!",1400)}
-    else if(G.rows[r].length>=TRY){G.res[r]={ok:false,n:FAIL}; flash("Kelime: "+up(WORDS[r]),2400)}
-    save(); renderBoard(); renderSteps();
-    if(G.res[r]){busy=true; setTimeout(()=>{busy=false; if(r===0){G.r=1}else{G.t1=Date.now()} save(); render(); if(done()) submitScore()},r===0?1300:1600)}
+    G.rows[r].push(cur); const w=cur; cur=""; revRow=G.rows[r].length-1;
+    const won=w===WORDS[r];
+    if(won)G.res[r]={ok:true,n:G.rows[r].length};
+    else if(G.rows[r].length>=TRY)G.res[r]={ok:false,n:FAIL};
+    save(); busy=true; renderBoard();
+    const after=5*160+420;
+    setTimeout(()=>{busy=!!G.res[r]; renderSteps();
+      if(won){flash(["Dahi!","Harika!","Süper!","Güzel!","İyi!","Kıl payı!"][G.rows[r].length-1]||"Bildin!",1600);const row=grid.children[G.rows[r].length-1];if(row)row.classList.add("win");burst(row)}
+      else if(G.res[r])flash("Kelime: "+up(WORDS[r]),2600);
+      if(G.res[r])setTimeout(()=>{busy=false; if(r===0){G.r=1}else{G.t1=Date.now();record()} save(); render(); if(done()) submitScore()},r===0?1400:1700);
+    },after);
     return}
-  if(LETTERS.includes(k)&&cur.length<5){cur+=k;renderBoard()}
+  if(LETTERS.includes(k)&&cur.length<5){cur+=k;popAt=cur.length-1;renderBoard()}
 }
+// küçük kutlama: doğru satırın üstünden renkli parçacıklar
+function burst(el){if(!el||matchMedia("(prefers-reduced-motion: reduce)").matches)return;const b=el.getBoundingClientRect(),box=document.querySelector(".gm-box").getBoundingClientRect();
+  const cols=["var(--t-green)","var(--t-orange)","var(--accent)","var(--cyan)"];
+  for(let i=0;i<26;i++){const p=document.createElement("i");p.className="gm-cf";p.style.left=(b.left-box.left+Math.random()*b.width)+"px";p.style.top=(b.top-box.top+b.height/2)+"px";
+    p.style.background=cols[i%4];p.style.setProperty("--dx",(Math.random()*240-120)+"px");p.style.setProperty("--dy",(-60-Math.random()*140)+"px");p.style.setProperty("--rt",(Math.random()*720-360)+"deg");
+    document.querySelector(".gm-box").appendChild(p);setTimeout(()=>p.remove(),1300)}}
+// yerel istatistik: oynanan gün, seri, en iyi
+function record(){const H=S.get("ka_hist",{});const t=tot();H[day]={s:t.solved,g:t.guesses};S.set("ka_hist",H)}
+function stats(){const H=S.get("ka_hist",{});const days=Object.keys(H).sort();let streak=0;const d0=new Date(day+"T12:00:00Z");
+  for(let k=0;;k++){const d=new Date(d0-k*864e5).toISOString().slice(0,10);if(H[d])streak++;else break}
+  let best=null;days.forEach(d=>{const x=H[d];if(x.s===2&&(best==null||x.g<best))best=x.g});
+  return{played:days.length,full:days.filter(d=>H[d].s===2).length,streak,best}}
+// İstanbul gece yarısına geri sayım
+function untilNext(){const now=new Date();const ist=new Date(now.toLocaleString("en-US",{timeZone:"Europe/Istanbul"}));const ms=(24*3600-(ist.getHours()*3600+ist.getMinutes()*60+ist.getSeconds()))*1000;
+  const t=Math.max(0,Math.floor(ms/1000));return[Math.floor(t/3600),Math.floor(t%3600/60),t%60].map(x=>String(x).padStart(2,"0")).join(":")}
+setInterval(()=>{document.querySelectorAll("[data-cd]").forEach(e=>e.textContent=untilNext())},1000);
 function shake(){const el=$("gmCur");if(el){el.classList.remove("shake");void el.offsetWidth;el.classList.add("shake")}}
 addEventListener("keydown",e=>{
   if(gm.hidden)return;
@@ -1505,12 +1596,23 @@ addEventListener("keydown",e=>{
 },true);
 
 function renderEnd(){
-  const t=tot(); const el=$("gmEnd");
-  el.innerHTML=`<p class="gm-sub">Bugünkü sonucun</p>
-    <div class="gm-score">${t.solved}/2 · ${t.guesses} tahmin · ${fmtT(t.secs)}</div>
-    <div class="gm-words">${WORDS.map((w,i)=>`<b class="${G.res[i].ok?"ok":"no"}">${up(w)}</b>`).join("")}</div>
+  const t=tot(), st=stats(), el=$("gmEnd");
+  const grid2=WORDS.map((w,i)=>G.rows[i].map(g=>score(g,w).map(x=>x===2?"🟩":x===1?"🟧":"⬛").join("")).join("\n"));
+  const verdict=t.solved===2?(t.guesses<=5?"Efsane!":t.guesses<=8?"Harika iş!":"İkisini de buldun!"):t.solved===1?"Biri tamam!":"Bugün zor geldi";
+  el.innerHTML=`<div class="gm-res">
+      <div class="gm-ver">${verdict}</div>
+      <div class="gm-big"><div><b>${t.solved}/2</b><span>kelime</span></div><div><b>${t.guesses}</b><span>tahmin</span></div><div><b>${fmtT(t.secs)}</b><span>süre</span></div></div>
+      <div class="gm-pair">${WORDS.map((w,i)=>`<div class="gm-wc ${G.res[i].ok?"ok":"no"}"><div class="gm-mini">${G.rows[i].map(g=>`<div>${score(g,w).map(x=>`<i class="s${x}"></i>`).join("")}</div>`).join("")}</div><b>${up(w)}</b><span>${G.res[i].ok?G.res[i].n+". tahminde":"bulunamadı"}</span></div>`).join("")}</div>
+      <div class="gm-acts"><button class="btn" type="button" id="gmShare">Sonucu paylaş</button></div>
+      <div class="gm-stats"><div><b>${st.played}</b><span>oynanan</span></div><div><b>${st.full}</b><span>tam çözüm</span></div><div><b>${st.streak}</b><span>gün seri</span></div><div><b>${st.best??"–"}</b><span>en iyi</span></div></div>
+      <p class="gm-cd">Yeni kelimeler <b data-cd>${untilNext()}</b> sonra</p>
+    </div>
     <div id="gmSend"></div>
-    <p class="gm-note">Sıralama: önce çözülen kelime sayısı, sonra toplam tahmin (bilinemeyen kelime ${FAIL} sayılır), sonra süre. Yarın yeni kelimeler.</p>`;
+    <p class="gm-note">Sıralama: önce çözülen kelime sayısı, sonra toplam tahmin (bilinemeyen kelime ${FAIL} sayılır), sonra süre.</p>`;
+  $("gmShare").onclick=async()=>{const url=location.protocol.startsWith("http")?location.origin+location.pathname+"#oyun":"https://baqikk.github.io/kelime-avcisi/#oyun";
+    const txt=`Kelime Avcısı · ${new Intl.DateTimeFormat("tr-TR",{day:"numeric",month:"long",timeZone:"Europe/Istanbul"}).format(new Date())}\n${t.solved}/2 · ${t.guesses} tahmin · ${fmtT(t.secs)}\n\n${grid2.join("\n\n")}\n\n${url}`;
+    const b=$("gmShare");try{if(navigator.share&&matchMedia("(pointer:coarse)").matches){await navigator.share({text:txt})}else{await navigator.clipboard.writeText(txt);b.textContent="Kopyalandı ✓";setTimeout(()=>b.textContent="Sonucu paylaş",2000)}}
+    catch(e){const ta=document.createElement("textarea");ta.value=txt;document.body.appendChild(ta);ta.select();try{document.execCommand("copy");b.textContent="Kopyalandı ✓"}catch(_){}ta.remove()}};
   renderSend();
 }
 function renderSend(){
